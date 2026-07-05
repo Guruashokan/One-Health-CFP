@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hospital Staff Portal — One Health Platform</title>
+  <meta name="description" content="Hospital employee login portal for managing beds, patients, inventory and staff on the One Health Platform.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Design tokens (shared) ─── */
+    :root {
+      --navy:#0a2540;--blue:#1a56db;--cyan:#0ea5e9;--mint:#a7f3d0;--mint-dark:#059669;
+      --coral:#ef4444;--amber:#f59e0b;--surface:#f8fafc;--surface-2:#f1f5f9;
+      --white:#ffffff;--ink:#0f172a;--ink-2:#475569;--ink-3:#94a3b8;
+      --line:rgba(15,23,42,.1);--shadow:0 4px 24px rgba(10,37,64,.09);
+      --shadow-lg:0 20px 60px rgba(10,37,64,.15);--radius:14px;--radius-sm:10px;--radius-xs:7px;
+      --t:180ms cubic-bezier(.4,0,.2,1);
+    }
+    .dark{--surface:#0f172a;--surface-2:#1e293b;--white:#1e293b;--ink:#f1f5f9;--ink-2:#94a3b8;--line:rgba(241,245,249,.08);}
+    *,*::before,*::after{box-sizing:border-box;}
+    html{-webkit-font-smoothing:antialiased;}
+    body{margin:0;font-family:'Inter',Arial,sans-serif;font-size:15px;line-height:1.65;color:var(--ink);background:var(--surface);transition:background var(--t),color var(--t);}
+    button,input,select,textarea{font:inherit;}
+    button{cursor:pointer;border:none;background:none;}
+    a{color:inherit;text-decoration:none;}
+    h1,h2,h3,p{margin-top:0;}
+    h1{color:var(--navy);font-size:clamp(22px,3vw,36px);font-weight:900;letter-spacing:-.02em;margin-bottom:0;}
+    h2{color:var(--navy);font-size:20px;font-weight:800;margin-bottom:0;}
+    h3{color:var(--navy);font-size:16px;font-weight:700;margin-bottom:6px;}
+    .dark h1,.dark h2,.dark h3{color:#e2e8f0;}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+    /* ─── Login screen ─── */
+    .login-screen {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .login-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px;
+      background: linear-gradient(160deg, var(--navy) 0%, #0f3460 100%);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .login-hero::before {
+      content:'';
+      position:absolute;inset:0;
+      background:radial-gradient(circle at 30% 70%, rgba(167,243,208,.18) 0%, transparent 60%);
+      pointer-events:none;
+    }
+    .hero-brand { display:flex;align-items:center;gap:14px;margin-bottom:48px; }
+    .hero-mark { width:52px;height:52px;display:grid;place-items:center;background:var(--mint);color:var(--navy);border-radius:12px;font-size:28px;font-weight:900;box-shadow:0 0 0 6px rgba(167,243,208,.22); }
+    .hero-brand strong { font-size:20px;font-weight:900; }
+    .hero-brand small { display:block;color:rgba(255,255,255,.55);font-size:12px;margin-top:1px; }
+    .login-hero h1 { color:#fff;margin-bottom:12px; }
+    .login-hero p { color:rgba(255,255,255,.72);font-size:15px;max-width:400px;margin-bottom:32px; }
+    .hero-features { display:grid;gap:12px; }
+    .hero-feature { display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px; }
+    .hero-feature span { font-size:22px;flex-shrink:0; }
+    .hero-feature p { margin:0;font-size:13.5px;color:rgba(255,255,255,.82);font-weight:500; }
+
+    .login-form-col {
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:48px;
+      background:var(--white);
+    }
+    .login-form-box { max-width:400px;width:100%; }
+    .login-eyebrow { font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:6px; }
+    .dark .login-eyebrow { color:#60a5fa; }
+    .form-group { display:grid;gap:6px;margin-bottom:16px; }
+    .form-group label { font-size:13.5px;font-weight:700;color:var(--navy); }
+    .dark .form-group label { color:#e2e8f0; }
+    .form-group input,.form-group select {
+      min-height:46px;padding:0 14px;
+      background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);
+      color:var(--ink);font-size:14px;outline:none;
+      transition:box-shadow var(--t);width:100%;
+    }
+    .form-group input:focus,.form-group select:focus{box-shadow:0 0 0 3px rgba(14,165,233,.3);}
+    .form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+    .remember-row{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:13.5px;color:var(--ink-2);}
+    .login-btn{width:100%;min-height:48px;padding:0 20px;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;border-radius:var(--radius-sm);font-size:15px;font-weight:800;transition:transform var(--t),box-shadow var(--t);}
+    .login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(14,165,233,.38);}
+    .login-error{display:none;padding:11px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-xs);color:#dc2626;font-size:13.5px;font-weight:600;margin-bottom:14px;}
+    .login-error.show{display:block;}
+    .demo-hint{margin-top:20px;padding:12px 14px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius-xs);font-size:12.5px;color:var(--ink-2);}
+    .demo-hint strong{color:var(--navy);}
+    .dark .demo-hint strong{color:#e2e8f0;}
+    .back-link{display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;color:var(--ink-2);font-size:13px;font-weight:600;transition:color var(--t);}
+    .back-link:hover{color:var(--blue);}
+
+    /* ─── Dashboard ─── */
+    .portal-shell { display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh; }
+    .portal-sidebar {
+      position:sticky;top:0;height:100vh;overflow-y:auto;
+      display:flex;flex-direction:column;gap:4px;
+      padding:20px 12px;
+      background:linear-gradient(160deg,var(--navy) 0%,#0f3460 100%);
+    }
+    .portal-brand{display:flex;align-items:center;gap:10px;padding:4px 6px 14px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:6px;}
+    .portal-mark{width:38px;height:38px;display:grid;place-items:center;background:var(--mint);color:var(--navy);border-radius:9px;font-size:20px;font-weight:900;}
+    .portal-brand strong{display:block;color:#fff;font-size:14px;font-weight:800;}
+    .portal-brand small{display:block;color:rgba(255,255,255,.52);font-size:11px;}
+    .portal-nav{display:flex;flex-direction:column;gap:3px;flex:1;}
+    .portal-link{display:flex;align-items:center;gap:9px;min-height:40px;padding:8px 12px;color:rgba(255,255,255,.72);border-radius:9px;font-size:13px;font-weight:600;transition:background var(--t),color var(--t);}
+    .portal-link:hover{color:#fff;background:rgba(255,255,255,.08);}
+    .portal-link.active{color:#fff;background:rgba(167,243,208,.14);box-shadow:inset 0 0 0 1px rgba(167,243,208,.2);}
+    .portal-link span{font-size:16px;flex-shrink:0;}
+    .portal-user{margin-top:auto;padding:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:9px;}
+    .portal-user strong{display:block;color:#fff;font-size:13px;}
+    .portal-user small{color:rgba(255,255,255,.55);font-size:11.5px;}
+    .portal-logout{display:flex;align-items:center;gap:7px;margin-top:8px;padding:8px 12px;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:12.5px;font-weight:600;width:100%;transition:background var(--t);}
+    .portal-logout:hover{background:rgba(239,68,68,.2);color:#fff;}
+
+    .portal-main{padding:28px;display:grid;gap:22px;align-content:start;}
+    .portal-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .portal-topbar h1{font-size:clamp(18px,2.5vw,28px);}
+    .hospital-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2);border-radius:999px;font-size:13px;font-weight:700;color:var(--blue);}
+
+    /* dashboard sections */
+    .dash-section{display:none;}
+    .dash-section.active{display:grid;gap:18px;}
+    .stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+    .stat-card{padding:18px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.06);display:grid;gap:3px;transition:transform var(--t),box-shadow var(--t);}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+    .stat-icon{font-size:22px;margin-bottom:2px;}
+    .stat-val{font-size:30px;font-weight:900;color:var(--cyan);line-height:1;font-variant-numeric:tabular-nums;}
+    .stat-label{font-size:12px;font-weight:500;color:var(--ink-2);margin-top:4px;}
+    .stat-card.alert-card .stat-val{color:var(--coral);}
+    .panel{padding:22px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.06);}
+    .dark .panel,.dark .stat-card{background:var(--surface-2);}
+    .sec-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
+    .btn{min-height:36px;padding:0 14px;border-radius:var(--radius-xs);font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px;transition:background var(--t),transform var(--t);}
+    .btn-primary{background:var(--blue);color:#fff;}.btn-primary:hover{background:#1748c4;transform:translateY(-1px);}
+    .btn-danger{background:var(--coral);color:#fff;}.btn-danger:hover{background:#dc2626;}
+    .btn-ghost{background:var(--surface-2);color:var(--blue);border:1px solid var(--line);}.btn-ghost:hover{background:var(--surface);border-color:var(--blue);}
+    .badge{display:inline-flex;align-items:center;min-height:22px;padding:0 8px;border-radius:999px;font-size:11px;font-weight:700;}
+    .badge-green{background:rgba(5,150,105,.12);color:var(--mint-dark);}
+    .badge-red{background:rgba(239,68,68,.12);color:#dc2626;}
+    .badge-amber{background:rgba(245,158,11,.12);color:#d97706;}
+
+    /* table */
+    .data-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+    .data-table th{text-align:left;padding:10px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);border-bottom:1px solid var(--line);}
+    .data-table td{padding:11px 12px;border-bottom:1px solid var(--line);color:var(--ink);}
+    .dark .data-table td{color:#e2e8f0;}
+    .data-table tr:last-child td{border-bottom:none;}
+    .data-table tr:hover td{background:var(--surface-2);}
+    input[type="number"].inline-edit{width:70px;min-height:32px;padding:0 8px;border:1px solid var(--line);border-radius:6px;color:var(--ink);background:var(--white);font-size:13px;text-align:center;}
+    input[type="text"].inline-edit{width:140px;min-height:32px;padding:0 8px;border:1px solid var(--line);border-radius:6px;color:var(--ink);background:var(--white);font-size:13px;}
+
+    /* alerts */
+    .alert-list{display:grid;gap:9px;}
+    .alert-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-xs);font-size:13.5px;font-weight:500;}
+    .alert-item.critical{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);}
+    .alert-item.warning{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);}
+    .alert-item.info{background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.2);}
+    .alert-icon{font-size:20px;flex-shrink:0;}
+
+    /* queue */
+    .queue-form{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+    .queue-form input{flex:1;min-width:180px;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:var(--radius-xs);color:var(--ink);background:var(--white);font-size:13.5px;outline:none;}
+    .queue-form input:focus{box-shadow:0 0 0 3px rgba(14,165,233,.3);}
+
+    /* staff */
+    .staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+    .staff-card{padding:16px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius-sm);display:flex;align-items:center;gap:12px;}
+    .staff-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0;}
+    .staff-card p{margin:0;font-size:12px;color:var(--ink-2);}
+    .staff-toggle{margin-left:auto;position:relative;width:38px;height:22px;flex-shrink:0;}
+    .staff-toggle input{opacity:0;width:0;height:0;}
+    .staff-slider{position:absolute;inset:0;background:var(--ink-3);border-radius:999px;cursor:pointer;transition:background var(--t);}
+    .staff-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform var(--t);}
+    .staff-toggle input:checked+.staff-slider{background:var(--mint-dark);}
+    .staff-toggle input:checked+.staff-slider::before{transform:translateX(16px);}
+
+    /* toast */
+    .toast{position:fixed;right:20px;bottom:20px;z-index:999;max-width:360px;padding:12px 16px;color:#fff;background:var(--navy);border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);font-size:13.5px;font-weight:600;transform:translateY(200%);opacity:0;transition:transform 240ms cubic-bezier(.34,1.56,.64,1),opacity 180ms ease;}
+    .toast.show{transform:translateY(0);opacity:1;}
+
+    /* responsive */
+    @media(max-width:900px){
+      .login-screen{grid-template-columns:1fr;}
+      .login-hero{display:none;}
+      .portal-shell{grid-template-columns:1fr;}
+      .portal-sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;padding:10px 12px;gap:6px;}
+      .portal-brand{border:none;padding:0;margin:0;}
+      .portal-nav{flex-direction:row;flex-wrap:wrap;flex:none;}
+      .portal-user,.portal-logout{display:none;}
+      .stat-row{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:560px){
+      .login-form-col{padding:24px 16px;}
+      .portal-main{padding:14px;}
+      .stat-row{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-hero">
+    <div class="hero-brand">
+      <div class="hero-mark">+</div>
+      <div><strong>One Health Platform</strong><small>Hospital Staff Portal</small></div>
+    </div>
+    <h1>Manage your hospital operations efficiently</h1>
+    <p>Real-time bed management, patient queue, medicine inventory and staff scheduling — all in one secure portal.</p>
+    <div class="hero-features">
+      <div class="hero-feature"><span>🛏️</span><p>Live bed availability and ICU tracking with instant updates</p></div>
+      <div class="hero-feature"><span>👥</span><p>Patient queue management and waiting room visibility</p></div>
+      <div class="hero-feature"><span>💊</span><p>Medicine inventory alerts and restocking requests</p></div>
+      <div class="hero-feature"><span>👨‍⚕️</span><p>Staff on-duty scheduling and availability toggles</p></div>
+    </div>
+  </div>
+
+  <div class="login-form-col">
+    <div class="login-form-box">
+      <a class="back-link" href="index.html">← Back to patient portal</a>
+      <p class="login-eyebrow">Hospital Staff Portal</p>
+      <h1 style="margin-bottom:6px">Staff login</h1>
+      <p style="color:var(--ink-2);font-size:14px;margin-bottom:24px">Access your hospital's management dashboard</p>
+
+      <div class="login-error" id="loginError">❌ Invalid Staff ID or password. Please try again.</div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="hospitalSelect">Select your hospital</label>
+          <select id="hospitalSelect" required>
+            <option value="">— Choose hospital —</option>
+            <option value="CityCare Hospital">CityCare Hospital</option>
+            <option value="GreenLine Clinic">GreenLine Clinic</option>
+            <option value="Hope Multispeciality">Hope Multispeciality</option>
+            <option value="Sunrise Senior Care">Sunrise Senior Care</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="roleSelect">Your role</label>
+          <select id="roleSelect" required>
+            <option value="">— Select role —</option>
+            <option value="Doctor">Doctor</option>
+            <option value="Nurse">Nurse</option>
+            <option value="Receptionist">Receptionist</option>
+            <option value="Admin">Admin</option>
+            <option value="Pharmacist">Pharmacist</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="staffId">Staff ID</label>
+          <input type="text" id="staffId" placeholder="E.g. STAFF001" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label for="staffPass">Password</label>
+          <input type="password" id="staffPass" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+        <div class="remember-row">
+          <input type="checkbox" id="rememberMe">
+          <label for="rememberMe">Keep me logged in</label>
+        </div>
+        <button type="submit" class="login-btn">Login to dashboard →</button>
+      </form>
+
+      <div class="demo-hint">
+        <strong>Demo credentials:</strong> Staff ID <code>staff</code> · Password <code>health123</code><br>
+        Select any hospital and role to explore the portal.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DASHBOARD (shown after login)
+══════════════════════════════════════════ -->
+<div class="portal-shell" id="portalShell" style="display:none">
+
+  <!-- Sidebar nav -->
+  <aside class="portal-sidebar" aria-label="Portal navigation">
+    <div class="portal-brand">
+      <div class="portal-mark">+</div>
+      <div><strong>One Health</strong><small>Staff Portal</small></div>
+    </div>
+    <nav class="portal-nav" aria-label="Dashboard sections">
+      <button class="portal-link active" data-section="sec-overview"><span>📊</span> Overview</button>
+      <button class="portal-link" data-section="sec-queue"><span>👥</span> Patient Queue</button>
+      <button class="portal-link" data-section="sec-inventory"><span>💊</span> Inventory</button>
+      <button class="portal-link" data-section="sec-staff"><span>👨‍⚕️</span> Staff on Duty</button>
+      <button class="portal-link" data-section="sec-alerts"><span>🔔</span> Alerts</button>
+    </nav>
+    <div class="portal-user">
+      <strong id="sidebarName">Staff Member</strong>
+      <small id="sidebarRole">Role · Hospital</small>
+    </div>
+    <button class="portal-logout" id="logoutBtn"><span>🚪</span> Logout</button>
+  </aside>
+
+  <!-- Main content -->
+  <main class="portal-main">
+    <!-- Topbar -->
+    <div class="portal-topbar">
+      <div>
+        <p style="margin:0 0 4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue)">Hospital Dashboard</p>
+        <h1 id="dashTitle">Welcome back</h1>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <span class="hospital-badge">🏥 <span id="hospitalBadge">Hospital</span></span>
+        <button class="btn btn-ghost" id="themeTogglePortal">🌙 Dark mode</button>
+      </div>
+    </div>
+
+    <!-- ── Section: Overview ── -->
+    <div class="dash-section active" id="sec-overview">
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-icon">🛏️</div>
+          <div class="stat-val" id="dashBeds">—</div>
+          <div class="stat-label">Beds available</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏥</div>
+          <div class="stat-val" id="dashICU">—</div>
+          <div class="stat-label">ICU beds</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-val" id="dashQueue">0</div>
+          <div class="stat-label">In patient queue</div>
+        </div>
+        <div class="stat-card alert-card">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-val" id="dashAlerts">0</div>
+          <div class="stat-label">Active alerts</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="sec-head"><h2>Bed & Resource Status</h2><button class="btn btn-primary" id="saveBedBtn">💾 Save changes</button></div>
+        <table class="data-table" aria-label="Bed and resource status">
+          <thead><tr><th>Resource</th><th>Current</th><th>Total</th><th>Status</th><th>Update</th></tr></thead>
+          <tbody id="bedTable"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="sec-head"><h2>Quick actions</h2></div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <button class="btn btn-primary" onclick="switchSection('sec-queue')">👥 Open patient queue</button>
+          <button class="btn btn-primary" onclick="switchSection('sec-inventory')">💊 Check inventory</button>
+          <button class="btn btn-ghost" onclick="switchSection('sec-alerts')">🔔 View alerts</button>
+          <a class="btn btn-ghost" href="index.html" target="_blank">🌐 Patient portal</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section: Patient Queue ── -->
+    <div class="dash-section" id="sec-queue">
+      <div class="panel">
+        <div class="sec-head"><h2>Patient Queue</h2><span class="badge badge-green" id="queueCount">0 patients</span></div>
+        <div class="queue-form">
+          <input type="text" id="patientName" placeholder="Patient name" aria-label="Patient name">
+          <input type="text" id="patientCondition" placeholder="Condition / reason" aria-label="Patient condition">
+          <select id="patientPriority" aria-label="Priority">
+            <option value="normal">🟢 Normal</option>
+            <option value="urgent">🟡 Urgent</option>
+            <option value="critical">🔴 Critical</option>
+          </select>
+          <button class="btn btn-primary" id="addPatientBtn">+ Add patient</button>
+        </div>
+        <table class="data-table" id="queueTable" aria-label="Patient queue">
+          <thead><tr><th>#</th><th>Patient</th><th>Condition</th><th>Priority</th><th>Wait time</th><th>Action</th></tr></thead>
+          <tbody id="queueBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Section: Inventory ── -->
+    <div class="dash-section" id="sec-inventory">
+      <div class="panel">
+        <div class="sec-head"><h2>Medicine Inventory</h2><button class="btn btn-primary" id="saveInvBtn">💾 Save inventory</button></div>
+        <table class="data-table" aria-label="Medicine inventory">
+          <thead><tr><th>Medicine</th><th>Category</th><th>Current stock</th><th>Threshold</th><th>Status</th><th>Update</th></tr></thead>
+          <tbody id="inventoryBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Section: Staff on Duty ── -->
+    <div class="dash-section" id="sec-staff">
+      <div class="panel">
+        <div class="sec-head"><h2>Staff on Duty</h2><span class="badge badge-green" id="staffOnCount">0 on duty</span></div>
+        <div class="staff-grid" id="staffGrid"></div>
+      </div>
+    </div>
+
+    <!-- ── Section: Alerts ── -->
+    <div class="dash-section" id="sec-alerts">
+      <div class="panel">
+        <div class="sec-head"><h2>Active Alerts</h2><button class="btn btn-ghost" id="clearAlertsBtn">Clear all</button></div>
+        <div class="alert-list" id="alertList"></div>
+      </div>
+    </div>
+
+  </main><!-- /portal-main -->
+</div><!-- /portal-shell -->
+
+<div class="toast" id="portalToast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script src="hospital-portal.js"></script>
+</body>
+</html>

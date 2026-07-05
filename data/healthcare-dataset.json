@@ -1,0 +1,416 @@
+{
+  "project": "One Health Platform",
+  "lastUpdated": "2026-06-22",
+  "serviceArea": "Demo City",
+  "emergencyNumbers": [
+    {
+      "name": "National Emergency Response",
+      "number": "112",
+      "use": "Police, fire, and general emergency response"
+    },
+    {
+      "name": "Ambulance",
+      "number": "108",
+      "use": "Medical emergency and ambulance dispatch"
+    }
+  ],
+  "hospitals": [
+    {
+      "id": "citycare",
+      "name": "CityCare Hospital",
+      "type": "Multispeciality",
+      "area": "MG Road",
+      "address": "12 MG Road, Demo City",
+      "distanceKm": 2.1,
+      "latitude": 12.9716,
+      "longitude": 77.5946,
+      "phone": "080-4100-1001",
+      "emergencyPhone": "080-4100-1111",
+      "openStatus": "Open 24x7",
+      "googleMapQuery": "CityCare Hospital MG Road Demo City",
+      "services": ["Emergency", "ICU", "Oxygen", "Cardiology", "Insurance Help Desk"],
+      "specialties": ["Cardiology", "Emergency", "General Medicine", "Neurology"],
+      "insuranceAccepted": ["Ayushman Bharat", "HealthSecure", "MediAssist"],
+      "beds": {
+        "general": { "total": 80, "available": 34 },
+        "icu": { "total": 16, "available": 8 },
+        "oxygen": { "total": 24, "available": 14 }
+      },
+      "priorityNotes": "Best match for chest pain, breathing difficulty, and ICU requirement."
+    },
+    {
+      "id": "greenline",
+      "name": "GreenLine Clinic",
+      "type": "Clinic",
+      "area": "Lake View",
+      "address": "44 Lake View Main Road, Demo City",
+      "distanceKm": 3.8,
+      "latitude": 12.9784,
+      "longitude": 77.6408,
+      "phone": "080-4200-2300",
+      "emergencyPhone": "080-4200-2323",
+      "openStatus": "Open until 10 PM",
+      "googleMapQuery": "GreenLine Clinic Lake View Demo City",
+      "services": ["General Medicine", "Pediatrics", "Oxygen"],
+      "specialties": ["General Medicine", "Pediatrics"],
+      "insuranceAccepted": ["HealthSecure"],
+      "beds": {
+        "general": { "total": 40, "available": 11 },
+        "icu": { "total": 0, "available": 0 },
+        "oxygen": { "total": 8, "available": 5 }
+      },
+      "priorityNotes": "Good match for fever, cough, child care, and primary consultation."
+    },
+    {
+      "id": "hope",
+      "name": "Hope Multispeciality",
+      "type": "Trauma and multispeciality",
+      "area": "Central Market",
+      "address": "7 Central Market Road, Demo City",
+      "distanceKm": 5.4,
+      "latitude": 12.9352,
+      "longitude": 77.6245,
+      "phone": "080-4300-7744",
+      "emergencyPhone": "080-4300-7000",
+      "openStatus": "Open 24x7",
+      "googleMapQuery": "Hope Multispeciality Central Market Demo City",
+      "services": ["Emergency", "ICU", "Orthopedics", "Trauma Care", "Insurance Help Desk"],
+      "specialties": ["Orthopedics", "Neurology", "Emergency", "General Surgery"],
+      "insuranceAccepted": ["Ayushman Bharat", "MediAssist", "CareShield"],
+      "beds": {
+        "general": { "total": 60, "available": 23 },
+        "icu": { "total": 10, "available": 5 },
+        "oxygen": { "total": 15, "available": 9 }
+      },
+      "priorityNotes": "Best match for accident, fracture, trauma, and emergency surgery."
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise Senior Care",
+      "type": "Senior care hospital",
+      "area": "West End",
+      "address": "101 West End Avenue, Demo City",
+      "distanceKm": 7.2,
+      "latitude": 12.9141,
+      "longitude": 77.5839,
+      "phone": "080-4400-8812",
+      "emergencyPhone": "080-4400-8899",
+      "openStatus": "Open 24x7",
+      "googleMapQuery": "Sunrise Senior Care West End Demo City",
+      "services": ["Geriatrics", "General Medicine", "Rehabilitation", "Insurance Help Desk"],
+      "specialties": ["Geriatrics", "General Medicine", "Physiotherapy"],
+      "insuranceAccepted": ["HealthSecure", "CareShield"],
+      "beds": {
+        "general": { "total": 60, "available": 19 },
+        "icu": { "total": 6, "available": 3 },
+        "oxygen": { "total": 12, "available": 0 }
+      },
+      "priorityNotes": "Good match for senior citizens, rehabilitation, and follow-up care."
+    }
+  ],
+  "doctors": [
+    {
+      "id": "asha-menon",
+      "name": "Dr. Asha Menon",
+      "specialization": "Cardiology",
+      "qualification": "MD, DM Cardiology",
+      "hospitalId": "citycare",
+      "hospitalName": "CityCare Hospital",
+      "status": "Available now",
+      "nextSlot": "Now",
+      "consultationModes": ["In-person", "Emergency"],
+      "phone": "080-4100-1010",
+      "seniorCitizenFriendly": true
+    },
+    {
+      "id": "kiran-rao",
+      "name": "Dr. Kiran Rao",
+      "specialization": "General Medicine",
+      "qualification": "MBBS, MD Medicine",
+      "hospitalId": "greenline",
+      "hospitalName": "GreenLine Clinic",
+      "status": "Next slot 4:30 PM",
+      "nextSlot": "4:30 PM",
+      "consultationModes": ["In-person", "Video consult"],
+      "phone": "080-4200-2320",
+      "seniorCitizenFriendly": true
+    },
+    {
+      "id": "meera-shah",
+      "name": "Dr. Meera Shah",
+      "specialization": "Pediatrics",
+      "qualification": "MD Pediatrics",
+      "hospitalId": "greenline",
+      "hospitalName": "GreenLine Clinic",
+      "status": "Available now",
+      "nextSlot": "Now",
+      "consultationModes": ["In-person"],
+      "phone": "080-4200-2340",
+      "seniorCitizenFriendly": false
+    },
+    {
+      "id": "farhan-ali",
+      "name": "Dr. Farhan Ali",
+      "specialization": "Orthopedics",
+      "qualification": "MS Orthopedics",
+      "hospitalId": "hope",
+      "hospitalName": "Hope Multispeciality",
+      "status": "Next slot 6:00 PM",
+      "nextSlot": "6:00 PM",
+      "consultationModes": ["In-person", "Emergency"],
+      "phone": "080-4300-7755",
+      "seniorCitizenFriendly": true
+    },
+    {
+      "id": "leela-nair",
+      "name": "Dr. Leela Nair",
+      "specialization": "Geriatrics",
+      "qualification": "MD Geriatrics",
+      "hospitalId": "sunrise",
+      "hospitalName": "Sunrise Senior Care",
+      "status": "Available now",
+      "nextSlot": "Now",
+      "consultationModes": ["In-person", "Home care follow-up"],
+      "phone": "080-4400-8820",
+      "seniorCitizenFriendly": true
+    }
+  ],
+  "medicines": [
+    {
+      "id": "insulin",
+      "name": "Insulin",
+      "category": "Diabetes care",
+      "pharmacyId": "mediquick",
+      "pharmacyName": "MediQuick Pharmacy",
+      "stock": 18,
+      "unit": "vials",
+      "requiresPrescription": true,
+      "alternative": "Consult doctor for brand substitute"
+    },
+    {
+      "id": "paracetamol",
+      "name": "Paracetamol 500mg",
+      "category": "Fever and pain",
+      "pharmacyId": "careplus",
+      "pharmacyName": "CarePlus Pharmacy",
+      "stock": 120,
+      "unit": "strips",
+      "requiresPrescription": false,
+      "alternative": "Acetaminophen 500mg"
+    },
+    {
+      "id": "ors",
+      "name": "ORS Sachets",
+      "category": "Dehydration",
+      "pharmacyId": "mediquick",
+      "pharmacyName": "MediQuick Pharmacy",
+      "stock": 7,
+      "unit": "sachets",
+      "requiresPrescription": false,
+      "alternative": "WHO ORS equivalent"
+    },
+    {
+      "id": "oxygen-cylinder",
+      "name": "Oxygen Cylinder",
+      "category": "Respiratory support",
+      "pharmacyId": "lifeaid",
+      "pharmacyName": "LifeAid Medicals",
+      "stock": 3,
+      "unit": "cylinders",
+      "requiresPrescription": true,
+      "alternative": "Hospital oxygen bed"
+    },
+    {
+      "id": "saline",
+      "name": "Normal Saline",
+      "category": "Emergency fluids",
+      "pharmacyId": "lifeaid",
+      "pharmacyName": "LifeAid Medicals",
+      "stock": 24,
+      "unit": "bottles",
+      "requiresPrescription": true,
+      "alternative": "Doctor advised fluid replacement"
+    }
+  ],
+  "pharmacies": [
+    {
+      "id": "mediquick",
+      "name": "MediQuick Pharmacy",
+      "distanceKm": 0.8,
+      "area": "MG Road",
+      "phone": "080-5000-1100",
+      "openStatus": "Open 24x7",
+      "latitude": 12.9702,
+      "longitude": 77.5991,
+      "googleMapQuery": "MediQuick Pharmacy MG Road Demo City",
+      "services": ["Home delivery", "Emergency medicines", "Diabetes care"]
+    },
+    {
+      "id": "careplus",
+      "name": "CarePlus Pharmacy",
+      "distanceKm": 1.4,
+      "area": "Lake View",
+      "phone": "080-5000-2200",
+      "openStatus": "Open until 11 PM",
+      "latitude": 12.9765,
+      "longitude": 77.6362,
+      "googleMapQuery": "CarePlus Pharmacy Lake View Demo City",
+      "services": ["Fever medicines", "Child care medicines", "Home delivery"]
+    },
+    {
+      "id": "lifeaid",
+      "name": "LifeAid Medicals",
+      "distanceKm": 2.7,
+      "area": "Central Market",
+      "phone": "080-5000-3300",
+      "openStatus": "Open 24x7",
+      "latitude": 12.9341,
+      "longitude": 77.6258,
+      "googleMapQuery": "LifeAid Medicals Central Market Demo City",
+      "services": ["Oxygen support", "Emergency medicines", "Surgical supplies"]
+    }
+  ],
+  "ambulances": [
+    {
+      "id": "rapid-ambulance",
+      "name": "Rapid Ambulance 24x7",
+      "etaMinutes": 8,
+      "phone": "108",
+      "type": "Advanced life support",
+      "available": true,
+      "coverage": "Demo City central area"
+    },
+    {
+      "id": "citycare-ambulance",
+      "name": "CityCare Ambulance",
+      "etaMinutes": 12,
+      "phone": "080-4100-1111",
+      "type": "Hospital transfer",
+      "available": true,
+      "coverage": "MG Road and nearby areas"
+    },
+    {
+      "id": "senior-assist",
+      "name": "Senior Assist Mobility",
+      "etaMinutes": 18,
+      "phone": "080-5999-1212",
+      "type": "Non-emergency patient transport",
+      "available": true,
+      "coverage": "Senior citizen transport"
+    }
+  ],
+  "insurancePartners": [
+    {
+      "id": "ayushman",
+      "name": "Ayushman Bharat",
+      "type": "Government scheme",
+      "helpDeskPhone": "1800-111-565",
+      "cashlessHospitals": ["CityCare Hospital", "Hope Multispeciality"],
+      "requiredDocuments": ["Government ID", "Scheme card", "Doctor admission note"]
+    },
+    {
+      "id": "healthsecure",
+      "name": "HealthSecure",
+      "type": "Private insurance",
+      "helpDeskPhone": "1800-222-700",
+      "cashlessHospitals": ["CityCare Hospital", "GreenLine Clinic", "Sunrise Senior Care"],
+      "requiredDocuments": ["Policy number", "Government ID", "Hospital estimate"]
+    },
+    {
+      "id": "mediassist",
+      "name": "MediAssist",
+      "type": "TPA support",
+      "helpDeskPhone": "1800-333-900",
+      "cashlessHospitals": ["CityCare Hospital", "Hope Multispeciality"],
+      "requiredDocuments": ["TPA card", "Policy number", "Admission request"]
+    }
+  ],
+  "firstAid": [
+    {
+      "id": "chest-pain",
+      "title": "Chest pain or breathing difficulty",
+      "urgency": "critical",
+      "tags": ["chest pain", "breathing", "heart attack", "oxygen"],
+      "steps": [
+        "Call 108 or 112 immediately.",
+        "Keep the person sitting upright and calm.",
+        "Loosen tight clothing and keep fresh air available.",
+        "Do not give food or drink if the person is very breathless or drowsy.",
+        "Move to the nearest emergency hospital with ICU and oxygen support."
+      ],
+      "avoid": ["Do not delay care to search online.", "Do not let the person walk around unnecessarily."],
+      "recommendedService": "Emergency hospital with ICU and oxygen support"
+    },
+    {
+      "id": "bleeding",
+      "title": "Heavy bleeding",
+      "urgency": "critical",
+      "tags": ["bleeding", "accident", "trauma", "cut"],
+      "steps": [
+        "Call an ambulance immediately.",
+        "Apply firm pressure with a clean cloth or bandage.",
+        "Raise the injured area if possible and safe.",
+        "Keep the person lying down and warm.",
+        "Go to a trauma or emergency hospital."
+      ],
+      "avoid": ["Do not remove deeply stuck objects.", "Do not use dirty cloth on a wound."],
+      "recommendedService": "Trauma care and emergency hospital"
+    },
+    {
+      "id": "burns",
+      "title": "Burns",
+      "urgency": "urgent",
+      "tags": ["burn", "fire", "scald"],
+      "steps": [
+        "Cool the burn under clean running water for 20 minutes.",
+        "Remove jewelry or tight items near the burn if easy.",
+        "Cover with clean non-stick cloth.",
+        "Seek medical help for large, deep, chemical, electrical, face, hand, or child burns."
+      ],
+      "avoid": ["Do not apply toothpaste, butter, or oil.", "Do not burst blisters."],
+      "recommendedService": "Emergency care or general surgery"
+    },
+    {
+      "id": "fracture",
+      "title": "Suspected fracture",
+      "urgency": "urgent",
+      "tags": ["fracture", "bone", "fall", "orthopedics"],
+      "steps": [
+        "Keep the injured part still.",
+        "Use a simple support or splint if trained.",
+        "Apply a cold pack wrapped in cloth for swelling.",
+        "Visit an orthopedic or emergency hospital."
+      ],
+      "avoid": ["Do not force the bone or joint back into place.", "Do not massage the injury."],
+      "recommendedService": "Orthopedics and X-ray facility"
+    },
+    {
+      "id": "fever",
+      "title": "Fever and dehydration risk",
+      "urgency": "moderate",
+      "tags": ["fever", "cough", "dehydration", "ors"],
+      "steps": [
+        "Measure temperature and note duration.",
+        "Drink water or ORS in small frequent amounts.",
+        "Use fever medicine only as per label or doctor advice.",
+        "Consult a doctor if fever is high, persistent, or with breathing trouble, rash, confusion, or child symptoms."
+      ],
+      "avoid": ["Do not take antibiotics without prescription.", "Do not ignore fever in infants or senior citizens."],
+      "recommendedService": "General medicine or pediatrics"
+    },
+    {
+      "id": "choking",
+      "title": "Choking",
+      "urgency": "critical",
+      "tags": ["choking", "throat", "cannot breathe"],
+      "steps": [
+        "Call emergency services if the person cannot breathe, speak, or cough.",
+        "Encourage coughing if air is moving.",
+        "Use back blows and abdominal thrusts only if trained.",
+        "Start CPR if the person becomes unresponsive and you are trained."
+      ],
+      "avoid": ["Do not put fingers blindly into the mouth.", "Do not give water during choking."],
+      "recommendedService": "Emergency ambulance and hospital"
+    }
+  ]
+}

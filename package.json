@@ -1,0 +1,9 @@
+{
+  "name": "one-health-platform-prototype",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Community Focused Project prototype with backend APIs, dataset, Google Maps embed, first-aid content, and chatbot.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

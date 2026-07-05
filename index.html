@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>One Health Platform — Community Care Near You</title>
+  <meta name="description" content="Find hospitals, doctors, medicines, ambulances and emergency care near you. AI-powered triage, first aid guides, insurance help and pharmacy marketplace.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ══════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════ -->
+  <aside class="sidebar" aria-label="Primary navigation">
+    <a class="brand" href="#" aria-label="One Health home">
+      <span class="brand-mark" aria-hidden="true">+</span>
+      <span class="brand-text">
+        <strong>One Health</strong>
+        <small>Community Care</small>
+      </span>
+    </a>
+
+    <!-- Language translation selector dropdown -->
+    <div class="lang-switcher" style="padding: 0 16px 12px 16px; width: 100%;">
+      <select id="langSelect" onchange="changeLanguage(this.value)" style="width: 100%; padding: 6px 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-xs); color: var(--ink); font-size: 13.5px; font-weight: 600; cursor: pointer; outline: none;">
+        <option value="en">🌐 English (EN)</option>
+        <option value="hi">🌐 हिन्दी (HI)</option>
+        <option value="ta">🌐 தமிழ் (TA)</option>
+        <option value="es">🌐 Español (ES)</option>
+        <option value="fr">🌐 Français (FR)</option>
+        <option value="de">🌐 Deutsch (DE)</option>
+      </select>
+    </div>
+
+    <nav class="nav-list" role="tablist" aria-label="Main sections">
+      <button class="nav-link active" role="tab" aria-selected="true"  data-tab="tab-overview"    id="nav-overview">
+        <span class="nav-icon">🗺️</span> <span data-i18n="navOverview">Overview</span>
+      </button>
+      <button class="nav-link" role="tab" aria-selected="false" data-tab="tab-hospitals"   id="nav-hospitals">
+        <span class="nav-icon">🏥</span> <span data-i18n="navHospitals">Hospitals</span>
+      </button>
+      <button class="nav-link" role="tab" aria-selected="false" data-tab="tab-doctors"     id="nav-doctors">
+        <span class="nav-icon">👨‍⚕️</span> <span data-i18n="navDoctors">Doctors</span>
+      </button>
+      <button class="nav-link" role="tab" aria-selected="false" data-tab="tab-medicine"    id="nav-medicine">
+        <span class="nav-icon">💊</span> <span data-i18n="navMedicines">Medicines</span>
+      </button>
+      <button class="nav-link" role="tab" aria-selected="false" data-tab="tab-chat"        id="nav-chat">
+        <span class="nav-icon">🤖</span> <span data-i18n="navChat">AI Chat</span>
+      </button>
+      <button class="nav-link" role="tab" aria-selected="false" data-tab="tab-firstaid"    id="nav-firstaid">
+        <span class="nav-icon">🩹</span> <span data-i18n="navFirstAid">First Aid</span>
+      </button>
+      <button class="nav-link" role="tab" aria-selected="false" data-tab="tab-insurance"   id="nav-insurance">
+        <span class="nav-icon">📋</span> <span data-i18n="navInsurance">Insurance</span>
+      </button>
+      <button class="nav-link" role="tab" aria-selected="false" data-tab="tab-emergency"   id="nav-emergency">
+        <span class="nav-icon">🚨</span> <span data-i18n="navEmergency">Emergency</span>
+      </button>
+      <button class="nav-link" role="tab" aria-selected="false" data-tab="tab-triage"      id="nav-triage">
+        <span class="nav-icon">📊</span> <span data-i18n="navTriage">Smart Triage</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <span class="pulse"></span>
+        <span>Live demo · updated now</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <span id="themeIcon">🌙</span>
+        <span id="themeLabel">Dark mode</span>
+      </button>
+      <a class="portal-link" href="hospital-portal.html" target="_blank">
+        <span>🏨</span> Hospital Portal
+      </a>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-copy">
+        <p class="eyebrow">Community Focused</p>
+        <h1>One place for urgent healthcare decisions</h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="emergency-pill">
+          <span class="pulse-red"></span>
+          <a href="tel:108" aria-label="Call ambulance 108">108 · Ambulance</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Global search -->
+    <section class="search-band" aria-labelledby="search-title">
+      <div class="search-copy">
+        <h2 id="search-title">Find care near you</h2>
+        <p>Search hospitals, doctors, medicines, or emergency services.</p>
+      </div>
+      <form class="search-form" id="searchForm" role="search">
+        <label class="sr-only" for="globalSearch">Search healthcare services</label>
+        <div class="search-input-wrap">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="globalSearch" name="q" type="search" placeholder="Try cardiology, insulin, oxygen bed, ambulance…" autocomplete="off">
+        </div>
+        <button type="submit">Search</button>
+      </form>
+    </section>
+
+    <!-- Metrics -->
+    <section class="metrics-row" aria-label="Platform status">
+      <article class="metric"><span class="metric-icon">🏥</span><span class="metric-value" id="metricHospitals">0</span><span class="metric-label">Nearby hospitals</span></article>
+      <article class="metric"><span class="metric-icon">🛏️</span><span class="metric-value" id="metricBeds">0</span><span class="metric-label">Beds available</span></article>
+      <article class="metric"><span class="metric-icon">👨‍⚕️</span><span class="metric-value" id="metricDoctors">0</span><span class="metric-label">Doctors online</span></article>
+      <article class="metric urgent"><span class="metric-icon">🚨</span><span class="metric-value">108</span><span class="metric-label">Emergency helpline</span></article>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         TAB PANELS
+    ══════════════════════════════════════ -->
+
+    <!-- ── Tab 1: Overview & Map ── -->
+    <section class="tab-panel active" id="tab-overview" role="tabpanel" aria-labelledby="nav-overview">
+      <div class="workspace-grid">
+
+        <!-- Google Maps panel -->
+        <div class="panel map-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Location Intelligence</p>
+              <h2>Interactive Healthcare Map</h2>
+            </div>
+            <div class="map-controls">
+              <select id="distanceFilter" aria-label="Filter by distance">
+                <option value="all">All distances</option>
+                <option value="1500">Within 1.5 km</option>
+                <option value="3000">Within 3 km</option>
+                <option value="5000">Within 5 km</option>
+              </select>
+              <button class="icon-btn" id="locateBtn" type="button" title="Use my location" aria-label="Use my location">📍</button>
+            </div>
+          </div>
+
+          <!-- Live Map Notice -->
+          <div class="map-notice" id="mapNotice" hidden>
+            <span class="notice-icon">⚠️</span>
+            <span id="mapNoticeText">Zoom in to view local healthcare facilities.</span>
+          </div>
+
+          <!-- Map container -->
+          <div class="map-container" id="mapContainer" aria-label="Healthcare map" style="position: relative;">
+            <div id="map" style="width: 100%; height: 380px; border-radius: var(--radius-sm); z-index: 1;"></div>
+            <!-- Loading indicator overlay -->
+            <div id="mapLoader" class="map-loader" hidden>
+              <span class="spinner"></span>
+              <span>Loading facilities...</span>
+            </div>
+          </div>
+
+          <div class="map-detail" id="mapDetail" aria-live="polite">
+            <div class="map-detail-icon">🏥</div>
+            <div class="map-detail-info">
+              <strong>CityCare Hospital</strong>
+              <span>2.1 km · ICU, oxygen beds, cardiology</span>
+            </div>
+            <button class="map-route-btn" id="mapRouteBtn" type="button" data-name="CityCare Hospital">Get directions</button>
+          </div>
+        </div>
+
+        <!-- AI Suggestion + Snapshots -->
+        <div class="panel ai-panel">
+          <div class="section-heading">
+            <div><p class="eyebrow">AI Triage</p><h2>Health suggestion</h2></div>
+            <span class="ai-badge">AI</span>
+          </div>
+          <form id="symptomForm" class="symptom-form">
+            <label for="symptoms">Describe your symptoms or need</label>
+            <textarea id="symptoms" rows="3" placeholder="E.g. fever and chest pain, need oxygen bed, senior citizen dizziness…"></textarea>
+            <div class="quick-symptoms">
+              <button type="button" data-symptom="fever cough">🤒 Fever</button>
+              <button type="button" data-symptom="chest pain breathing">💔 Chest pain</button>
+              <button type="button" data-symptom="diabetes insulin">💉 Diabetes</button>
+              <button type="button" data-symptom="accident bleeding ambulance">🚨 Accident</button>
+              <button type="button" data-symptom="senior elderly dizzy">👴 Senior</button>
+              <button type="button" data-symptom="child pediatrics">🧒 Child</button>
+            </div>
+            <button class="primary-action" type="submit">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Get suggestion
+            </button>
+          </form>
+          <div class="advice-box" id="adviceBox" aria-live="polite">
+            <span class="advice-icon">💡</span>
+            <div><strong>Suggestion preview</strong><p>Enter symptoms above to see triage guidance and matching care options.</p></div>
+          </div>
+          <div class="snapshot-grid">
+            <div class="snapshot-item"><strong id="snapBeds">0</strong><span>Beds available</span></div>
+            <div class="snapshot-item"><strong id="snapICU">0</strong><span>ICU beds tracked</span></div>
+            <div class="snapshot-item"><strong id="snapOxygen">0</strong><span>Oxygen sources</span></div>
+            <div class="snapshot-item"><strong id="snapPharmacy">3</strong><span>Open pharmacies</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Tab 2: Hospitals ── -->
+    <section class="tab-panel" id="tab-hospitals" role="tabpanel" aria-labelledby="nav-hospitals" hidden>
+      <div class="section-heading">
+        <div><p class="eyebrow">Hospitals</p><h2>Nearby care centers</h2></div>
+        <div class="segmented-control" role="group" aria-label="Hospital filter">
+          <button class="segment active" data-filter="all">All</button>
+          <button class="segment" data-filter="icu">ICU</button>
+          <button class="segment" data-filter="oxygen">Oxygen</button>
+          <button class="segment" data-filter="insurance">Insurance</button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <select id="distanceFilter2" aria-label="Filter by distance">
+          <option value="all">All distances</option>
+          <option value="3">Within 3 km</option>
+          <option value="5">Within 5 km</option>
+          <option value="10">Within 10 km</option>
+        </select>
+      </div>
+      <div class="card-grid" id="hospitalGrid" aria-live="polite"></div>
+    </section>
+
+    <!-- ── Tab 3: Doctors ── -->
+    <section class="tab-panel" id="tab-doctors" role="tabpanel" aria-labelledby="nav-doctors" hidden>
+      <div class="section-heading">
+        <div><p class="eyebrow">Doctors</p><h2>Availability &amp; Specialization</h2></div>
+        <select id="specialtyFilter" aria-label="Filter by specialty">
+          <option value="all">All specializations</option>
+          <option value="Cardiology">Cardiology</option>
+          <option value="General Medicine">General Medicine</option>
+          <option value="Pediatrics">Pediatrics</option>
+          <option value="Orthopedics">Orthopedics</option>
+          <option value="Geriatrics">Geriatrics</option>
+        </select>
+      </div>
+      <div class="doctor-list" id="doctorList" aria-live="polite"></div>
+    </section>
+
+    <!-- ── Tab 4: Medicines & Pharmacies ── -->
+    <section class="tab-panel" id="tab-medicine" role="tabpanel" aria-labelledby="nav-medicine" hidden>
+      <div class="two-col-layout">
+        <!-- Stock finder -->
+        <div class="panel">
+          <div class="section-heading"><div><p class="eyebrow">Stock Finder</p><h2>Medicines near you</h2></div></div>
+          <div class="filter-row">
+            <input id="medicineSearch" type="search" placeholder="Search medicines…" aria-label="Search medicines">
+          </div>
+          <div class="medicine-list" id="medicineList" aria-live="polite"></div>
+        </div>
+        <!-- Local pharmacies -->
+        <div class="panel">
+          <div class="section-heading"><div><p class="eyebrow">Pharmacies</p><h2>Nearby pharmacies</h2></div></div>
+          <div class="pharmacy-list" id="pharmacyList"></div>
+        </div>
+      </div>
+
+      <!-- Online pharmacy marketplace -->
+      <div class="panel marketplace-panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">Online Marketplace</p><h2>Buy medicines online</h2></div>
+          <span class="badge-new">All platforms</span>
+        </div>
+        <p class="marketplace-intro">Search any medicine across all major Indian pharmacy apps at once:</p>
+        <div class="marketplace-search-row">
+          <input id="buySearch" type="search" placeholder="Type a medicine name to search all platforms…" aria-label="Search medicine across platforms">
+          <button type="button" id="buySearchBtn" class="primary-action">Search All</button>
+        </div>
+        <div class="pharmacy-apps-grid" id="pharmacyAppsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ── Tab 5: AI Chat ── -->
+    <section class="tab-panel" id="tab-chat" role="tabpanel" aria-labelledby="nav-chat" hidden>
+      <div class="chat-layout">
+        <div class="panel chat-panel">
+          <div class="section-heading">
+            <div><p class="eyebrow">Powered by Gemini AI</p><h2>Health Assistant Chat</h2></div>
+            <span class="ai-badge">AI</span>
+          </div>
+          <div class="api-notice" id="chatApiNotice">
+            <span>🔑</span>
+            <div>Add your <strong>Gemini API key</strong> in <code>app.js</code> → <code>GEMINI_API_KEY</code> for real AI responses. Without it, a smart rule-based assistant responds.
+            <a href="https://aistudio.google.com" target="_blank" rel="noopener">Get a free key →</a></div>
+          </div>
+          <div class="chat-messages" id="chatMessages" aria-live="polite" aria-label="Chat conversation">
+            <div class="chat-bubble bot">
+              <span class="chat-avatar">🤖</span>
+              <div class="bubble-content">
+                <p>Hello! I'm your One Health AI assistant. I can help with:</p>
+                <ul>
+                  <li>🏥 Finding hospitals and doctors near you</li>
+                  <li>💊 Medicine information and stock</li>
+                  <li>🩹 First aid guidance</li>
+                  <li>📋 Insurance and scheme queries</li>
+                  <li>🚨 Emergency triage advice</li>
+                </ul>
+                <p>What can I help you with today?</p>
+              </div>
+            </div>
+          </div>
+          <div class="chat-typing" id="chatTyping" hidden aria-live="polite" aria-label="AI is typing">
+            <span class="chat-avatar">🤖</span>
+            <div class="typing-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="quick-chat" aria-label="Quick questions">
+            <button type="button" data-query="Which hospitals near me have ICU beds?">ICU hospitals</button>
+            <button type="button" data-query="What is the first aid for a heart attack?">Heart attack first aid</button>
+            <button type="button" data-query="How do I apply for Ayushman Bharat PM-JAY?">PM-JAY scheme</button>
+            <button type="button" data-query="Where can I find insulin near me?">Find insulin</button>
+            <button type="button" data-query="What are signs of a stroke?">Stroke signs</button>
+            <button type="button" data-query="Is there a doctor available for video consult now?">Video consult</button>
+          </div>
+          <form class="chat-form" id="chatForm" aria-label="Send a message">
+            <label class="sr-only" for="chatInput">Your message</label>
+            <input id="chatInput" type="text" placeholder="Ask about symptoms, hospitals, medicines, insurance…" autocomplete="off">
+            <button type="submit" aria-label="Send message">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+        </div>
+        <div class="panel chat-sidebar">
+          <p class="eyebrow">Quick references</p>
+          <h3>Emergency numbers</h3>
+          <div class="emergency-list">
+            <div class="emergency-item"><span>🚑</span><div><strong>Ambulance</strong><a href="tel:108">108</a></div></div>
+            <div class="emergency-item"><span>🚒</span><div><strong>Fire</strong><a href="tel:101">101</a></div></div>
+            <div class="emergency-item"><span>👮</span><div><strong>Police</strong><a href="tel:100">100</a></div></div>
+            <div class="emergency-item"><span>👩</span><div><strong>Women helpline</strong><a href="tel:1091">1091</a></div></div>
+            <div class="emergency-item"><span>🧒</span><div><strong>Child helpline</strong><a href="tel:1098">1098</a></div></div>
+            <div class="emergency-item"><span>☠️</span><div><strong>Poison control</strong><a href="tel:1800-116-117">1800-116-117</a></div></div>
+          </div>
+          <div class="divider"></div>
+          <p class="eyebrow">Disclaimer</p>
+          <p style="font-size:12px;color:var(--ink-2)">This AI provides general health information only. Always consult a qualified medical professional for diagnosis and treatment. In emergencies, call 108 immediately.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Tab 6: First Aid ── -->
+    <section class="tab-panel" id="tab-firstaid" role="tabpanel" aria-labelledby="nav-firstaid" hidden>
+      <div class="section-heading">
+        <div><p class="eyebrow">First Aid Guide</p><h2>Emergency procedures</h2></div>
+        <div class="filter-row">
+          <input id="firstaidSearch" type="search" placeholder="Search first aid…" aria-label="Search first aid procedures">
+          <select id="severityFilter" aria-label="Filter by severity">
+            <option value="all">All severities</option>
+            <option value="critical">🔴 Critical</option>
+            <option value="high">🟠 High</option>
+            <option value="moderate">🟡 Moderate</option>
+          </select>
+        </div>
+      </div>
+      <div class="firstaid-grid" id="firstaidGrid" aria-live="polite"></div>
+    </section>
+
+    <!-- ── Tab 7: Insurance ── -->
+    <section class="tab-panel" id="tab-insurance" role="tabpanel" aria-labelledby="nav-insurance" hidden>
+      <div class="section-heading">
+        <div><p class="eyebrow">Health Coverage</p><h2>Insurance &amp; Government Schemes</h2></div>
+      </div>
+
+      <!-- Scheme cards -->
+      <div class="insurance-section-label">🏛️ Government Schemes</div>
+      <div class="insurance-grid" id="govtSchemeGrid"></div>
+
+      <div class="insurance-section-label">🏢 Private Insurers</div>
+      <div class="insurance-grid" id="privateInsurGrid"></div>
+
+      <!-- How to apply accordion -->
+      <div class="panel" style="margin-top:8px">
+        <div class="section-heading"><div><p class="eyebrow">Step-by-step guide</p><h2>How to apply</h2></div></div>
+        <div class="accordion" id="insuranceAccordion"></div>
+      </div>
+
+      <!-- Hospital empanelment checker -->
+      <div class="panel" style="margin-top:8px">
+        <div class="section-heading"><div><p class="eyebrow">Empanelment Checker</p><h2>Is your hospital covered?</h2></div></div>
+        <div class="filter-row">
+          <input id="empanelSearch" type="text" placeholder="Search hospital name…" aria-label="Search hospital empanelment">
+          <button type="button" id="empanelBtn" class="primary-action">Check coverage</button>
+        </div>
+        <div id="empanelResult" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ── Tab 8: Emergency ── -->
+    <section class="tab-panel" id="tab-emergency" role="tabpanel" aria-labelledby="nav-emergency" hidden>
+      <div class="two-col-layout">
+        <div class="panel emergency-panel">
+          <p class="eyebrow">Emergency</p>
+          <h2>Ambulance services</h2>
+          <div id="ambulanceList" class="ambulance-list"></div>
+          <div class="sos-wrap">
+            <button class="sos-btn" id="sosBtn" type="button" aria-label="Send SOS alert">🆘 Send SOS Alert</button>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="eyebrow">Support</p>
+          <h2>Insurance help desk</h2>
+          <div class="insurance-box">
+            <span class="insurance-icon">✅</span>
+            <div>
+              <strong>Claim &amp; cashless support</strong>
+              <p>Verify network hospitals, required documents, and emergency admission guidance.</p>
+            </div>
+          </div>
+          <form class="insurance-form" id="insuranceForm">
+            <label for="policyType">Policy type</label>
+            <select id="policyType">
+              <option>Government scheme (PM-JAY/ESIC/CGHS)</option>
+              <option>Private insurance</option>
+              <option>Employer / group coverage</option>
+            </select>
+            <label for="supportNeed">Support needed</label>
+            <input id="supportNeed" type="text" placeholder="E.g. cashless admission at CityCare">
+            <button type="submit">Check support</button>
+          </form>
+          <p class="form-result" id="insuranceResult" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 📄 Tab 9: Smart Triage -->
+    <section class="tab-panel" id="tab-triage" role="tabpanel" aria-labelledby="nav-triage" hidden>
+      <header class="section-header">
+        <div>
+          <p class="eyebrow" data-i18n="triageEyebrow">IEEE Decision Analytics</p>
+          <h2 data-i18n="triageTitle">Smart Resource Triage Optimizer</h2>
+        </div>
+      </header>
+      
+      <div class="two-col-layout">
+        <div class="card" style="padding:20px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);">
+          <h3 data-i18n="triageInputs">Optimization Parameters</h3>
+          <p class="card-desc" style="color:var(--ink-2); font-size:13.5px; margin-top:4px; line-height:1.4;" data-i18n="triageDesc">Select emergency profile and priority factor to execute Dijkstra-based hospital triage resource allocation.</p>
+          
+          <form id="triageForm" class="insurance-form" style="margin-top: 15px; display:flex; flex-direction:column; gap:12px;">
+            <div class="form-group" style="display:flex; flex-direction:column; gap:4px;">
+              <label for="triageProfile" style="font-size:12.5px; font-weight:700; color:var(--navy)" data-i18n="labelProfile">Emergency Profile</label>
+              <select id="triageProfile" style="padding:8px 10px; border:1px solid var(--line); border-radius:var(--radius-xs); background:var(--surface-2); color:var(--ink); font-size:13.5px; font-weight:600; outline:none;">
+                <option value="cardiac">🔴 Cardiac Emergency (ICU & Cardiology priority)</option>
+                <option value="trauma">🟠 Severe Trauma / Accident (Emergency & General priority)</option>
+                <option value="pediatric">🟡 Pediatric Crisis (Pediatric ICU priority)</option>
+                <option value="general">🟢 General Ward Admission (Standard priority)</option>
+              </select>
+            </div>
+            
+            <div class="form-group" style="display:flex; flex-direction:column; gap:4px;">
+              <label for="triageWeight" style="font-size:12.5px; font-weight:700; color:var(--navy)" data-i18n="labelWeight">Primary Optimization Objective</label>
+              <select id="triageWeight" style="padding:8px 10px; border:1px solid var(--line); border-radius:var(--radius-xs); background:var(--surface-2); color:var(--ink); font-size:13.5px; font-weight:600; outline:none;">
+                <option value="distance">Minimize Physical Proximity (Distance-decay heavier weight)</option>
+                <option value="beds">Maximize Real-time Bed & ICU Availability</option>
+                <option value="rating">Maximize Clinical Quality (User Rating-weighted)</option>
+                <option value="balanced">Balanced Utility Score (Multi-objective compromise)</option>
+              </select>
+            </div>
+            
+            <button type="submit" class="primary-action" style="margin-top: 8px; width:100%; display:block; padding:10px; font-weight:700" data-i18n="btnOptimize">
+              ⚡ Execute Optimization Algorithm
+            </button>
+          </form>
+        </div>
+        
+        <div class="card" style="padding:20px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);">
+          <h3 data-i18n="triageOutputs">Algorithmic Match Outcomes</h3>
+          <div id="triageResultsList" style="margin-top: 15px;">
+            <p class="empty-state" data-i18n="triageEmpty">Execute the optimizer to run the utility-scoring formula on active surrounding hospitals.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /main -->
+</div><!-- /app-shell -->
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<!-- SOS Modal -->
+<div class="modal-backdrop" id="sosModal" role="dialog" aria-modal="true" aria-labelledby="sosTitle" hidden>
+  <div class="modal">
+    <h2 id="sosTitle">🆘 SOS Alert Sent</h2>
+    <p>Your location has been shared with emergency services. Nearest ambulance — <strong>Rapid Ambulance 24×7</strong> — has been notified.</p>
+    <p>Estimated arrival: <strong>8 minutes</strong>. Please stay calm and keep the line open.</p>
+    <p>Call <a href="tel:108"><strong>108</strong></a> for immediate voice assistance.</p>
+    <button class="primary-action" id="closeSosModal">Close</button>
+  </div>
+</div>
+
+<!-- First Aid Detail Modal -->
+<div class="modal-backdrop" id="firstaidModal" role="dialog" aria-modal="true" aria-labelledby="firstaidModalTitle" hidden>
+  <div class="modal modal-lg" id="firstaidModalContent"></div>
+</div>
+
+<!-- Google Maps API — replace YOUR_GOOGLE_MAPS_API_KEY -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initGoogleMap&libraries=places&loading=async" async defer></script> -->
+
+<script src="app.js"></script>
+</body>
+</html>

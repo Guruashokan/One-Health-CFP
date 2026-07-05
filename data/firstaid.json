@@ -1,0 +1,394 @@
+[
+  {
+    "id": "cpr-adult",
+    "title": "CPR — Adult (18+)",
+    "icon": "❤️",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["cpr", "cardiac arrest", "heart attack", "unconscious", "not breathing"],
+    "symptoms": ["Person is unresponsive", "Not breathing or only gasping", "No pulse felt"],
+    "steps": [
+      "Call 108 or ask someone nearby to call immediately.",
+      "Lay the person on a firm, flat surface on their back.",
+      "Tilt their head back gently and lift the chin to open the airway.",
+      "Check for normal breathing for no more than 10 seconds.",
+      "Place the heel of one hand on the centre of the chest (lower half of sternum). Place your other hand on top.",
+      "Press down hard and fast — at least 5 cm deep at a rate of 100–120 compressions per minute.",
+      "After 30 compressions, give 2 rescue breaths (mouth-to-mouth) if trained.",
+      "Continue cycles of 30 compressions + 2 breaths until help arrives or the person recovers.",
+      "If an AED is available, use it as soon as possible."
+    ],
+    "doNot": [
+      "Do not stop CPR unless medically qualified help takes over.",
+      "Do not leave the person alone once you start.",
+      "Do not tilt the head if a spinal injury is suspected."
+    ]
+  },
+  {
+    "id": "cpr-child",
+    "title": "CPR — Child (1–12 years)",
+    "icon": "🧒",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["cpr child", "child cardiac", "child unconscious", "child not breathing"],
+    "symptoms": ["Child is unresponsive", "Not breathing or gasping", "No pulse"],
+    "steps": [
+      "Call 108 immediately.",
+      "Tilt head back, lift chin. Check for breathing (max 10 seconds).",
+      "Give 5 initial rescue breaths mouth-to-mouth.",
+      "Use 2 fingers (or one hand for larger child) on the centre of the chest.",
+      "Compress at least one-third of chest depth (about 5 cm).",
+      "Rate: 100–120 compressions per minute.",
+      "After 30 compressions, give 2 rescue breaths.",
+      "Continue until help arrives."
+    ],
+    "doNot": [
+      "Do not use adult force — children's chests are more delicate.",
+      "Do not delay calling 108."
+    ]
+  },
+  {
+    "id": "choking-adult",
+    "title": "Choking — Adult",
+    "icon": "🫁",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["choking", "blocked airway", "can't breathe", "heimlich"],
+    "symptoms": ["Cannot speak, cry or cough effectively", "Clutching throat with hands", "Face turning blue or red", "Weak or silent cough"],
+    "steps": [
+      "Ask 'Are you choking?' If they cannot speak or cough, act immediately.",
+      "Stand behind them and give 5 firm back blows between the shoulder blades with the heel of your hand.",
+      "Check if the obstruction is cleared after each blow.",
+      "If back blows fail: perform 5 abdominal thrusts (Heimlich manoeuvre).",
+      "Stand behind, make a fist just above the navel, grasp with other hand, and thrust sharply inward and upward.",
+      "Alternate 5 back blows + 5 abdominal thrusts until cleared or person becomes unconscious.",
+      "If unconscious, start CPR and call 108."
+    ],
+    "doNot": [
+      "Do not perform blind finger sweeps in the mouth.",
+      "Do not slap their back if they can still cough effectively — encourage coughing."
+    ]
+  },
+  {
+    "id": "bleeding",
+    "title": "Severe Bleeding",
+    "icon": "🩸",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["bleeding", "cut", "wound", "blood loss", "laceration"],
+    "symptoms": ["Heavy bleeding from wound", "Blood soaking through bandages", "Pale, clammy skin", "Weakness or dizziness"],
+    "steps": [
+      "Put on gloves or use a plastic bag to protect yourself.",
+      "Apply firm, direct pressure to the wound using a clean cloth, gauze, or clothing.",
+      "Maintain continuous pressure for at least 10 minutes — do not lift to check.",
+      "If blood soaks through, add more material on top — do not remove the first layer.",
+      "Elevate the injured limb above the heart if possible.",
+      "If a limb and pressure doesn't stop the bleeding, apply a tourniquet 5–7 cm above the wound.",
+      "Note the time the tourniquet was applied.",
+      "Keep the person warm and calm. Lay them down to prevent shock.",
+      "Call 108."
+    ],
+    "doNot": [
+      "Do not remove a deeply embedded object — pad around it.",
+      "Do not remove a tourniquet once applied — only medics should do this.",
+      "Do not apply a tourniquet over a joint."
+    ]
+  },
+  {
+    "id": "burns-minor",
+    "title": "Burns — Minor (1st/2nd degree, small area)",
+    "icon": "🔥",
+    "severity": "moderate",
+    "callAmbulance": false,
+    "keywords": ["burn", "scald", "hot water", "minor burn", "blister"],
+    "symptoms": ["Red or blistered skin", "Pain and swelling", "Area smaller than palm of hand"],
+    "steps": [
+      "Cool the burn immediately under cool (not cold/icy) running water for 20 minutes.",
+      "Remove rings, watches, or clothing near the burn — before swelling starts.",
+      "Do not burst any blisters.",
+      "Cover loosely with a clean, non-fluffy material such as cling film or a sterile dressing.",
+      "Take over-the-counter pain relief (paracetamol or ibuprofen) if needed.",
+      "Seek medical attention if blisters form, burn is on face/hands/genitals/joints, or size is larger than a palm."
+    ],
+    "doNot": [
+      "Do not apply toothpaste, butter, oil or any home remedy — these trap heat and cause infection.",
+      "Do not use ice or iced water.",
+      "Do not use fluffy cotton wool directly on a burn."
+    ]
+  },
+  {
+    "id": "burns-severe",
+    "title": "Burns — Severe (3rd degree or large area)",
+    "icon": "🚨",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["severe burn", "third degree burn", "chemical burn", "electrical burn", "large burn"],
+    "symptoms": ["Charred, white, or leathery skin", "Painless (nerve damage)", "Area larger than palm", "Burns on face, hands, feet, genitals"],
+    "steps": [
+      "Call 108 immediately.",
+      "Do not remove burned clothing stuck to skin.",
+      "Cool the burn with cool running water if it does not delay calling emergency services.",
+      "Cover loosely with a clean, non-fluffy material — cling film is ideal.",
+      "Keep the person warm (burns cause heat loss) and lay them flat.",
+      "Raise legs if no spinal injury suspected (shock position).",
+      "Do not give food or water if surgery may be needed.",
+      "Monitor breathing and pulse until help arrives."
+    ],
+    "doNot": [
+      "Do not use cold water or ice on large burns — this can cause shock.",
+      "Do not attempt to remove clothing fused to skin.",
+      "Do not apply any creams or ointments."
+    ]
+  },
+  {
+    "id": "fracture",
+    "title": "Fracture / Broken Bone",
+    "icon": "🦴",
+    "severity": "moderate",
+    "callAmbulance": false,
+    "keywords": ["fracture", "broken bone", "broken arm", "broken leg", "sprain"],
+    "symptoms": ["Intense pain at site", "Swelling and bruising", "Deformity or unnatural angle", "Inability to move the area"],
+    "steps": [
+      "Keep the person still and calm.",
+      "Immobilise the injured area — do not try to straighten it.",
+      "Support the fracture using a splint or padding (folded clothing, pillows).",
+      "For arm: place in a sling to support against the body.",
+      "Apply an ice pack wrapped in cloth to reduce swelling — max 20 minutes at a time.",
+      "Elevate the limb if possible and comfortable.",
+      "Seek medical attention for X-ray and proper treatment.",
+      "Call 108 if the fracture is open (bone through skin), or involves spine, pelvis, or multiple bones."
+    ],
+    "doNot": [
+      "Do not try to move or straighten a broken bone.",
+      "Do not apply ice directly to skin.",
+      "Do not give food or water if surgery might be required."
+    ]
+  },
+  {
+    "id": "seizure",
+    "title": "Seizure / Epileptic Fit",
+    "icon": "⚡",
+    "severity": "high",
+    "callAmbulance": true,
+    "keywords": ["seizure", "epilepsy", "fit", "convulsion", "shaking"],
+    "symptoms": ["Sudden jerking or stiffening of body", "Loss of consciousness", "Uncontrolled movements", "Confusion after episode"],
+    "steps": [
+      "Stay calm and note the time the seizure starts.",
+      "Clear the area of hard or sharp objects to prevent injury.",
+      "Cushion the person's head with something soft.",
+      "Gently roll them onto their side (recovery position) after convulsions stop.",
+      "Loosen any tight clothing around the neck.",
+      "Stay with them until they are fully conscious.",
+      "Call 108 if: seizure lasts more than 5 minutes, person doesn't regain consciousness, has a second seizure, or is injured."
+    ],
+    "doNot": [
+      "Do not hold the person down or restrain movements.",
+      "Do not put anything in their mouth — they cannot swallow their tongue.",
+      "Do not give water or food until they are fully alert."
+    ]
+  },
+  {
+    "id": "anaphylaxis",
+    "title": "Anaphylaxis / Severe Allergic Reaction",
+    "icon": "😰",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["anaphylaxis", "allergic reaction", "allergy", "swelling throat", "bee sting", "peanut allergy"],
+    "symptoms": ["Throat swelling / difficulty breathing", "Rapid weak pulse", "Skin rash, hives, or flushing", "Nausea or vomiting", "Dizziness or collapse"],
+    "steps": [
+      "Call 108 immediately.",
+      "Use an epinephrine auto-injector (EpiPen) if available — inject into outer thigh.",
+      "Lay the person flat. If breathing is difficult, allow them to sit up.",
+      "If unconscious and not breathing, begin CPR.",
+      "A second EpiPen dose may be given after 5–15 minutes if symptoms do not improve.",
+      "Even if symptoms improve, the person must be seen by a doctor urgently.",
+      "Keep them warm and calm."
+    ],
+    "doNot": [
+      "Do not make the person stand or walk.",
+      "Do not give antihistamines alone — they are too slow for anaphylaxis.",
+      "Do not leave the person alone."
+    ]
+  },
+  {
+    "id": "heatstroke",
+    "title": "Heat Stroke / Hyperthermia",
+    "icon": "☀️",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["heatstroke", "heat stroke", "hyperthermia", "overheating", "sun stroke"],
+    "symptoms": ["Body temperature above 40°C (104°F)", "Hot, red, dry skin (no sweating)", "Rapid strong pulse", "Confusion or unconsciousness"],
+    "steps": [
+      "Call 108 immediately.",
+      "Move the person to a cool, shaded area.",
+      "Cool them rapidly: apply cold wet cloths, or immerse in cool (not ice cold) water if available.",
+      "Fan them to increase evaporation cooling.",
+      "Place ice packs at neck, armpits, and groin if available.",
+      "If conscious, give cool water to sip slowly.",
+      "Monitor until help arrives."
+    ],
+    "doNot": [
+      "Do not give aspirin or paracetamol — they are not effective for heat stroke.",
+      "Do not give fluids if the person is unconscious.",
+      "Do not use alcohol rubs."
+    ]
+  },
+  {
+    "id": "drowning",
+    "title": "Drowning / Near-Drowning",
+    "icon": "🌊",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["drowning", "near drowning", "water rescue", "swallowed water"],
+    "symptoms": ["Coughing or retching", "Blue lips or fingertips", "Unconscious or unresponsive", "Breathing difficulties"],
+    "steps": [
+      "Ensure your own safety before entering water. Use a rope, ring, or long object to pull the person to safety.",
+      "Call 108.",
+      "If the person is not breathing, start CPR immediately.",
+      "Tilt head back, lift chin, check for breathing, then begin 30 compressions + 2 rescue breaths.",
+      "Continue CPR until the person breathes or help arrives.",
+      "Once breathing, place in recovery position (on their side).",
+      "Keep them warm — hypothermia risk is high even in warm weather.",
+      "All near-drowning victims must be seen at a hospital even if they appear fine."
+    ],
+    "doNot": [
+      "Do not attempt a water rescue unless trained — use flotation devices.",
+      "Do not try to drain water from lungs — start CPR."
+    ]
+  },
+  {
+    "id": "poisoning",
+    "title": "Poisoning / Toxic Ingestion",
+    "icon": "☠️",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["poison", "poisoning", "overdose", "toxic", "chemical ingested", "medicine overdose"],
+    "symptoms": ["Nausea, vomiting, or stomach pain", "Drowsiness or confusion", "Burns around mouth", "Difficulty breathing"],
+    "steps": [
+      "Call 108 immediately and have the substance/container ready to describe.",
+      "If the person is conscious and alert, call Poison Control.",
+      "Do not induce vomiting unless specifically told to by medical staff.",
+      "If chemical is on skin or eyes, rinse with large amounts of water.",
+      "Collect the container/substance for emergency responders.",
+      "If unconscious and not breathing, begin CPR.",
+      "Keep the person calm and monitor until help arrives."
+    ],
+    "doNot": [
+      "Do not induce vomiting for corrosive substances (bleach, acids, drain cleaner).",
+      "Do not give milk, water, or food unless instructed by poison control.",
+      "Do not leave the person alone."
+    ]
+  },
+  {
+    "id": "snake-bite",
+    "title": "Snake Bite",
+    "icon": "🐍",
+    "severity": "critical",
+    "callAmbulance": true,
+    "keywords": ["snake bite", "snakebite", "venomous snake", "cobra", "viper"],
+    "symptoms": ["Two puncture marks at bite site", "Swelling and pain at bite site", "Nausea, dizziness", "Difficulty breathing (severe envenomation)"],
+    "steps": [
+      "Call 108 immediately.",
+      "Keep the person calm and still — movement speeds venom absorption.",
+      "Immobilise the bitten limb below heart level.",
+      "Remove rings, watches, tight clothing near the bite before swelling starts.",
+      "Note the time of the bite and try to safely describe the snake (do not catch it).",
+      "Mark the edges of swelling with a pen and time to monitor spread.",
+      "Get to hospital as fast as possible — antivenom is the only effective treatment."
+    ],
+    "doNot": [
+      "Do not cut the wound or try to suck out venom.",
+      "Do not apply a tourniquet.",
+      "Do not apply ice or cold packs.",
+      "Do not give alcohol or pain medications."
+    ]
+  },
+  {
+    "id": "eye-injury",
+    "title": "Eye Injury / Chemical in Eye",
+    "icon": "👁️",
+    "severity": "high",
+    "callAmbulance": false,
+    "keywords": ["eye injury", "chemical in eye", "foreign object eye", "eye splash", "eye pain"],
+    "symptoms": ["Intense pain or burning in eye", "Redness and watering", "Blurred or lost vision", "Visible foreign object"],
+    "steps": [
+      "For chemicals: flush eye immediately with clean water for 20 minutes — hold eye open under gentle running water.",
+      "For foreign objects: do not rub the eye. Try blinking rapidly, or rinse gently.",
+      "If object is embedded or vision is affected, cover with clean cup (do not touch) and go to hospital.",
+      "Remove contact lenses before rinsing if possible.",
+      "Seek immediate medical attention for all significant eye injuries."
+    ],
+    "doNot": [
+      "Do not rub the eye.",
+      "Do not try to remove an embedded object.",
+      "Do not apply eye drops other than sterile saline unless prescribed."
+    ]
+  },
+  {
+    "id": "fainting",
+    "title": "Fainting / Loss of Consciousness",
+    "icon": "😵",
+    "severity": "moderate",
+    "callAmbulance": false,
+    "keywords": ["fainting", "faint", "syncope", "passing out", "blackout"],
+    "symptoms": ["Sudden loss of consciousness", "Pale, sweating skin", "Weak or slow pulse", "Confusion on recovery"],
+    "steps": [
+      "Lower the person to the ground carefully — support their head.",
+      "Lay them flat and raise their legs 30 cm (shock position).",
+      "Loosen any tight clothing at neck or waist.",
+      "Check they are breathing — if not, start CPR.",
+      "Once conscious, keep them lying down for 10–15 minutes.",
+      "Give them water or a sweet drink once fully alert.",
+      "Seek medical advice if fainting is unexplained or recurrent."
+    ],
+    "doNot": [
+      "Do not prop them up in a sitting or standing position too quickly.",
+      "Do not give food or drink until fully conscious.",
+      "Do not leave the person alone."
+    ]
+  },
+  {
+    "id": "diabetic-emergency",
+    "title": "Diabetic Emergency (Hypoglycaemia)",
+    "icon": "💉",
+    "severity": "high",
+    "callAmbulance": false,
+    "keywords": ["diabetes", "hypoglycaemia", "low blood sugar", "insulin shock", "diabetic emergency"],
+    "symptoms": ["Shaking or trembling", "Sweating", "Confusion or unusual behaviour", "Weakness or dizziness", "Pale skin"],
+    "steps": [
+      "If the person is conscious and can swallow: give 15–20g of fast-acting sugar immediately.",
+      "Examples: 150 ml of fruit juice, 3–4 glucose tablets, 5 sugar lumps, or a sugary soft drink.",
+      "Wait 15 minutes and recheck — if still symptomatic, give another dose.",
+      "Once recovered, give a longer-acting snack (biscuits, sandwich).",
+      "If unconscious: do not give food or drink. Call 108.",
+      "Place in recovery position if unconscious but breathing."
+    ],
+    "doNot": [
+      "Do not give food or drink to an unconscious person.",
+      "Do not delay giving sugar if the person is conscious.",
+      "Do not assume the person is intoxicated — always check for a medical ID bracelet."
+    ]
+  },
+  {
+    "id": "asthma-attack",
+    "title": "Asthma Attack",
+    "icon": "💨",
+    "severity": "high",
+    "callAmbulance": false,
+    "keywords": ["asthma", "asthma attack", "inhaler", "wheeze", "breathing difficulty"],
+    "symptoms": ["Wheezing", "Coughing persistently", "Tight chest", "Difficulty breathing or speaking", "Blue lips (severe)"],
+    "steps": [
+      "Help the person sit upright in a position they find comfortable — do not lay them flat.",
+      "Encourage them to use their reliever inhaler (usually blue, salbutamol) — up to 10 puffs, one at a time.",
+      "Wait 15 minutes. If no improvement, call 108.",
+      "If 108 is delayed, give up to 10 more puffs every 15 minutes.",
+      "Keep them calm — anxiety worsens breathing.",
+      "If lips turn blue or they lose consciousness, call 108 and be prepared to start CPR."
+    ],
+    "doNot": [
+      "Do not leave them alone.",
+      "Do not lay them flat.",
+      "Do not use a preventer inhaler (brown/purple) in an emergency — only the blue reliever."
+    ]
+  }
+]
