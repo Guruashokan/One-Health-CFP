@@ -1056,6 +1056,16 @@ function initLeafletMap() {
     clearTimeout(mapQueryTimeout);
     mapQueryTimeout = setTimeout(fetchNearbyFacilities, 600);
   });
+
+  // Allow manual location selection by clicking on the map
+  leafletMap.on("click", (e) => {
+    const { lat, lng } = e.latlng;
+    userCoords = { lat, lng };
+    relocateMockups(lat, lng);
+    setUserMarker(lat, lng);
+    fetchNearbyFacilities();
+    showToast(`📍 Location set manually: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+  });
 }
 
 // Update tile layer based on body dark mode class
