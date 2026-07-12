@@ -917,18 +917,17 @@ function openFirstAidModal(id) {
     ${doNots ? `<h3>What NOT to do</h3><div class="donot-list">${doNots}</div>` : ""}
     ${item.youtubeId ? `
       <h3>🎥 Video Tutorial</h3>
-      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius-sm);margin-bottom:12px;background:#000;">
-        <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" 
-                src="https://www.youtube.com/embed/${item.youtubeId}" 
-                title="YouTube Video Player" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-        </iframe>
-      </div>
-      <div style="margin-bottom: 20px;">
-        <a href="https://www.youtube.com/watch?v=${item.youtubeId}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
-          📺 Open video in YouTube
-        </a>
+      <div class="firstaid-video-card" style="background:var(--surface-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:14px; display:flex; align-items:center; gap:12px; margin-bottom:20px; cursor:pointer; transition: transform 0.2s, border-color 0.2s;" 
+           onclick="window.open('https://www.youtube.com/watch?v=${item.youtubeId}', '_blank')"
+           onmouseover="this.style.borderColor='var(--blue)'; this.style.transform='translateY(-2px)';"
+           onmouseout="this.style.borderColor='var(--line)'; this.style.transform='translateY(0)';"
+           role="button" tabindex="0">
+        <div style="font-size:32px; background:var(--surface); width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.06);">📺</div>
+        <div style="flex:1;">
+          <div style="font-weight:700; color:var(--blue); font-size:14px; margin-bottom:2px;">Watch step-by-step video on YouTube</div>
+          <div style="font-size:11px; color:var(--ink-2); font-weight:600;">Official video tutorial for ${item.title}</div>
+        </div>
+        <div style="font-weight:700; color:var(--blue); font-size:18px;">➡️</div>
       </div>
     ` : ""}
     <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
