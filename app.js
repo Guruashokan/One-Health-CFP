@@ -1818,6 +1818,14 @@ function bindEvents() {
     );
   });
 
+  /* ── Manual Locate button ── */
+  $("manualLocateBtn")?.addEventListener("click", async () => {
+    const area = prompt("Enter your city, area, or zip code (e.g. Krishnankoil):");
+    if (area && area.trim()) {
+      await geocodeSearch(area.trim());
+    }
+  });
+
   /* ── Map route button ── */
   $("mapRouteBtn")?.addEventListener("click", () => {
     const lat = $("mapRouteBtn")?.dataset.lat;
