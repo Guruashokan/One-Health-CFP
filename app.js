@@ -1319,7 +1319,7 @@ function processMapData(elements) {
     else if (amenity === "clinic") type = "clinic";
     else if (amenity === "doctors" || amenity === "dentist") type = "doctor";
 
-    const dist = calculateDistance(mapCenter.lat, mapCenter.lng, lat, lng);
+    const dist = calculateDistance(userCoords.lat, userCoords.lng, lat, lng);
     const street = tags["addr:street"] || tags["addr:suburb"] || tags["addr:city"] || "Nearby area";
     const phone = tags.phone || tags["contact:phone"] || "N/A";
     const website = tags.website || tags["contact:website"] || "";
@@ -1346,7 +1346,7 @@ function processMapData(elements) {
           ${website ? `<div>🌐 <a href="${website}" target="_blank" rel="noopener">Website</a></div>` : ""}
         </div>
         <div style="display:flex;gap:6px;">
-          <button onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${mapCenter.lat},${mapCenter.lng}&destination=${lat},${lng}','_blank')" 
+          <button onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}','_blank')" 
                   style="background:var(--blue);color:#fff;border-radius:4px;border:none;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;">
             Directions
           </button>
@@ -1365,7 +1365,7 @@ function processMapData(elements) {
           <strong>${name} (⭐ ${rating.toFixed(1)})</strong>
           <span>${dist.toFixed(1)} km · ${street} · Contact: ${phone}</span>
         </div>
-        <button class="map-route-btn" id="mapRouteBtn" data-name="${name}" data-lat="${lat}" data-lng="${lng}" onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${mapCenter.lat},${mapCenter.lng}&destination=${lat},${lng}','_blank')">Get directions</button>
+        <button class="map-route-btn" id="mapRouteBtn" data-name="${name}" data-lat="${lat}" data-lng="${lng}" onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}','_blank')">Get directions</button>
       `;
     });
 
@@ -1831,8 +1831,7 @@ function bindEvents() {
     const lat = $("mapRouteBtn")?.dataset.lat;
     const lng = $("mapRouteBtn")?.dataset.lng;
     if (lat && lng) {
-      const center = leafletMap ? leafletMap.getCenter() : userCoords;
-      window.open(`https://www.google.com/maps/dir/?api=1&origin=${center.lat},${center.lng}&destination=${lat},${lng}`, "_blank");
+      window.open(`https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}`, "_blank");
     } else {
       const name = $("mapRouteBtn")?.dataset.name ?? "CityCare Hospital";
       window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
@@ -1867,8 +1866,7 @@ function bindEvents() {
       const lat = btn.dataset.lat;
       const lng = btn.dataset.lng;
       if (lat && lng) {
-        const center = leafletMap ? leafletMap.getCenter() : userCoords;
-        window.open(`https://www.google.com/maps/dir/?api=1&origin=${center.lat},${center.lng}&destination=${lat},${lng}`, "_blank");
+        window.open(`https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}`, "_blank");
       } else {
         window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
       }
