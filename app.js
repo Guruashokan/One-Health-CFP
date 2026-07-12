@@ -1034,6 +1034,7 @@ function initLeafletMap() {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         userCoords = { lat, lng };
+        relocateMockups(lat, lng);
         leafletMap.setView([lat, lng], 14);
         setUserMarker(lat, lng);
         fetchNearbyFacilities();
@@ -1259,6 +1260,28 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+function relocateMockups(lat, lng) {
+  const hasMockups = hospitals.some(h => h.name === "CityCare Hospital");
+  if (!hasMockups) return;
+
+  const offsets = [
+    { name:"CityCare Hospital",     lat: 0.0046, lng: 0.0047 },
+    { name:"GreenLine Clinic",      lat: 0.0000, lng: 0.0000 },
+    { name:"Hope Multispeciality",  lat:-0.0027, lng: 0.0128 },
+    { name:"Sunrise Senior Care",   lat: 0.0096, lng:-0.0068 }
+  ];
+  
+  hospitals.forEach((h, index) => {
+    const off = offsets[index % offsets.length];
+    h.lat = lat + off.lat;
+    h.lng = lng + off.lng;
+    h.distance = Number(calculateDistance(lat, lng, h.lat, h.lng).toFixed(1));
+  });
+  
+  renderHospitals();
+  renderMetrics();
+}
+
 // Process API response, plot markers, synchronize database lists
 function processMapData(elements) {
   clearMapMarkers();
@@ -1419,6 +1442,8 @@ function processMapData(elements) {
     hospitals.push(...loadedHospitals);
     renderHospitals();
     renderMetrics();
+  } else {
+    relocateMockups(mapCenter.lat, mapCenter.lng);
   }
 
   if (loadedPharmacies.length > 0) {
@@ -1461,6 +1486,7 @@ async function geocodeSearch(query) {
       
       if (leafletMap) {
         userCoords = { lat, lng: lon };
+        relocateMockups(lat, lon);
         setUserMarker(lat, lon);
         leafletMap.setView([lat, lon], 14);
       }
@@ -1773,6 +1799,7 @@ function bindEvents() {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         userCoords = { lat, lng };
+        relocateMockups(lat, lng);
         setUserMarker(lat, lng);
         if (leafletMap) leafletMap.setView([lat, lng], 14);
         showToast(`📍 Location found: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
