@@ -439,6 +439,7 @@ async function loadFirstAid() {
       "icon": "❤️",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "0aV9YSWhMC0",
       "keywords": ["cpr", "cardiac arrest", "heart attack", "unconscious", "not breathing"],
       "symptoms": ["Person is unresponsive", "Not breathing or only gasping", "No pulse felt"],
       "steps": [
@@ -464,6 +465,7 @@ async function loadFirstAid() {
       "icon": "🧒",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "0ZMKD1tV0xM",
       "keywords": ["cpr child", "child cardiac", "child unconscious", "child not breathing"],
       "symptoms": ["Child is unresponsive", "Not breathing or gasping", "No pulse"],
       "steps": [
@@ -487,6 +489,7 @@ async function loadFirstAid() {
       "icon": "🫁",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "uxLdGf-B-y4",
       "keywords": ["choking", "blocked airway", "can't breathe", "heimlich"],
       "symptoms": ["Cannot speak, cry or cough effectively", "Clutching throat with hands", "Face turning blue or red", "Weak or silent cough"],
       "steps": [
@@ -509,6 +512,7 @@ async function loadFirstAid() {
       "icon": "🩸",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "NxO5Lvgq9P4",
       "keywords": ["bleeding", "cut", "wound", "blood loss", "laceration"],
       "symptoms": ["Heavy bleeding from wound", "Blood soaking through bandages", "Pale, clammy skin", "Weakness or dizziness"],
       "steps": [
@@ -534,6 +538,7 @@ async function loadFirstAid() {
       "icon": "🔥",
       "severity": "moderate",
       "callAmbulance": false,
+      "youtubeId": "EaJmzB8YgS0",
       "keywords": ["burn", "scald", "hot water", "minor burn", "blister"],
       "symptoms": ["Red or blistered skin", "Pain and swelling", "Area smaller than palm of hand"],
       "steps": [
@@ -556,6 +561,7 @@ async function loadFirstAid() {
       "icon": "🚨",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "EaJmzB8YgS0",
       "keywords": ["severe burn", "third degree burn", "chemical burn", "electrical burn", "large burn"],
       "symptoms": ["Charred, white, or leathery skin", "Painless (nerve damage)", "Area larger than palm", "Burns on face, hands, feet, genitals"],
       "steps": [
@@ -580,6 +586,7 @@ async function loadFirstAid() {
       "icon": "🦴",
       "severity": "moderate",
       "callAmbulance": false,
+      "youtubeId": "2v89B1U_n0c",
       "keywords": ["fracture", "broken bone", "broken arm", "broken leg", "sprain"],
       "symptoms": ["Intense pain at site", "Swelling and bruising", "Deformity or unnatural angle", "Inability to move the area"],
       "steps": [
@@ -604,6 +611,7 @@ async function loadFirstAid() {
       "icon": "⚡",
       "severity": "high",
       "callAmbulance": true,
+      "youtubeId": "M5G8tE6L47g",
       "keywords": ["seizure", "epilepsy", "fit", "convulsion", "shaking"],
       "symptoms": ["Sudden jerking or stiffening of body", "Loss of consciousness", "Uncontrolled movements", "Confusion after episode"],
       "steps": [
@@ -627,6 +635,7 @@ async function loadFirstAid() {
       "icon": "😰",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "wIqVvV4V1fU",
       "keywords": ["anaphylaxis", "allergic reaction", "allergy", "swelling throat", "bee sting", "peanut allergy"],
       "symptoms": ["Throat swelling / difficulty breathing", "Rapid weak pulse", "Skin rash, hives, or flushing", "Nausea or vomiting", "Dizziness or collapse"],
       "steps": [
@@ -650,6 +659,7 @@ async function loadFirstAid() {
       "icon": "☀️",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "H74tN7e7yD4",
       "keywords": ["heatstroke", "heat stroke", "hyperthermia", "overheating", "sun stroke"],
       "symptoms": ["Body temperature above 40°C (104°F)", "Hot, red, dry skin (no sweating)", "Rapid strong pulse", "Confusion or unconsciousness"],
       "steps": [
@@ -673,6 +683,7 @@ async function loadFirstAid() {
       "icon": "🌊",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "3M3cT4Lq2_k",
       "keywords": ["drowning", "near drowning", "water rescue", "swallowed water"],
       "symptoms": ["Coughing or retching", "Blue lips or fingertips", "Unconscious or unresponsive", "Breathing difficulties"],
       "steps": [
@@ -696,6 +707,7 @@ async function loadFirstAid() {
       "icon": "☠️",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "VlI4wY_wN_E",
       "keywords": ["poison", "poisoning", "overdose", "toxic", "chemical ingested", "medicine overdose"],
       "symptoms": ["Nausea, vomiting, or stomach pain", "Drowsiness or confusion", "Burns around mouth", "Difficulty breathing"],
       "steps": [
@@ -719,6 +731,7 @@ async function loadFirstAid() {
       "icon": "🐍",
       "severity": "critical",
       "callAmbulance": true,
+      "youtubeId": "wX-y0h2kPz8",
       "keywords": ["snake bite", "snakebite", "venomous snake", "cobra", "viper"],
       "symptoms": ["Two puncture marks at bite site", "Swelling and pain at bite site", "Nausea, dizziness", "Difficulty breathing (severe envenomation)"],
       "steps": [
@@ -743,6 +756,7 @@ async function loadFirstAid() {
       "icon": "👁️",
       "severity": "high",
       "callAmbulance": false,
+      "youtubeId": "2r1p8U_P_88",
       "keywords": ["eye injury", "chemical in eye", "foreign object eye", "eye splash", "eye pain"],
       "symptoms": ["Intense pain or burning in eye", "Redness and watering", "Blurred or lost vision", "Visible foreign object"],
       "steps": [
@@ -764,6 +778,7 @@ async function loadFirstAid() {
       "icon": "😵",
       "severity": "moderate",
       "callAmbulance": false,
+      "youtubeId": "1V_vSscN0vY",
       "keywords": ["fainting", "faint", "syncope", "passing out", "blackout"],
       "symptoms": ["Sudden loss of consciousness", "Pale, sweating skin", "Weak or slow pulse", "Confusion on recovery"],
       "steps": [
@@ -787,6 +802,7 @@ async function loadFirstAid() {
       "icon": "💉",
       "severity": "high",
       "callAmbulance": false,
+      "youtubeId": "VlI4wY_wN_E",
       "keywords": ["diabetes", "hypoglycaemia", "low blood sugar", "insulin shock", "diabetic emergency"],
       "symptoms": ["Shaking or trembling", "Sweating", "Confusion or unusual behaviour", "Weakness or dizziness", "Pale skin"],
       "steps": [
@@ -809,6 +825,7 @@ async function loadFirstAid() {
       "icon": "💨",
       "severity": "high",
       "callAmbulance": false,
+      "youtubeId": "wIqVvV4V1fU",
       "keywords": ["asthma", "asthma attack", "inhaler", "wheeze", "breathing difficulty"],
       "symptoms": ["Wheezing", "Coughing persistently", "Tight chest", "Difficulty breathing or speaking", "Blue lips (severe)"],
       "steps": [
@@ -898,6 +915,22 @@ function openFirstAidModal(id) {
     <h3>What to do — step by step</h3>
     <div class="firstaid-steps">${steps}</div>
     ${doNots ? `<h3>What NOT to do</h3><div class="donot-list">${doNots}</div>` : ""}
+    ${item.youtubeId ? `
+      <h3>🎥 Video Tutorial</h3>
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius-sm);margin-bottom:12px;background:#000;">
+        <iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" 
+                src="https://www.youtube.com/embed/${item.youtubeId}" 
+                title="YouTube Video Player" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <a href="https://www.youtube.com/watch?v=${item.youtubeId}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+          📺 Open video in YouTube
+        </a>
+      </div>
+    ` : ""}
     <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
       <button class="primary-action" onclick="$('firstaidModal').hidden=true">Close</button>
       ${item.callAmbulance ? `<a class="primary-action" href="tel:108" style="background:var(--coral)">📞 Call 108 now</a>` : ""}
