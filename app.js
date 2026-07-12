@@ -918,7 +918,7 @@ function openFirstAidModal(id) {
     ${item.youtubeId ? `
       <h3>🎥 Video Tutorial</h3>
       <div class="firstaid-video-card" style="background:var(--surface-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:14px; display:flex; align-items:center; gap:12px; margin-bottom:20px; cursor:pointer; transition: transform 0.2s, border-color 0.2s;" 
-           onclick="window.open('https://www.youtube.com/watch?v=${item.youtubeId}', '_blank')"
+           onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent('St John Ambulance ' + item.title + ' First Aid Tutorial')}', '_blank')"
            onmouseover="this.style.borderColor='var(--blue)'; this.style.transform='translateY(-2px)';"
            onmouseout="this.style.borderColor='var(--line)'; this.style.transform='translateY(0)';"
            role="button" tabindex="0">
