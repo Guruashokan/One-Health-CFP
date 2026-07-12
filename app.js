@@ -319,7 +319,7 @@ function buildHospitalCard(h) {
       <span>${h.insurance ? "✅ Insurance desk" : "⚠️ No insurance desk"}</span>
     </div>
     <div class="card-actions">
-      <button class="primary" type="button" data-action="route" data-name="${h.name}">🗺️ Directions</button>
+      <button class="primary" type="button" data-action="route" data-name="${h.name}" data-lat="${h.lat}" data-lng="${h.lng}">🗺️ Directions</button>
       <button type="button" data-action="call"  data-name="${h.name}" data-phone="${h.phone}">📞 Call</button>
       <button type="button" data-action="map"   data-name="${h.name}">📌 Show on map</button>
     </div>
@@ -1313,7 +1313,7 @@ function processMapData(elements) {
           ${website ? `<div>🌐 <a href="${website}" target="_blank" rel="noopener">Website</a></div>` : ""}
         </div>
         <div style="display:flex;gap:6px;">
-          <button onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(name)}','_blank')" 
+          <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}','_blank')" 
                   style="background:var(--blue);color:#fff;border-radius:4px;border:none;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;">
             Directions
           </button>
@@ -1332,7 +1332,7 @@ function processMapData(elements) {
           <strong>${name} (⭐ ${rating.toFixed(1)})</strong>
           <span>${dist.toFixed(1)} km · ${street} · Contact: ${phone}</span>
         </div>
-        <button class="map-route-btn" data-name="${name}" onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(name)}','_blank')">Get directions</button>
+        <button class="map-route-btn" id="mapRouteBtn" data-name="${name}" data-lat="${lat}" data-lng="${lng}" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}','_blank')">Get directions</button>
       `;
     });
 
@@ -1783,8 +1783,14 @@ function bindEvents() {
 
   /* ── Map route button ── */
   $("mapRouteBtn")?.addEventListener("click", () => {
-    const name = $("mapRouteBtn")?.dataset.name ?? "CityCare Hospital";
-    window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
+    const lat = $("mapRouteBtn")?.dataset.lat;
+    const lng = $("mapRouteBtn")?.dataset.lng;
+    if (lat && lng) {
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, "_blank");
+    } else {
+      const name = $("mapRouteBtn")?.dataset.name ?? "CityCare Hospital";
+      window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
+    }
   });
 
   /* ── Dark mode ── */
@@ -1811,7 +1817,15 @@ function bindEvents() {
     if (!btn) return;
     const { action, name, phone } = btn.dataset;
     if (action === "call")  showToast(`📞 Calling ${name}: ${phone}`);
-    if (action === "route") window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
+    if (action === "route") {
+      const lat = btn.dataset.lat;
+      const lng = btn.dataset.lng;
+      if (lat && lng) {
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, "_blank");
+      } else {
+        window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
+      }
+    }
     if (action === "book")  showToast(`📅 Appointment started for ${name}. You'll be redirected to booking.`);
     if (action === "map") {
       switchTab("tab-overview");
