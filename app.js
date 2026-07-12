@@ -1965,7 +1965,91 @@ const TRANSLATIONS = {
     btnOptimize: "⚡ Execute Optimization Algorithm",
     triageOutputs: "Algorithmic Match Outcomes",
     triageEmpty: "Execute the optimizer to run the utility-scoring formula on active surrounding hospitals.",
-    searchPlaceholder: "Search hospitals, pharmacies, locations..."
+    searchPlaceholder: "Search hospitals, pharmacies, locations...",
+    
+    // Insurance tab static labels
+    insEyebrow: "Health Coverage",
+    insTitle: "Insurance & Government Schemes",
+    labelGovtSchemes: "🏛️ Government Schemes",
+    labelPrivateInsurers: "🏢 Private Insurers",
+    accEyebrow: "Step-by-step guide",
+    accTitle: "How to apply",
+    chkEyebrow: "Empanelment Checker",
+    chkTitle: "Is your hospital covered?",
+    chkPlaceholder: "Search hospital name…",
+    chkBtn: "Check coverage",
+    lblEligibility: "Eligibility",
+    lblApply: "Apply / Enroll",
+    lblPortal: "Official portal",
+    lblCheckEligibility: "Check eligibility",
+    lblGetQuote: "Get quote",
+    lblNetworkHospitals: "Network hospitals",
+    
+    // Govt Schemes
+    scheme_pmjay_name: "Ayushman Bharat PM-JAY",
+    scheme_pmjay_coverage: "₹5 Lakh / family / year",
+    scheme_pmjay_desc: "World's largest government health insurance scheme covering 55 crore+ beneficiaries for secondary and tertiary hospitalisation.",
+    scheme_pmjay_eligibility: "BPL families listed in SECC 2011 database",
+    
+    scheme_esic_name: "ESIC — Employees' State Insurance",
+    scheme_esic_coverage: "Full medical care + cash benefits",
+    scheme_esic_desc: "Comprehensive social security scheme for salaried employees earning ≤₹21,000/month in organised sector establishments.",
+    scheme_esic_eligibility: "Employees in ESI-covered establishments",
+    
+    scheme_cghs_name: "CGHS — Central Govt Health Scheme",
+    scheme_cghs_coverage: "OPD + IPD at CGHS empanelled hospitals",
+    scheme_cghs_desc: "Healthcare facility for central government employees, pensioners and their dependents in 75+ cities across India.",
+    scheme_cghs_eligibility: "Central govt employees and pensioners",
+    
+    // Private Insurers
+    ins_star_name: "Star Health Insurance",
+    ins_star_coverage: "Up to ₹25 Lakh",
+    ins_star_desc: "India's largest standalone health insurer with 14,000+ network hospitals and comprehensive family floater plans.",
+    
+    ins_hdfc_name: "HDFC Ergo Health",
+    ins_hdfc_coverage: "Up to ₹1 Crore",
+    ins_hdfc_desc: "Feature-rich health insurance plans with no room rent capping, unlimited e-consults and restoration benefit.",
+    
+    ins_nivabupa_name: "Niva Bupa Health",
+    ins_nivabupa_coverage: "Up to ₹1 Crore",
+    ins_nivabupa_desc: "ReAssure & Heartbeat plans with direct claim settlement, no third-party admin delays, and cashless at 10,000+ hospitals.",
+    
+    // Steps
+    step_step_pmjay_title: "Apply for Ayushman Bharat (PM-JAY) card",
+    step_step_pmjay_steps: [
+      'Visit <a href="https://mera.pmjay.gov.in" target="_blank" rel="noopener">mera.pmjay.gov.in</a> and check your family eligibility by mobile number or ration card.',
+      'If eligible, visit your nearest Common Service Centre (CSC) or empanelled hospital\'s Ayushman Mitra desk.',
+      'Carry Aadhaar card, ration card or government ID, and a recent family photograph.',
+      'Biometric verification is done on-site. An e-card (Ayushman card) is generated instantly.',
+      'Use the e-card at any PM-JAY empanelled hospital for cashless treatment up to ₹5 lakh per year.'
+    ],
+    
+    step_step_cashless_title: "Claim cashless treatment at a network hospital",
+    step_step_cashless_steps: [
+      'At admission, show your health insurance card / Ayushman card to the hospital\'s insurance desk.',
+      'The hospital sends a pre-authorisation request to your insurer / PM-JAY system.',
+      'Approval is typically given within 30–60 minutes for planned treatments.',
+      'At discharge, sign the discharge summary — the insurer settles the bill directly with the hospital.',
+      'Keep all original bills and discharge papers for any future reimbursement discrepancies.'
+    ],
+    
+    step_step_private_title: "Apply for private health insurance",
+    step_step_private_steps: [
+      'Compare plans on <a href="https://www.policybazaar.com/health-insurance/" target="_blank" rel="noopener">PolicyBazaar</a> or <a href="https://www.coverfox.com/health-insurance/" target="_blank" rel="noopener">Coverfox</a> — filter by family size, age, and required coverage.',
+      'Complete KYC: Aadhaar, PAN, recent photograph and income proof.',
+      'Declare all existing health conditions honestly (non-disclosure leads to claim rejection).',
+      'Pay the annual premium online. Policy document is emailed within 24–48 hours.',
+      'Download the insurer\'s mobile app for e-card, claim tracking and hospital locator.'
+    ],
+    
+    step_step_reimburse_title: "File a reimbursement claim",
+    step_step_reimburse_steps: [
+      'Collect ALL original documents: discharge summary, itemised bills, lab reports, doctor prescriptions.',
+      'Fill the claim form from your insurer\'s website or app.',
+      'Submit within 15–30 days of discharge (check policy wording for exact timeline).',
+      'Insurer will process within 30 days. Disputed claims go to the Grievance Redressal Officer.',
+      'If unresolved, escalate to IRDAI Bima Bharosa portal: <a href="https://bimabharosa.irdai.gov.in" target="_blank" rel="noopener">bimabharosa.irdai.gov.in</a>.'
+    ]
   },
   hi: {
     navOverview: "अवलोकन",
@@ -1986,7 +2070,91 @@ const TRANSLATIONS = {
     btnOptimize: "⚡ अनुकूलन एल्गोरिथ्म चलाएं",
     triageOutputs: "एल्गोरिथम मिलान परिणाम",
     triageEmpty: "अस्पतालों पर उपयोगिता-स्कोरिंग फॉर्मूला चलाने के लिए अनुकूलक चलाएं।",
-    searchPlaceholder: "अस्पताल, फ़ार्मेसी, स्थान खोजें..."
+    searchPlaceholder: "अस्पताल, फ़ार्मेसी, स्थान खोजें...",
+    
+    // Insurance tab static labels
+    insEyebrow: "स्वास्थ्य कवरेज",
+    insTitle: "बीमा और सरकारी योजनाएं",
+    labelGovtSchemes: "🏛️ सरकारी योजनाएं",
+    labelPrivateInsurers: "🏢 निजी बीमाकर्ता",
+    accEyebrow: "चरण-दर-चरण मार्गदर्शिका",
+    accTitle: "आवेदन कैसे करें",
+    chkEyebrow: "पैनलबद्धता चेकर",
+    chkTitle: "क्या आपका अस्पताल कवर है?",
+    chkPlaceholder: "अस्पताल का नाम खोजें…",
+    chkBtn: "कवरेज जांचें",
+    lblEligibility: "पात्रता",
+    lblApply: "आधिकारिक लिंक",
+    lblPortal: "आधिकारिक पोर्टल",
+    lblCheckEligibility: "पात्रता जांचें",
+    lblGetQuote: "कोटेशन प्राप्त करें",
+    lblNetworkHospitals: "नेटवर्क अस्पताल",
+    
+    // Govt Schemes
+    scheme_pmjay_name: "आयुष्मान भारत PM-JAY",
+    scheme_pmjay_coverage: "₹5 लाख / परिवार / वर्ष",
+    scheme_pmjay_desc: "माध्यमिक और तृतीयक अस्पताल में भर्ती होने के लिए 55 करोड़+ लाभार्थियों को कवर करने वाली दुनिया की सबसे बड़ी सरकारी स्वास्थ्य बीमा योजना।",
+    scheme_pmjay_eligibility: "SECC 2011 डेटाबेस में सूचीबद्ध बीपीएल परिवार",
+    
+    scheme_esic_name: "ESIC — कर्मचारी राज्य बीमा",
+    scheme_esic_coverage: "पूर्ण चिकित्सा देखभाल + नकद लाभ",
+    scheme_esic_desc: "संगठित क्षेत्र के प्रतिष्ठानों में ≤₹21,000/माह कमाने वाले वेतनभोगी कर्मचारियों के लिए व्यापक सामाजिक सुरक्षा योजना।",
+    scheme_esic_eligibility: "ईएसआई-कवर प्रतिष्ठानों में कर्मचारी",
+    
+    scheme_cghs_name: "CGHS — केंद्र सरकार स्वास्थ्य योजना",
+    scheme_cghs_coverage: "CGHS पैनलबद्ध अस्पतालों में ओपीडी + आईपीडी",
+    scheme_cghs_desc: "भारत भर के 75+ शहरों में केंद्र सरकार के कर्मचारियों, पेंशनभोगियों और उनके आश्रितों के लिए स्वास्थ्य सेवा सुविधा।",
+    scheme_cghs_eligibility: "केंद्र सरकार के कर्मचारी और पेंशनभोगी",
+    
+    // Private Insurers
+    ins_star_name: "स्टार हेल्थ इंश्योरेंस",
+    ins_star_coverage: "₹25 लाख तक",
+    ins_star_desc: "14,000+ नेटवर्क अस्पतालों और व्यापक फैमिली फ्लोटर योजनाओं के साथ भारत का सबसे बड़ा स्टैंडअलोन स्वास्थ्य बीमाकर्ता।",
+    
+    ins_hdfc_name: "एचडीएफसी एर्गो हेल्थ",
+    ins_hdfc_coverage: "₹1 करोड़ तक",
+    ins_hdfc_desc: "बिना किसी रूम रेंट कैपिंग, असीमित ई-परामर्श और बहाली लाभ के साथ सुविधा संपन्न स्वास्थ्य बीमा योजनाएं।",
+    
+    ins_nivabupa_name: "निवा बूपा हेल्थ",
+    ins_nivabupa_coverage: "₹1 करोड़ तक",
+    ins_nivabupa_desc: "ReAssure और Heartbeat योजनाओं के साथ सीधा दावा निपटान, कोई तीसरे पक्ष के व्यवस्थापक में देरी नहीं, और 10,000+ नेटवर्क अस्पतालों में कैशलेस सुविधा।",
+    
+    // Steps
+    step_step_pmjay_title: "आयुष्मान भारत (PM-JAY) कार्ड के लिए आवेदन कैसे करें",
+    step_step_pmjay_steps: [
+      'Mera.pmjay.gov.in पर जाएं और मोबाइल नंबर या राशन कार्ड द्वारा अपने परिवार की पात्रता जांचें।',
+      'यदि पात्र हैं, तो अपने नजदीकी कॉमन सर्विस सेंटर (सीएससी) या पैनलबद्ध अस्पताल के आयुष्मान मित्र डेस्क पर जाएं।',
+      'आधार कार्ड, राशन कार्ड या सरकारी आईडी और एक हालिया पारिवारिक फोटो ले जाएं।',
+      'बायोमेट्रिक सत्यापन ऑन-साइट किया जाता है। एक ई-कार्ड (आयुष्मान कार्ड) तुरंत जनरेट होता है।',
+      'प्रति वर्ष ₹5 लाख तक के कैशलेस उपचार के लिए किसी भी पीएम-जेएवाई पैनलबद्ध अस्पताल में ई-कार्ड का उपयोग करें।'
+    ],
+    
+    step_step_cashless_title: "नेटवर्क अस्पताल में कैशलेस उपचार का दावा कैसे करें",
+    step_step_cashless_steps: [
+      'भर्ती के समय, अस्पताल के बीमा डेस्क को अपना स्वास्थ्य बीमा कार्ड / आयुष्मान कार्ड दिखाएं।',
+      'अस्पताल आपके बीमाकर्ता / पीएम-जेएवाई सिस्टम को पूर्व-प्राधिकरण अनुरोध भेजता है।',
+      'नियोजित उपचारों के लिए आमतौर पर 30-60 मिनट के भीतर मंजूरी दे दी जाती है।',
+      'डिस्चार्ज के समय, डिस्चार्ज सारांश पर हस्ताक्षर करें - अधिकारी सीधे अस्पताल के साथ बिल का निपटान करेगा।',
+      'भविष्य के बिल या दावे के विवादों के लिए सभी मूल बिलों और डिस्चार्ज पेपर्स को संभाल कर रखें।'
+    ],
+    
+    step_step_private_title: "निजी स्वास्थ्य बीमा के लिए आवेदन कैसे करें",
+    step_step_private_steps: [
+      'PolicyBazaar या Coverfox पर योजनाओं की तुलना करें — परिवार के आकार, आयु और आवश्यक कवरेज के आधार पर फ़िल्टर करें।',
+      'केवाईसी पूरा करें: आधार, पैन, हालिया फोटो और आय प्रमाण।',
+      'मौजूदा स्वास्थ्य स्थितियों की ईमानदारी से घोषणा करें (जानकारी छिपाने से दावा खारिज हो सकता है)।',
+      'वार्षिक प्रीमियम का ऑनलाइन भुगतान करें। पॉलिसी दस्तावेज़ 24-48 घंटों के भीतर ईमेल किया जाता है।',
+      'ई-कार्ड, क्लेम ट्रैकिंग और अस्पताल लोकेटर के लिए बीमाकर्ता का मोबाइल ऐप डाउनलोड करें।'
+    ],
+    
+    step_step_reimburse_title: "प्रतिपूर्ति (Reimbursement) दावा कैसे दायर करें",
+    step_step_reimburse_steps: [
+      'सभी मूल दस्तावेज एकत्र करें: डिस्चार्ज सारांश, बिल, लैब रिपोर्ट, डॉक्टर के पर्चे।',
+      'अपने बीमाकर्ता की वेबसाइट या ऐप से दावा फ़ॉर्म भरें।',
+      'डिस्चार्ज के 15-30 दिनों के भीतर जमा करें (सटीक समय सीमा के लिए पॉलिसी दस्तावेज देखें)।',
+      'बीमाकर्ता 30 दिनों के भीतर इस पर कार्रवाई करेगा। विवादित दावे शिकायत निवारण अधिकारी के पास जाएंगे।',
+      'यदि अनसुलझा है, तो IRDAI बीमा भरोसा पोर्टल पर जाएं: bimabharosa.irdai.gov.in।'
+    ]
   },
   ta: {
     navOverview: "கண்ணோட்டம்",
@@ -2007,7 +2175,91 @@ const TRANSLATIONS = {
     btnOptimize: "⚡ உகப்பாக்கம் அல்காரிதத்தை இயக்கு",
     triageOutputs: "அல்காரிதம் பொருத்தம் முடிவுகள்",
     triageEmpty: "மதிப்பெண் சூத்திரத்தை இயக்க ஆப்டிமைசரை செயல்படுத்தவும்.",
-    searchPlaceholder: "மருத்துவமனைகள், மருந்தகங்கள், இடங்களைத் தேடு..."
+    searchPlaceholder: "மருத்துவமனைகள், மருந்தகங்கள், இடங்களைத் தேடு...",
+    
+    // Insurance tab static labels
+    insEyebrow: "சுகாதார பாதுகாப்பு",
+    insTitle: "காப்பீடு மற்றும் அரசு திட்டங்கள்",
+    labelGovtSchemes: "🏛️ அரசு திட்டங்கள்",
+    labelPrivateInsurers: "🏢 தனியார் காப்பீட்டாளர்கள்",
+    accEyebrow: "வழிமுறை வழிகாட்டி",
+    accTitle: "விண்ணப்பிப்பது எப்படி",
+    chkEyebrow: "அங்கீகார சரிபார்ப்பு",
+    chkTitle: "உங்கள் மருத்துவமனை அங்கீகரிக்கப்பட்டுள்ளதா?",
+    chkPlaceholder: "மருத்துவமனை பெயரைத் தேடு…",
+    chkBtn: "சரிபார்க்கவும்",
+    lblEligibility: "தகுதி",
+    lblApply: "விண்ணப்பி / பதிவுசெய்",
+    lblPortal: "அதிகாரப்பூர்வ போர்டல்",
+    lblCheckEligibility: "தகுதியைச் சரிபார்",
+    lblGetQuote: "கட்டண விபரம் பெறு",
+    lblNetworkHospitals: "மருத்துவமனை நெட்வொர்க்",
+    
+    // Govt Schemes
+    scheme_pmjay_name: "ஆயுஷ்மான் பாரத் PM-JAY",
+    scheme_pmjay_coverage: "₹5 லட்சம் / குடும்பம் / ஆண்டு",
+    scheme_pmjay_desc: "இரண்டாம் நிலை மற்றும் மூன்றாம் நிலை மருத்துவமனையில் அனுமதிக்கப்படுவதற்கான 55 கோடிக்கும் அதிகமான பயனாளிகளை உள்ளடக்கிய உலகின் மிகப்பெரிய அரசு சுகாதார காப்பீட்டுத் திட்டம்.",
+    scheme_pmjay_eligibility: "SECC 2011 தரவுத்தளத்தில் பட்டியலிடப்பட்டுள்ள வறுமைக் கோட்டிற்கு கீழ் உள்ள குடும்பங்கள்",
+    
+    scheme_esic_name: "ESIC — தொழிலாளர் அரசு காப்பீடு",
+    scheme_esic_coverage: "முழு மருத்துவ சிகிச்சை + பண பலன்கள்",
+    scheme_esic_desc: "ஒழுங்கமைக்கப்பட்ட துறை நிறுவனங்களில் மாதத்திற்கு ≤₹21,000 சம்பாதிக்கும் ஊழியர்களுக்கான விரிவான சமூக பாதுகாப்பு திட்டம்.",
+    scheme_esic_eligibility: "ESI வரம்பிற்குட்ட நிறுவனங்களில் உள்ள ஊழியர்கள்",
+    
+    scheme_cghs_name: "CGHS — மத்திய அரசு சுகாதார திட்டம்",
+    scheme_cghs_coverage: "CGHS அங்கீகரிக்கப்பட்ட மருத்துவமனைகளில் வெளிநோயாளி (OPD) + உள்நோயாளி (IPD) சிகிச்சை",
+    scheme_cghs_desc: "இந்தியாவில் 75+ நகரங்களில் உள்ள மத்திய அரசு ஊழியர்கள், ஓய்வூதியதாரர்கள் மற்றும் அவர்களைச் சார்ந்தவர்களுக்கான சுகாதார வசதி.",
+    scheme_cghs_eligibility: "மத்திய அரசு ஊழியர்கள் மற்றும் ஓய்வூதியதாரர்கள்",
+    
+    // Private Insurers
+    ins_star_name: "ஸ்டார் ஹெல்த் இன்சூரன்ஸ்",
+    ins_star_coverage: "₹25 லட்சம் வரை",
+    ins_star_desc: "14,000+ நெட்வொர்க் மருத்துவமனைகள் மற்றும் விரிவான குடும்ப ஃப்ளோட்டர் திட்டங்களைக் கொண்ட இந்தியாவின் மிகப்பெரிய தனியுரிம சுகாதார காப்பீட்டாளர்.",
+    
+    ins_hdfc_name: "HDFC எர்கோ ஹெல்த்",
+    ins_hdfc_coverage: "₹1 கோடி வரை",
+    ins_hdfc_desc: "அறை வாடகை வரம்பு இல்லாத, வரம்பற்ற இ-ஆலோசனைகள் மற்றும் மறுசீரமைப்பு நன்மைகளைக் கொண்ட அம்சம் நிறைந்த சுகாதார காப்பீட்டுத் திட்டங்கள்.",
+    
+    ins_nivabupa_name: "நிவா பூபா ஹெல்த்",
+    ins_nivabupa_coverage: "₹1 கோடி வரை",
+    ins_nivabupa_desc: "ReAssure மற்றும் Heartbeat திட்டங்களுடன் கூடிய நேரடி உரிமைகோரல் தீர்வு, மூன்றாம் தரப்பு நிர்வாகி தாமதங்கள் இல்லை, மேலும் 10,000+ நெட்வொர்க் மருத்துவமனைகளில் பணமில்லா வசதி.",
+    
+    // Steps
+    step_step_pmjay_title: "ஆயுஷ்மான் பாரத் (PM-JAY) அட்டைக்கு விண்ணப்பிப்பது எப்படி",
+    step_step_pmjay_steps: [
+      'Mera.pmjay.gov.in ஐப் பார்வையிட்டு, மொபைல் எண் அல்லது ரேஷன் கார்டு மூலம் உங்கள் குடும்பத் தகுதியைச் சரிபார்க்கவும்.',
+      'தகுதி இருந்தால், உங்களுக்கு அருகிலுள்ள பொது சேவை மையத்திற்கு (CSC) அல்லது அங்கீகரிக்கப்பட்ட மருத்துவமனையின் ஆயுஷ்மான் மித்ரா மேசைக்குச் செல்லவும்.',
+      'ஆதார் அட்டை, ரேஷன் கார்டு அல்லது அரசு ஐடி மற்றும் சமீபத்திய குடும்ப புகைப்படத்தை எடுத்துச் செல்லவும்.',
+      'பயோமெட்ரிக் சரிபார்ப்பு தளத்திலேயே செய்யப்படுகிறது. இ-கார்டு (ஆயுஷ்மான் கார்டு) உடனடியாக உருவாக்கப்படும்.',
+      'ஆண்டிற்கு ₹5 லட்சம் வரையிலான பணமில்லா சிகிச்சைக்கு எந்தவொரு PM-JAY அங்கீகரிக்கப்பட்ட மருத்துவமனையிலும் இ-கார்டைப் பயன்படுத்தவும்.'
+    ],
+    
+    step_step_cashless_title: "நெட்வொர்க் மருத்துவமனையில் பணமில்லா சிகிச்சையை கோருவது எப்படி",
+    step_step_cashless_steps: [
+      'மருத்துவமனையில் அனுமதிக்கப்படும் போது, ​​மருத்துவமனையின் காப்பீட்டு மேசையில் உங்கள் சுகாதார காப்பீட்டு அட்டை / ஆயுஷ்மான் அட்டையைக் காண்பிக்கவும்.',
+      'மருத்துவமனை உங்கள் காப்பீட்டாளர் / PM-JAY அமைப்பிற்கு முன்கூட்டியே அனுமதி கோரிக்கையை அனுப்புகிறது.',
+      'திட்டமிடப்பட்ட சிகிச்சைகளுக்கு வழக்கமாக 30-60 நிமிடங்களுக்குள் ஒப்புதல் அளிக்கப்படும்.',
+      'டிஸ்சார்ஜ் செய்யும்போது, ​​டிஸ்சார்ஜ் சுருக்கத்தில் கையெழுத்திடுங்கள் - காப்பீட்டாளர் நேரடியாக மருத்துவமனையுடன் பில்லைத் தீர்ப்பார்.',
+      'எதிர்கால பில்கள் அல்லது உரிமைகோரல் முரண்பாடுகளுக்கு அனைத்து அசல் பில்களையும் டிஸ்சார்ஜ் தாள்களையும் பாதுகாப்பாக வைத்திருக்கவும்.'
+    ],
+    
+    step_step_private_title: "தனியார் சுகாதார காப்பீட்டிற்கு விண்ணப்பிப்பது எப்படி",
+    step_step_private_steps: [
+      'PolicyBazaar அல்லது Coverfox இல் திட்டங்களை ஒப்பிட்டுப் பாருங்கள் — குடும்ப அளவு, வயது மற்றும் தேவையான காப்பீடு ஆகியவற்றின் அடிப்படையில் வடிகட்டவும்.',
+      'KYC ஐ முடிக்கவும்: ஆதார், பான் கார்டு, சமீபத்திய புகைப்படம் மற்றும் வருமானச் சான்று.',
+      'தற்போது இருக்கும் உடல்நலப் பிரச்சனைகளை நேர்மையாக அறிவிக்கவும் (தகவலை மறைத்தால் கோரிக்கை நிராகரிக்கப்படும்).',
+      'ஆண்டு பிரீமியத்தை ஆன்லைனில் செலுத்துங்கள். பாலிசி ஆவணம் 24-48 மணிநேரத்திற்குள் மின்னஞ்சல் செய்யப்படும்.',
+      'இ-கார்டு, உரிமைகோரல் கண்காணிப்பு மற்றும் மருத்துவமனை இருப்பிடத்தைக் கண்டறிய காப்பீட்டாளரின் மொபைல் செயலியைப் பதிவிறக்கவும்.'
+    ],
+    
+    step_step_reimburse_title: "பணம் திரும்பப் பெறுவதற்கான கோரிக்கையை தாக்கல் செய்வது எப்படி",
+    step_step_reimburse_steps: [
+      'அனைத்து அசல் ஆவணங்களையும் சேகரிக்கவும்: டிஸ்சார்ஜ் சுருக்கம், பில்கள், ஆய்வக அறிக்கைகள், மருத்துவர் பரிந்துரை சீட்டுகள்.',
+      'உங்கள் காப்பீட்டாளரின் இணையதளம் அல்லது செயலியில் இருந்து கோரிக்கை படிவத்தை நிரப்பவும்.',
+      'டிஸ்சார்ஜ் செய்யப்பட்ட 15-30 நாட்களுக்குள் சமர்ப்பிக்கவும் (துல்லியமான காலக்கெடுவிற்கு பாலிசி ஆவணத்தை பார்க்கவும்).',
+      'காப்பீட்டாளர் 30 நாட்களுக்குள் அதைச் செயலாக்குவார். சர்ச்சைக்குரிய உரிமைகோரல்கள் குறைதீர்க்கும் அதிகாரியிடம் செல்லும்.',
+      'தீர்க்கப்படாவிட்டால், IRDAI பீமா பரோசா போர்ட்டலுக்கு மாற்றவும்: bimabharosa.irdai.gov.in.'
+    ]
   },
   es: {
     navOverview: "Resumen",

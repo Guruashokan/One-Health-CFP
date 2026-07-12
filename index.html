@@ -376,28 +376,28 @@
     <!-- ── Tab 7: Insurance ── -->
     <section class="tab-panel" id="tab-insurance" role="tabpanel" aria-labelledby="nav-insurance" hidden>
       <div class="section-heading">
-        <div><p class="eyebrow">Health Coverage</p><h2>Insurance &amp; Government Schemes</h2></div>
+        <div><p class="eyebrow" data-i18n="insEyebrow">Health Coverage</p><h2 data-i18n="insTitle">Insurance &amp; Government Schemes</h2></div>
       </div>
 
       <!-- Scheme cards -->
-      <div class="insurance-section-label">🏛️ Government Schemes</div>
+      <div class="insurance-section-label" data-i18n="labelGovtSchemes">🏛️ Government Schemes</div>
       <div class="insurance-grid" id="govtSchemeGrid"></div>
 
-      <div class="insurance-section-label">🏢 Private Insurers</div>
+      <div class="insurance-section-label" data-i18n="labelPrivateInsurers">🏢 Private Insurers</div>
       <div class="insurance-grid" id="privateInsurGrid"></div>
 
       <!-- How to apply accordion -->
       <div class="panel" style="margin-top:8px">
-        <div class="section-heading"><div><p class="eyebrow">Step-by-step guide</p><h2>How to apply</h2></div></div>
+        <div class="section-heading"><div><p class="eyebrow" data-i18n="accEyebrow">Step-by-step guide</p><h2 data-i18n="accTitle">How to apply</h2></div></div>
         <div class="accordion" id="insuranceAccordion"></div>
       </div>
 
       <!-- Hospital empanelment checker -->
       <div class="panel" style="margin-top:8px">
-        <div class="section-heading"><div><p class="eyebrow">Empanelment Checker</p><h2>Is your hospital covered?</h2></div></div>
+        <div class="section-heading"><div><p class="eyebrow" data-i18n="chkEyebrow">Empanelment Checker</p><h2 data-i18n="chkTitle">Is your hospital covered?</h2></div></div>
         <div class="filter-row">
-          <input id="empanelSearch" type="text" placeholder="Search hospital name…" aria-label="Search hospital empanelment">
-          <button type="button" id="empanelBtn" class="primary-action">Check coverage</button>
+          <input id="empanelSearch" type="text" placeholder="Search hospital name…" aria-label="Search hospital empanelment" data-i18n-placeholder="chkPlaceholder">
+          <button type="button" id="empanelBtn" class="primary-action" data-i18n="chkBtn">Check coverage</button>
         </div>
         <div id="empanelResult" aria-live="polite"></div>
       </div>
@@ -515,6 +515,6 @@
 <!-- Google Maps API — replace YOUR_GOOGLE_MAPS_API_KEY -->
 <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initGoogleMap&libraries=places&loading=async" async defer></script> -->
 
-<script src="app.js?v=2.2"></script>
+<script src="app.js?v=2.3"></script>
 </body>
 </html>
