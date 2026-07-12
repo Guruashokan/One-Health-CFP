@@ -139,19 +139,19 @@
         <div class="panel map-panel">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Location Intelligence</p>
-              <h2>Interactive Healthcare Map</h2>
+              <p class="eyebrow" data-i18n="lblLocIntel">Location Intelligence</p>
+              <h2 data-i18n="lblInteractMap">Interactive Healthcare Map</h2>
             </div>
             <div class="map-controls">
               <select id="distanceFilter" aria-label="Filter by distance">
-                <option value="all">All distances</option>
-                <option value="1500">Within 1.5 km</option>
-                <option value="3000">Within 3 km</option>
-                <option value="5000">Within 5 km</option>
+                <option value="all" data-i18n="optAllDist">All distances</option>
+                <option value="1500" data-i18n="optDist15">Within 1.5 km</option>
+                <option value="3000" data-i18n="optDist30">Within 3 km</option>
+                <option value="5000" data-i18n="optDist50">Within 5 km</option>
               </select>
-              <button class="icon-btn" id="locateBtn" type="button" title="Auto-detect location (GPS)" aria-label="Auto-detect location">📍</button>
+              <button class="icon-btn" id="locateBtn" type="button" data-i18n-title="titleGps" title="Auto-detect location (GPS)" aria-label="Auto-detect location">📍</button>
               <button class="filter-select" id="manualLocateBtn" type="button" style="padding: 0 12px; height: 38px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; border-radius: var(--radius-xs); border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);">
-                ✏️ Set Location
+                <span data-i18n="btnSetLoc">✏️ Set Location</span>
               </button>
             </div>
           </div>
@@ -159,7 +159,7 @@
           <!-- Live Map Notice -->
           <div class="map-notice" id="mapNotice" hidden>
             <span class="notice-icon">⚠️</span>
-            <span id="mapNoticeText">Zoom in to view local healthcare facilities.</span>
+            <span id="mapNoticeText" data-i18n="mapNotice">Zoom in to view local healthcare facilities.</span>
           </div>
 
           <!-- Map container -->
@@ -168,7 +168,7 @@
             <!-- Loading indicator overlay -->
             <div id="mapLoader" class="map-loader" hidden>
               <span class="spinner"></span>
-              <span>Loading facilities...</span>
+              <span data-i18n="mapLoading">Loading facilities...</span>
             </div>
           </div>
 
@@ -178,41 +178,41 @@
               <strong>CityCare Hospital</strong>
               <span>2.1 km · ICU, oxygen beds, cardiology</span>
             </div>
-            <button class="map-route-btn" id="mapRouteBtn" type="button" data-name="CityCare Hospital" data-lat="12.9716" data-lng="77.5946">Get directions</button>
+            <button class="map-route-btn" id="mapRouteBtn" type="button" data-name="CityCare Hospital" data-lat="12.9716" data-lng="77.5946" data-i18n="btnGetDir">Get directions</button>
           </div>
         </div>
 
         <!-- AI Suggestion + Snapshots -->
         <div class="panel ai-panel">
           <div class="section-heading">
-            <div><p class="eyebrow">AI Triage</p><h2>Health suggestion</h2></div>
+            <div><p class="eyebrow" data-i18n="lblAiTriage">AI Triage</p><h2 data-i18n="lblHealthSugg">Health suggestion</h2></div>
             <span class="ai-badge">AI</span>
           </div>
           <form id="symptomForm" class="symptom-form">
-            <label for="symptoms">Describe your symptoms or need</label>
-            <textarea id="symptoms" rows="3" placeholder="E.g. fever and chest pain, need oxygen bed, senior citizen dizziness…"></textarea>
+            <label for="symptoms" data-i18n="lblDescribeSym">Describe your symptoms or need</label>
+            <textarea id="symptoms" rows="3" placeholder="E.g. fever and chest pain, need oxygen bed, senior citizen dizziness…" data-i18n-placeholder="placeholderSymptoms"></textarea>
             <div class="quick-symptoms">
-              <button type="button" data-symptom="fever cough">🤒 Fever</button>
-              <button type="button" data-symptom="chest pain breathing">💔 Chest pain</button>
-              <button type="button" data-symptom="diabetes insulin">💉 Diabetes</button>
-              <button type="button" data-symptom="accident bleeding ambulance">🚨 Accident</button>
-              <button type="button" data-symptom="senior elderly dizzy">👴 Senior</button>
-              <button type="button" data-symptom="child pediatrics">🧒 Child</button>
+              <button type="button" data-symptom="fever cough" data-i18n="symFever">🤒 Fever</button>
+              <button type="button" data-symptom="chest pain breathing" data-i18n="symChest">💔 Chest pain</button>
+              <button type="button" data-symptom="diabetes insulin" data-i18n="symDiabetes">💉 Diabetes</button>
+              <button type="button" data-symptom="accident bleeding ambulance" data-i18n="symAccident">🚨 Accident</button>
+              <button type="button" data-symptom="senior elderly dizzy" data-i18n="symSenior">👴 Senior</button>
+              <button type="button" data-symptom="child pediatrics" data-i18n="symChild">🧒 Child</button>
             </div>
             <button class="primary-action" type="submit">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              Get suggestion
+              <span data-i18n="btnGetSugg">Get suggestion</span>
             </button>
           </form>
           <div class="advice-box" id="adviceBox" aria-live="polite">
             <span class="advice-icon">💡</span>
-            <div><strong>Suggestion preview</strong><p>Enter symptoms above to see triage guidance and matching care options.</p></div>
+            <div><strong data-i18n="suggPreview">Suggestion preview</strong><p data-i18n="suggPreviewDesc">Enter symptoms above to see triage guidance and matching care options.</p></div>
           </div>
           <div class="snapshot-grid">
-            <div class="snapshot-item"><strong id="snapBeds">0</strong><span>Beds available</span></div>
-            <div class="snapshot-item"><strong id="snapICU">0</strong><span>ICU beds tracked</span></div>
-            <div class="snapshot-item"><strong id="snapOxygen">0</strong><span>Oxygen sources</span></div>
-            <div class="snapshot-item"><strong id="snapPharmacy">3</strong><span>Open pharmacies</span></div>
+            <div class="snapshot-item"><strong id="snapBeds">0</strong><span data-i18n="snapBeds">Beds available</span></div>
+            <div class="snapshot-item"><strong id="snapICU">0</strong><span data-i18n="snapIcu">ICU beds tracked</span></div>
+            <div class="snapshot-item"><strong id="snapOxygen">0</strong><span data-i18n="snapOxygen">Oxygen sources</span></div>
+            <div class="snapshot-item"><strong id="snapPharmacy">3</strong><span data-i18n="snapPharm">Open pharmacies</span></div>
           </div>
         </div>
       </div>
@@ -221,20 +221,20 @@
     <!-- ── Tab 2: Hospitals ── -->
     <section class="tab-panel" id="tab-hospitals" role="tabpanel" aria-labelledby="nav-hospitals" hidden>
       <div class="section-heading">
-        <div><p class="eyebrow">Hospitals</p><h2>Nearby care centers</h2></div>
+        <div><p class="eyebrow" data-i18n="hospEyebrow">Hospitals</p><h2 data-i18n="hospTitle">Nearby care centers</h2></div>
         <div class="segmented-control" role="group" aria-label="Hospital filter">
-          <button class="segment active" data-filter="all">All</button>
-          <button class="segment" data-filter="icu">ICU</button>
-          <button class="segment" data-filter="oxygen">Oxygen</button>
-          <button class="segment" data-filter="insurance">Insurance</button>
+          <button class="segment active" data-filter="all" data-i18n="btnAll">All</button>
+          <button class="segment" data-filter="icu" data-i18n="btnIcu">ICU</button>
+          <button class="segment" data-filter="oxygen" data-i18n="btnOxygen">Oxygen</button>
+          <button class="segment" data-filter="insurance" data-i18n="btnInsurance">Insurance</button>
         </div>
       </div>
       <div class="filter-row">
         <select id="distanceFilter2" aria-label="Filter by distance">
-          <option value="all">All distances</option>
-          <option value="3">Within 3 km</option>
-          <option value="5">Within 5 km</option>
-          <option value="10">Within 10 km</option>
+          <option value="all" data-i18n="optAllDist">All distances</option>
+          <option value="3" data-i18n="optDist3">Within 3 km</option>
+          <option value="5" data-i18n="optDist5">Within 5 km</option>
+          <option value="10" data-i18n="optDist10">Within 10 km</option>
         </select>
       </div>
       <div class="card-grid" id="hospitalGrid" aria-live="polite"></div>
@@ -243,14 +243,14 @@
     <!-- ── Tab 3: Doctors ── -->
     <section class="tab-panel" id="tab-doctors" role="tabpanel" aria-labelledby="nav-doctors" hidden>
       <div class="section-heading">
-        <div><p class="eyebrow">Doctors</p><h2>Availability &amp; Specialization</h2></div>
+        <div><p class="eyebrow" data-i18n="docEyebrow">Doctors</p><h2 data-i18n="docTitle">Availability &amp; Specialization</h2></div>
         <select id="specialtyFilter" aria-label="Filter by specialty">
-          <option value="all">All specializations</option>
-          <option value="Cardiology">Cardiology</option>
-          <option value="General Medicine">General Medicine</option>
-          <option value="Pediatrics">Pediatrics</option>
-          <option value="Orthopedics">Orthopedics</option>
-          <option value="Geriatrics">Geriatrics</option>
+          <option value="all" data-i18n="optAllSpec">All specializations</option>
+          <option value="Cardiology" data-i18n="optCardio">Cardiology</option>
+          <option value="General Medicine" data-i18n="optGenMed">General Medicine</option>
+          <option value="Pediatrics" data-i18n="optPeds">Pediatrics</option>
+          <option value="Orthopedics" data-i18n="optOrtho">Orthopedics</option>
+          <option value="Geriatrics" data-i18n="optGeriat">Geriatrics</option>
         </select>
       </div>
       <div class="doctor-list" id="doctorList" aria-live="polite"></div>
@@ -261,15 +261,15 @@
       <div class="two-col-layout">
         <!-- Stock finder -->
         <div class="panel">
-          <div class="section-heading"><div><p class="eyebrow">Stock Finder</p><h2>Medicines near you</h2></div></div>
+          <div class="section-heading"><div><p class="eyebrow" data-i18n="medStockEyebrow">Stock Finder</p><h2 data-i18n="medStockTitle">Medicines near you</h2></div></div>
           <div class="filter-row">
-            <input id="medicineSearch" type="search" placeholder="Search medicines…" aria-label="Search medicines">
+            <input id="medicineSearch" type="search" placeholder="Search medicines…" aria-label="Search medicines" data-i18n-placeholder="medSearchPlaceholder">
           </div>
           <div class="medicine-list" id="medicineList" aria-live="polite"></div>
         </div>
         <!-- Local pharmacies -->
         <div class="panel">
-          <div class="section-heading"><div><p class="eyebrow">Pharmacies</p><h2>Nearby pharmacies</h2></div></div>
+          <div class="section-heading"><div><p class="eyebrow" data-i18n="pharmEyebrow">Pharmacies</p><h2 data-i18n="pharmTitle">Nearby pharmacies</h2></div></div>
           <div class="pharmacy-list" id="pharmacyList"></div>
         </div>
       </div>
@@ -277,13 +277,13 @@
       <!-- Online pharmacy marketplace -->
       <div class="panel marketplace-panel">
         <div class="section-heading">
-          <div><p class="eyebrow">Online Marketplace</p><h2>Buy medicines online</h2></div>
-          <span class="badge-new">All platforms</span>
+          <div><p class="eyebrow" data-i18n="marketEyebrow">Online Marketplace</p><h2 data-i18n="marketTitle">Buy medicines online</h2></div>
+          <span class="badge-new" data-i18n="marketBadge">All platforms</span>
         </div>
-        <p class="marketplace-intro">Search any medicine across all major Indian pharmacy apps at once:</p>
+        <p class="marketplace-intro" data-i18n="marketIntro">Search any medicine across all major Indian pharmacy apps at once:</p>
         <div class="marketplace-search-row">
-          <input id="buySearch" type="search" placeholder="Type a medicine name to search all platforms…" aria-label="Search medicine across platforms">
-          <button type="button" id="buySearchBtn" class="primary-action">Search All</button>
+          <input id="buySearch" type="search" placeholder="Type a medicine name to search all platforms…" aria-label="Search medicine across platforms" data-i18n-placeholder="marketPlaceholder">
+          <button type="button" id="buySearchBtn" class="primary-action" data-i18n="marketBtn">Search All</button>
         </div>
         <div class="pharmacy-apps-grid" id="pharmacyAppsGrid"></div>
       </div>
@@ -294,7 +294,7 @@
       <div class="chat-layout">
         <div class="panel chat-panel">
           <div class="section-heading">
-            <div><p class="eyebrow">Powered by Gemini AI</p><h2>Health Assistant Chat</h2></div>
+            <div><p class="eyebrow" data-i18n="chatEyebrow">Powered by Gemini AI</p><h2 data-i18n="chatTitle">Health Assistant Chat</h2></div>
             <span class="ai-badge">AI</span>
           </div>
           <div class="api-notice" id="chatApiNotice">
@@ -305,7 +305,7 @@
           <div class="chat-messages" id="chatMessages" aria-live="polite" aria-label="Chat conversation">
             <div class="chat-bubble bot">
               <span class="chat-avatar">🤖</span>
-              <div class="bubble-content">
+              <div class="bubble-content" id="chatWelcomeContent">
                 <p>Hello! I'm your One Health AI assistant. I can help with:</p>
                 <ul>
                   <li>🏥 Finding hospitals and doctors near you</li>
@@ -323,35 +323,35 @@
             <div class="typing-dots"><span></span><span></span><span></span></div>
           </div>
           <div class="quick-chat" aria-label="Quick questions">
-            <button type="button" data-query="Which hospitals near me have ICU beds?">ICU hospitals</button>
-            <button type="button" data-query="What is the first aid for a heart attack?">Heart attack first aid</button>
-            <button type="button" data-query="How do I apply for Ayushman Bharat PM-JAY?">PM-JAY scheme</button>
-            <button type="button" data-query="Where can I find insulin near me?">Find insulin</button>
-            <button type="button" data-query="What are signs of a stroke?">Stroke signs</button>
-            <button type="button" data-query="Is there a doctor available for video consult now?">Video consult</button>
+            <button type="button" data-query="Which hospitals near me have ICU beds?" data-i18n="chatQ1">ICU hospitals</button>
+            <button type="button" data-query="What is the first aid for a heart attack?" data-i18n="chatQ2">Heart attack first aid</button>
+            <button type="button" data-query="How do I apply for Ayushman Bharat PM-JAY?" data-i18n="chatQ3">PM-JAY scheme</button>
+            <button type="button" data-query="Where can I find insulin near me?" data-i18n="chatQ4">Find insulin</button>
+            <button type="button" data-query="What are signs of a stroke?" data-i18n="chatQ5">Stroke signs</button>
+            <button type="button" data-query="Is there a doctor available for video consult now?" data-i18n="chatQ6">Video consult</button>
           </div>
           <form class="chat-form" id="chatForm" aria-label="Send a message">
             <label class="sr-only" for="chatInput">Your message</label>
-            <input id="chatInput" type="text" placeholder="Ask about symptoms, hospitals, medicines, insurance…" autocomplete="off">
+            <input id="chatInput" type="text" placeholder="Ask about symptoms, hospitals, medicines, insurance…" autocomplete="off" data-i18n-placeholder="chatPlaceholder">
             <button type="submit" aria-label="Send message">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
           </form>
         </div>
         <div class="panel chat-sidebar">
-          <p class="eyebrow">Quick references</p>
-          <h3>Emergency numbers</h3>
+          <p class="eyebrow" data-i18n="chatRefEyebrow">Quick references</p>
+          <h3 data-i18n="chatRefTitle">Emergency numbers</h3>
           <div class="emergency-list">
-            <div class="emergency-item"><span>🚑</span><div><strong>Ambulance</strong><a href="tel:108">108</a></div></div>
-            <div class="emergency-item"><span>🚒</span><div><strong>Fire</strong><a href="tel:101">101</a></div></div>
-            <div class="emergency-item"><span>👮</span><div><strong>Police</strong><a href="tel:100">100</a></div></div>
-            <div class="emergency-item"><span>👩</span><div><strong>Women helpline</strong><a href="tel:1091">1091</a></div></div>
-            <div class="emergency-item"><span>🧒</span><div><strong>Child helpline</strong><a href="tel:1098">1098</a></div></div>
-            <div class="emergency-item"><span>☠️</span><div><strong>Poison control</strong><a href="tel:1800-116-117">1800-116-117</a></div></div>
+            <div class="emergency-item"><span>🚑</span><div><strong data-i18n="lblAmbulance">Ambulance</strong><a href="tel:108">108</a></div></div>
+            <div class="emergency-item"><span>🚒</span><div><strong data-i18n="lblFire">Fire</strong><a href="tel:101">101</a></div></div>
+            <div class="emergency-item"><span>👮</span><div><strong data-i18n="lblPolice">Police</strong><a href="tel:100">100</a></div></div>
+            <div class="emergency-item"><span>👩</span><div><strong data-i18n="lblWomenHelp">Women helpline</strong><a href="tel:1091">1091</a></div></div>
+            <div class="emergency-item"><span>🧒</span><div><strong data-i18n="lblChildHelp">Child helpline</strong><a href="tel:1098">1098</a></div></div>
+            <div class="emergency-item"><span>☠️</span><div><strong data-i18n="lblPoisonHelp">Poison control</strong><a href="tel:1800-116-117">1800-116-117</a></div></div>
           </div>
           <div class="divider"></div>
-          <p class="eyebrow">Disclaimer</p>
-          <p style="font-size:12px;color:var(--ink-2)">This AI provides general health information only. Always consult a qualified medical professional for diagnosis and treatment. In emergencies, call 108 immediately.</p>
+          <p class="eyebrow" data-i18n="disclaimEyebrow">Disclaimer</p>
+          <p style="font-size:12px;color:var(--ink-2)" data-i18n="disclaimText">This AI provides general health information only. Always consult a qualified medical professional for diagnosis and treatment. In emergencies, call 108 immediately.</p>
         </div>
       </div>
     </section>
@@ -359,14 +359,14 @@
     <!-- ── Tab 6: First Aid ── -->
     <section class="tab-panel" id="tab-firstaid" role="tabpanel" aria-labelledby="nav-firstaid" hidden>
       <div class="section-heading">
-        <div><p class="eyebrow">First Aid Guide</p><h2>Emergency procedures</h2></div>
+        <div><p class="eyebrow" data-i18n="firstaidEyebrow">First Aid Guide</p><h2 data-i18n="firstaidTitle">Emergency procedures</h2></div>
         <div class="filter-row">
-          <input id="firstaidSearch" type="search" placeholder="Search first aid…" aria-label="Search first aid procedures">
+          <input id="firstaidSearch" type="search" placeholder="Search first aid…" aria-label="Search first aid procedures" data-i18n-placeholder="firstaidPlaceholder">
           <select id="severityFilter" aria-label="Filter by severity">
-            <option value="all">All severities</option>
-            <option value="critical">🔴 Critical</option>
-            <option value="high">🟠 High</option>
-            <option value="moderate">🟡 Moderate</option>
+            <option value="all" data-i18n="optAllSev">All severities</option>
+            <option value="critical" data-i18n="optCritical">🔴 Critical</option>
+            <option value="high" data-i18n="optHigh">🟠 High</option>
+            <option value="moderate" data-i18n="optModerate">🟡 Moderate</option>
           </select>
         </div>
       </div>
@@ -407,33 +407,33 @@
     <section class="tab-panel" id="tab-emergency" role="tabpanel" aria-labelledby="nav-emergency" hidden>
       <div class="two-col-layout">
         <div class="panel emergency-panel">
-          <p class="eyebrow">Emergency</p>
-          <h2>Ambulance services</h2>
+          <p class="eyebrow" data-i18n="emergEyebrow">Emergency</p>
+          <h2 data-i18n="emergTitle">Ambulance services</h2>
           <div id="ambulanceList" class="ambulance-list"></div>
           <div class="sos-wrap">
-            <button class="sos-btn" id="sosBtn" type="button" aria-label="Send SOS alert">🆘 Send SOS Alert</button>
+            <button class="sos-btn" id="sosBtn" type="button" aria-label="Send SOS alert" data-i18n="emergBtnSos">🆘 Send SOS Alert</button>
           </div>
         </div>
         <div class="panel">
-          <p class="eyebrow">Support</p>
-          <h2>Insurance help desk</h2>
+          <p class="eyebrow" data-i18n="emergSuppEyebrow">Support</p>
+          <h2 data-i18n="emergSuppTitle">Insurance help desk</h2>
           <div class="insurance-box">
             <span class="insurance-icon">✅</span>
             <div>
-              <strong>Claim &amp; cashless support</strong>
-              <p>Verify network hospitals, required documents, and emergency admission guidance.</p>
+              <strong data-i18n="emergSuppClaim">Claim &amp; cashless support</strong>
+              <p data-i18n="emergSuppClaimDesc">Verify network hospitals, required documents, and emergency admission guidance.</p>
             </div>
           </div>
           <form class="insurance-form" id="insuranceForm">
-            <label for="policyType">Policy type</label>
+            <label for="policyType" data-i18n="lblPolicyType">Policy type</label>
             <select id="policyType">
-              <option>Government scheme (PM-JAY/ESIC/CGHS)</option>
-              <option>Private insurance</option>
-              <option>Employer / group coverage</option>
+              <option data-i18n="optPolicyGov">Government scheme (PM-JAY/ESIC/CGHS)</option>
+              <option data-i18n="optPolicyPriv">Private insurance</option>
+              <option data-i18n="optPolicyGroup">Employer / group coverage</option>
             </select>
-            <label for="supportNeed">Support needed</label>
-            <input id="supportNeed" type="text" placeholder="E.g. cashless admission at CityCare">
-            <button type="submit">Check support</button>
+            <label for="supportNeed" data-i18n="lblSupportNeed">Support needed</label>
+            <input id="supportNeed" type="text" placeholder="E.g. cashless admission at CityCare" data-i18n-placeholder="placeholderSupportNeed">
+            <button type="submit" data-i18n="btnCheckSupport">Check support</button>
           </form>
           <p class="form-result" id="insuranceResult" aria-live="polite"></p>
         </div>
@@ -515,6 +515,6 @@
 <!-- Google Maps API — replace YOUR_GOOGLE_MAPS_API_KEY -->
 <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initGoogleMap&libraries=places&loading=async" async defer></script> -->
 
-<script src="app.js?v=2.3"></script>
+<script src="app.js?v=2.4"></script>
 </body>
 </html>
