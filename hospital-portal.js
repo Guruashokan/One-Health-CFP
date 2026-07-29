@@ -195,6 +195,22 @@ function setHospitalOptions(hospitals, doctors = [], message) {
       select.add(new Option(`${hospital.name} (${distance} km)`, hospital.name));
     });
 
+  if (activeHospitalNames.size === 0) {
+    // Load static demo defaults in Krishnankoil/Watrap
+    const defaults = [
+      { name: "Krishnankoil Community Hospital", distance: 0.6, beds: 42, totalBeds: 120, icu: 8, oxygen: true },
+      { name: "Kalasalingam Clinic & Research", distance: 1.2, beds: 11, totalBeds: 40, icu: 0, oxygen: true },
+      { name: "Watrap Government Hospital", distance: 2.4, beds: 28, totalBeds: 85, icu: 5, oxygen: true },
+      { name: "Srivilliputhur Cooperative Hospital", distance: 7.2, beds: 19, totalBeds: 60, icu: 3, oxygen: false }
+    ];
+    defaults.forEach(h => {
+      HOSPITAL_DATA[h.name] = createPortalHospitalData(h, []);
+      activeHospitalNames.add(h.name);
+      select.add(new Option(`${h.name} (${h.distance} km) [Demo]`, h.name));
+    });
+    message = "Using offline demo hospitals list. Check location access to load real facilities.";
+  }
+
   setHospitalLocationHint(message || (activeHospitalNames.size
     ? `Showing ${activeHospitalNames.size} hospitals within 50 km of your location.`
     : "No hospitals were found within 50 km. Set your location in the patient portal and try again."));

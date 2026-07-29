@@ -9,7 +9,7 @@ const GEMINI_API_KEY      = "YOUR_GEMINI_API_KEY";      // https://aistudio.goog
 const GEMINI_MODEL        = "gemini-1.5-flash";
 const USE_SERVER_CHAT_FALLBACK = false;
 const USE_SERVER_INSURANCE_API = false;
-const DEFAULT_MAP_CENTER = { lat: 20.5937, lng: 78.9629 };
+const DEFAULT_MAP_CENTER = { lat: 9.5606, lng: 77.6749 };
 const LOCATION_STORAGE_KEY = "ohp_user_location";
 const HOSPITAL_STORAGE_KEY = "ohp_location_hospitals";
 
@@ -17,31 +17,28 @@ const HOSPITAL_STORAGE_KEY = "ohp_location_hospitals";
    DATA
 ─────────────────────────────────────────── */
 const hospitals = [
-  { name:"CityCare Hospital",     lat:12.9762, lng:77.5993, distance:2.1, location:"MG Road",       beds:42, totalBeds:120, icu:8,  oxygen:true,  insurance:true,  specialties:["Cardiology","Emergency","General Medicine"], phone:"080-4100-1001" },
-  { name:"GreenLine Clinic",      lat:12.9716, lng:77.5946, distance:3.8, location:"Lake View",     beds:11, totalBeds:40,  icu:0,  oxygen:true,  insurance:false, specialties:["General Medicine","Pediatrics"],             phone:"080-4200-2300" },
-  { name:"Hope Multispeciality",  lat:12.9689, lng:77.6074, distance:5.4, location:"Central Market",beds:28, totalBeds:85,  icu:5,  oxygen:true,  insurance:true,  specialties:["Orthopedics","Neurology","Emergency"],        phone:"080-4300-7744" },
-  { name:"Sunrise Senior Care",   lat:12.9812, lng:77.5878, distance:7.2, location:"West End",      beds:19, totalBeds:60,  icu:3,  oxygen:false, insurance:true,  specialties:["Geriatrics","General Medicine"],             phone:"080-4400-8812" },
-  { name:"Metro Heart & Trauma Centre", lat:13.0218, lng:77.6436, distance:12.8, location:"North Ring Road", beds:36, totalBeds:110, icu:10, oxygen:true, insurance:true, specialties:["Cardiology","Emergency","Orthopedics"], phone:"080-4500-1280" },
-  { name:"Asha Community Hospital", lat:12.8978, lng:77.5364, distance:18.6, location:"South Township", beds:24, totalBeds:70, icu:4, oxygen:true, insurance:true, specialties:["General Medicine","Pediatrics","Geriatrics"], phone:"080-4600-1860" },
-  { name:"CareBridge Medical College Hospital", lat:13.0926, lng:77.7102, distance:24.9, location:"Outer Health Corridor", beds:86, totalBeds:260, icu:22, oxygen:true, insurance:true, specialties:["Emergency","General Medicine","Orthopedics"], phone:"080-4700-2490" },
-  { name:"Veda Women & Child Hospital", lat:12.8234, lng:77.4621, distance:32.4, location:"East Valley Road", beds:31, totalBeds:95, icu:6, oxygen:true, insurance:false, specialties:["Pediatrics","General Medicine"], phone:"080-4800-3240" },
-  { name:"District Senior Care Institute", lat:13.2384, lng:77.3987, distance:41.2, location:"District Health Campus", beds:52, totalBeds:140, icu:9, oxygen:true, insurance:true, specialties:["Geriatrics","General Medicine","Emergency"], phone:"080-4900-4120" },
-  { name:"Nirmala Rural Super Speciality", lat:12.6678, lng:77.8615, distance:49.6, location:"Rural Link Road", beds:44, totalBeds:125, icu:7, oxygen:true, insurance:true, specialties:["Cardiology","Orthopedics","Emergency"], phone:"080-5000-4960" },
+  { name:"Krishnankoil Community Hospital", lat:9.5636, lng:77.6709, distance:0.6, location:"Watrap Road, Krishnankoil", beds:42, totalBeds:120, icu:8,  oxygen:true,  insurance:true,  specialties:["Cardiology","Emergency","General Medicine"], phone:"+91 4563 289124" },
+  { name:"Kalasalingam Clinic & Research",  lat:9.5536, lng:77.6829, distance:1.2, location:"KLU Campus, Krishnankoil",  beds:11, totalBeds:40,  icu:0,  oxygen:true,  insurance:false, specialties:["General Medicine","Pediatrics"],             phone:"+91 4563 288410" },
+  { name:"Watrap Government Hospital",      lat:9.5756, lng:77.6649, distance:2.4, location:"Watrap Bazaar",            beds:28, totalBeds:85,  icu:5,  oxygen:true,  insurance:true,  specialties:["Orthopedics","Neurology","Emergency"],        phone:"+91 4563 288500" },
+  { name:"Srivilliputhur Cooperative Hospital", lat:9.5106, lng:77.6349, distance:7.2, location:"Madurai Road, Srivilliputhur", beds:19, totalBeds:60, icu:3, oxygen:false, insurance:true, specialties:["Geriatrics","General Medicine"], phone:"+91 4563 260341" },
+  { name:"Srivilliputhur Government Hospital", lat:9.5058, lng:77.6294, distance:8.1, location:"Srivilliputhur Town", beds:36, totalBeds:110, icu:10, oxygen:true, insurance:true, specialties:["Cardiology","Emergency","Orthopedics"], phone:"+91 4563 260224" },
+  { name:"Asha Community Hospital", lat:9.4568, lng:77.5364, distance:18.6, location:"South Township", beds:24, totalBeds:70, icu:4, oxygen:true, insurance:true, specialties:["General Medicine","Pediatrics","Geriatrics"], phone:"+91 4563 290186" },
+  { name:"CareBridge Medical College Hospital", lat:9.3926, lng:77.7102, distance:24.9, location:"Outer Health Corridor", beds:86, totalBeds:260, icu:22, oxygen:true, insurance:true, specialties:["Emergency","General Medicine","Orthopedics"], phone:"+91 4563 290470" },
+  { name:"Veda Women & Child Hospital", lat:9.2234, lng:77.4621, distance:41.2, location:"East Valley Road", beds:31, totalBeds:95, icu:6, oxygen:true, insurance:false, specialties:["Pediatrics","General Medicine"], phone:"+91 4563 290480" },
+  { name:"Madurai Rajaji Govt Hospital", lat:9.9252, lng:78.1198, distance:48.5, location:"Collector Office Road, Madurai", beds:52, totalBeds:350, icu:25, oxygen:true, insurance:true, specialties:["Geriatrics","General Medicine","Emergency"], phone:"+91 452 253 2535" },
 ];
 
 let doctors = [
-  { name:"Dr. Asha Menon", specialty:"Cardiology", hospital:"CityCare Hospital", location:"MG Road", distance:2.1, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.9, phone:"080-4100-1011", languages:"English, Kannada, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 700", experience:"14 yrs", verified:true },
-  { name:"Dr. Kiran Rao", specialty:"General Medicine", hospital:"GreenLine Clinic", location:"Lake View", distance:3.8, available:"24/7 doctor help", mode:"Online + clinic follow-up", rating:4.7, phone:"080-4200-2315", languages:"English, Kannada, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 450", experience:"9 yrs", verified:true },
-  { name:"Dr. Meera Shah", specialty:"Pediatrics", hospital:"GreenLine Clinic", location:"Lake View", distance:3.8, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.8, phone:"080-4200-2322", languages:"English, Hindi, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 550", experience:"11 yrs", verified:true },
-  { name:"Dr. Farhan Ali", specialty:"Orthopedics", hospital:"Hope Multispeciality", location:"Central Market", distance:5.4, available:"24/7 doctor help", mode:"Online + emergency referral", rating:4.6, phone:"080-4300-7750", languages:"English, Hindi, Urdu", hours:"24/7 online helpdesk", fee:"Rs. 650", experience:"12 yrs", verified:true },
-  { name:"Dr. Priya Suresh", specialty:"Geriatrics", hospital:"Sunrise Senior Care", location:"West End", distance:7.2, available:"24/7 doctor help", mode:"Online + senior care support", rating:4.8, phone:"080-4400-8820", languages:"English, Tamil, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 600", experience:"16 yrs", verified:true },
-  { name:"Dr. Vivek Anand", specialty:"Cardiology", hospital:"Metro Heart & Trauma Centre", location:"North Ring Road", distance:12.8, available:"24/7 doctor help", mode:"Online + emergency referral", rating:4.8, phone:"080-4500-1291", languages:"English, Kannada, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 800", experience:"18 yrs", verified:true },
-  { name:"Dr. Nalini Joseph", specialty:"General Medicine", hospital:"Asha Community Hospital", location:"South Township", distance:18.6, available:"24/7 doctor help", mode:"Online + clinic follow-up", rating:4.5, phone:"080-4600-1872", languages:"English, Tamil, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 400", experience:"8 yrs", verified:true },
-  { name:"Dr. Rohan Iyer", specialty:"Orthopedics", hospital:"CareBridge Medical College Hospital", location:"Outer Health Corridor", distance:24.9, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.7, phone:"080-4700-2508", languages:"English, Kannada, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 650", experience:"13 yrs", verified:true },
-  { name:"Dr. Latha Krishnan", specialty:"Pediatrics", hospital:"Veda Women & Child Hospital", location:"East Valley Road", distance:32.4, available:"24/7 doctor help", mode:"Online + child care support", rating:4.6, phone:"080-4800-3251", languages:"English, Tamil, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 500", experience:"10 yrs", verified:true },
-  { name:"Dr. Harish Nair", specialty:"Geriatrics", hospital:"District Senior Care Institute", location:"District Health Campus", distance:41.2, available:"24/7 doctor help", mode:"Online + senior care support", rating:4.9, phone:"080-4900-4135", languages:"English, Malayalam, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 550", experience:"20 yrs", verified:true },
-  { name:"Dr. Sana Kapoor", specialty:"General Medicine", hospital:"Nirmala Rural Super Speciality", location:"Rural Link Road", distance:49.6, available:"24/7 doctor help", mode:"Online + rural care support", rating:4.5, phone:"080-5000-4974", languages:"English, Hindi, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 450", experience:"7 yrs", verified:true },
-  { name:"Dr. Arjun Dev", specialty:"Cardiology", hospital:"Nirmala Rural Super Speciality", location:"Rural Link Road", distance:49.6, available:"24/7 doctor help", mode:"Online + emergency referral", rating:4.7, phone:"080-5000-4988", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 750", experience:"15 yrs", verified:true },
+  { name:"Dr. Asha Menon", specialty:"Cardiology", hospital:"Krishnankoil Community Hospital", location:"Watrap Road, Krishnankoil", distance:0.6, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.9, phone:"+91 4563 289124", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 700", experience:"14 yrs", verified:true },
+  { name:"Dr. Kiran Rao", specialty:"General Medicine", hospital:"Kalasalingam Clinic & Research", location:"KLU Campus, Krishnankoil", distance:1.2, available:"24/7 doctor help", mode:"Online + clinic follow-up", rating:4.7, phone:"+91 4563 288410", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 450", experience:"9 yrs", verified:true },
+  { name:"Dr. Meera Shah", specialty:"Pediatrics", hospital:"Kalasalingam Clinic & Research", location:"KLU Campus, Krishnankoil", distance:1.2, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.8, phone:"+91 4563 288410", languages:"English, Hindi, Tamil", hours:"24/7 online helpdesk", fee:"Rs. 550", experience:"11 yrs", verified:true },
+  { name:"Dr. Farhan Ali", specialty:"Orthopedics", hospital:"Watrap Government Hospital", location:"Watrap Bazaar", distance:2.4, available:"24/7 doctor help", mode:"Online + emergency referral", rating:4.6, phone:"+91 4563 288500", languages:"English, Hindi, Tamil", hours:"24/7 online helpdesk", fee:"Rs. 650", experience:"12 yrs", verified:true },
+  { name:"Dr. Priya Suresh", specialty:"Geriatrics", hospital:"Srivilliputhur Cooperative Hospital", location:"Madurai Road, Srivilliputhur", distance:7.2, available:"24/7 doctor help", mode:"Online + senior care support", rating:4.8, phone:"+91 4563 260341", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 600", experience:"16 yrs", verified:true },
+  { name:"Dr. Vivek Anand", specialty:"Cardiology", hospital:"Srivilliputhur Government Hospital", location:"Srivilliputhur Town", distance:8.1, available:"24/7 doctor help", mode:"Online + emergency referral", rating:4.8, phone:"+91 4563 260224", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 800", experience:"18 yrs", verified:true },
+  { name:"Dr. Nalini Joseph", specialty:"General Medicine", hospital:"Asha Community Hospital", location:"South Township", distance:18.6, available:"24/7 doctor help", mode:"Online + clinic follow-up", rating:4.5, phone:"+91 4563 290186", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 400", experience:"8 yrs", verified:true },
+  { name:"Dr. Rohan Iyer", specialty:"Orthopedics", hospital:"CareBridge Medical College Hospital", location:"Outer Health Corridor", distance:24.9, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.7, phone:"+91 4563 290470", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 650", experience:"13 yrs", verified:true },
+  { name:"Dr. Latha Krishnan", specialty:"Pediatrics", hospital:"Veda Women & Child Hospital", location:"East Valley Road", distance:41.2, available:"24/7 doctor help", mode:"Online + child care support", rating:4.6, phone:"+91 4563 290480", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 500", experience:"10 yrs", verified:true },
+  { name:"Dr. Harish Nair", specialty:"Geriatrics", hospital:"Madurai Rajaji Govt Hospital", location:"Collector Office Road, Madurai", distance:48.5, available:"24/7 doctor help", mode:"Online + senior care support", rating:4.9, phone:"+91 452 253 2535", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 550", experience:"20 yrs", verified:true },
 ];
 
 const medicines = [
@@ -194,15 +191,15 @@ let leafletMap      = null;
 let tileLayer       = null;
 let mapMarkers      = [];
 let userMarker      = null;
-let userCoords      = null;
+let userCoords      = { lat: 9.5606, lng: 77.6749 }; // Watrap/Krishnankoil, Tamil Nadu default fallback
 let mapQueryTimeout = null;
 
 const mapDetails = {
-  "CityCare Hospital":    { icon:"🏥", title:"CityCare Hospital",    text:"2.1 km · ICU, oxygen beds, cardiology" },
-  "MediQuick Pharmacy":  { icon:"💊", title:"MediQuick Pharmacy",   text:"0.8 km · insulin, ORS, open 24×7" },
-  "CarePlus Pharmacy":   { icon:"💊", title:"CarePlus Pharmacy",    text:"1.4 km · paracetamol, antibiotics, open until 11 PM" },
+  "Krishnankoil Community Hospital": { icon:"🏥", title:"Krishnankoil Community Hospital", text:"0.6 km · ICU, oxygen beds, cardiology" },
+  "KLU Campus Pharmacy":  { icon:"💊", title:"KLU Campus Pharmacy",   text:"0.8 km · insulin, ORS, open 24×7" },
+  "Watrap Town Pharmacy":   { icon:"💊", title:"Watrap Town Pharmacy",    text:"1.4 km · paracetamol, antibiotics, open until 11 PM" },
   "Rapid Ambulance 24×7":{ icon:"🚑", title:"Rapid Ambulance 24×7", text:"8 min ETA · advanced life support vehicle" },
-  "GreenLine Clinic":    { icon:"🏨", title:"GreenLine Clinic",     text:"3.8 km · general medicine & pediatrics" },
+  "Kalasalingam Clinic & Research":    { icon:"🏨", title:"Kalasalingam Clinic & Research",     text:"1.2 km · general medicine & pediatrics" },
 };
 
 
@@ -1554,20 +1551,19 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 function relocateMockups(lat, lng) {
-  const hasMockups = hospitals.some(h => h.name === "CityCare Hospital");
+  const hasMockups = hospitals.some(h => h.name === "Krishnankoil Community Hospital");
   if (!hasMockups) return;
 
   const offsets = [
-    { name:"CityCare Hospital", lat: 0.0140, lng: 0.0130 },
-    { name:"GreenLine Clinic", lat: 0.0250, lng:-0.0250 },
-    { name:"Hope Multispeciality", lat:-0.0340, lng: 0.0360 },
-    { name:"Sunrise Senior Care", lat: 0.0500, lng:-0.0450 },
-    { name:"Metro Heart & Trauma Centre", lat:-0.0850, lng: 0.0850 },
-    { name:"Asha Community Hospital", lat: 0.1250, lng:-0.1200 },
-    { name:"CareBridge Medical College Hospital", lat:-0.1700, lng: 0.1600 },
-    { name:"Veda Women & Child Hospital", lat: 0.2300, lng: 0.2050 },
-    { name:"District Senior Care Institute", lat:-0.2850, lng:-0.2550 },
-    { name:"Nirmala Rural Super Speciality", lat: 0.3300, lng:-0.3000 }
+    { name:"Krishnankoil Community Hospital", lat: 0.003, lng: -0.004 },
+    { name:"Kalasalingam Clinic & Research", lat: -0.007, lng: 0.008 },
+    { name:"Watrap Government Hospital", lat: 0.015, lng: -0.010 },
+    { name:"Srivilliputhur Cooperative Hospital", lat: -0.050, lng: -0.040 },
+    { name:"Srivilliputhur Government Hospital", lat: -0.055, lng: -0.045 },
+    { name:"Asha Community Hospital", lat: -0.104, lng: -0.138 },
+    { name:"CareBridge Medical College Hospital", lat: -0.168, lng: 0.035 },
+    { name:"Veda Women & Child Hospital", lat: -0.337, lng: -0.212 },
+    { name:"Madurai Rajaji Govt Hospital", lat: 0.364, lng: 0.444 }
   ];
   
   hospitals.forEach((h, index) => {
@@ -2250,7 +2246,7 @@ function bindEvents() {
     if (lat && lng && userCoords) {
       window.open(`https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}`, "_blank");
     } else {
-      const name = $("mapRouteBtn")?.dataset.name ?? "CityCare Hospital";
+      const name = $("mapRouteBtn")?.dataset.name ?? "Krishnankoil Community Hospital";
       window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
     }
   });
