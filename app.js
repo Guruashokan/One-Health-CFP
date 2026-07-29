@@ -1555,27 +1555,48 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 function relocateMockups(lat, lng) {
-  const hasMockups = hospitals.some(h => h.name === "Krishnankoil Community Hospital");
-  if (!hasMockups) return;
-
-  const offsets = [
-    { name:"Krishnankoil Community Hospital", lat: 0.003, lng: -0.004 },
-    { name:"Kalasalingam Clinic & Research", lat: -0.007, lng: 0.008 },
-    { name:"Watrap Government Hospital", lat: 0.015, lng: -0.010 },
-    { name:"Srivilliputhur Cooperative Hospital", lat: -0.050, lng: -0.040 },
-    { name:"Srivilliputhur Government Hospital", lat: -0.055, lng: -0.045 },
-    { name:"Asha Community Hospital", lat: -0.104, lng: -0.138 },
-    { name:"CareBridge Medical College Hospital", lat: -0.168, lng: 0.035 },
-    { name:"Veda Women & Child Hospital", lat: -0.337, lng: -0.212 },
-    { name:"Madurai Rajaji Govt Hospital", lat: 0.364, lng: 0.444 }
-  ];
+  const isDefaultArea = Math.abs(lat - 9.5606) < 0.1 && Math.abs(lng - 77.6749) < 0.1;
   
-  hospitals.forEach((h, index) => {
-    const off = offsets[index % offsets.length];
-    h.lat = lat + off.lat;
-    h.lng = lng + off.lng;
-    h.distance = Number(calculateDistance(lat, lng, h.lat, h.lng).toFixed(1));
-  });
+  if (isDefaultArea) {
+    const baseCoords = {
+      "Krishnankoil Community Hospital": { lat: 9.5636, lng: 77.6709 },
+      "Kalasalingam Clinic & Research": { lat: 9.5536, lng: 77.6829 },
+      "Watrap Government Hospital": { lat: 9.5756, lng: 77.6649 },
+      "Srivilliputhur Cooperative Hospital": { lat: 9.5106, lng: 77.6349 },
+      "Srivilliputhur Government Hospital": { lat: 9.5058, lng: 77.6294 },
+      "Asha Community Hospital": { lat: 9.4568, lng: 77.5364 },
+      "CareBridge Medical College Hospital": { lat: 9.3926, lng: 77.7102 },
+      "Veda Women & Child Hospital": { lat: 9.2234, lng: 77.4621 },
+      "Madurai Rajaji Govt Hospital": { lat: 9.9252, lng: 78.1198 }
+    };
+    hospitals.forEach(h => {
+      if (baseCoords[h.name]) {
+        h.lat = baseCoords[h.name].lat;
+        h.lng = baseCoords[h.name].lng;
+      }
+      h.distance = Number(calculateDistance(lat, lng, h.lat, h.lng).toFixed(1));
+    });
+  } else {
+    const offsets = [
+      { lat: 0.003, lng: -0.004 },
+      { lat: -0.007, lng: 0.008 },
+      { lat: 0.015, lng: -0.010 },
+      { lat: -0.050, lng: -0.040 },
+      { lat: -0.055, lng: -0.045 },
+      { lat: -0.104, lng: -0.138 },
+      { lat: -0.168, lng: 0.035 },
+      { lat: -0.337, lng: -0.212 },
+      { lat: 0.364, lng: 0.444 }
+    ];
+    hospitals.forEach((h, index) => {
+      const off = offsets[index % offsets.length];
+      h.lat = lat + off.lat;
+      h.lng = lng + off.lng;
+      h.distance = Number(calculateDistance(lat, lng, h.lat, h.lng).toFixed(1));
+    });
+  }
+
+  hospitals.sort((a, b) => a.distance - b.distance);
 
   doctors.forEach(doctor => {
     const hospital = hospitals.find(h => h.name === doctor.hospital);
@@ -1752,28 +1773,23 @@ function processMapData(elements) {
     }
   });
 
-  if (loadedHospitals.length > 0) {
-    loadedHospitals.sort((a,b) => a.distance - b.distance);
-    hospitals.length = 0;
-    hospitals.push(...loadedHospitals);
-    renderHospitals();
-    renderMetrics();
-  } else {
-    relocateMockups(mapCenter.lat, mapCenter.lng);
+  // Always keep project hospitals list stable and update distances relative to userCoords
+  if (userCoords) {
+    hospitals.forEach(h => {
+      h.distance = Number(calculateDistance(userCoords.lat, userCoords.lng, h.lat, h.lng).toFixed(1));
+    });
+    hospitals.sort((a, b) => a.distance - b.distance);
+    
+    doctors.forEach(d => {
+      const h = hospitals.find(hosp => hosp.name === d.hospital);
+      if (h) d.distance = h.distance;
+    });
   }
 
-  if (loadedPharmacies.length > 0) {
-    loadedPharmacies.sort((a,b) => a.distance - b.distance);
-    localPharmacies.length = 0;
-    localPharmacies.push(...loadedPharmacies);
-    renderPharmacies();
-  }
-
-  if (loadedDoctors.length > 0) {
-    doctors.length = 0;
-    doctors.push(...loadedDoctors);
-    renderDoctors();
-  }
+  renderHospitals();
+  renderDoctors();
+  renderPharmacies();
+  renderMetrics();
 
   renderSnapshots();
   persistLocalCareData("osm");
