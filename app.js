@@ -1188,7 +1188,12 @@ out center;`;
     const url = `${mirror}?data=${encodeURIComponent(query)}`;
     try {
       console.log(`Querying Overpass mirror ${i+1}: ${mirror}`);
-      const res = await fetch(url);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5-second timeout
+      
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
       if (res.ok) {
         const data = await res.json();
         if (data.elements && data.elements.length > 0) {
