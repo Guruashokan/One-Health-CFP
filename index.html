@@ -123,7 +123,7 @@
     <section class="metrics-row" aria-label="Platform status">
       <article class="metric"><span class="metric-icon">🏥</span><span class="metric-value" id="metricHospitals">0</span><span class="metric-label">Nearby hospitals</span></article>
       <article class="metric"><span class="metric-icon">🛏️</span><span class="metric-value" id="metricBeds">0</span><span class="metric-label">Beds available</span></article>
-      <article class="metric"><span class="metric-icon">👨‍⚕️</span><span class="metric-value" id="metricDoctors">0</span><span class="metric-label">Doctors online</span></article>
+      <article class="metric"><span class="metric-icon">👨‍⚕️</span><span class="metric-value" id="metricDoctors">0</span><span class="metric-label">24/7 doctor help</span></article>
       <article class="metric urgent"><span class="metric-icon">🚨</span><span class="metric-value">108</span><span class="metric-label">Emergency helpline</span></article>
     </section>
 
@@ -148,6 +148,8 @@
                 <option value="1500" data-i18n="optDist15">Within 1.5 km</option>
                 <option value="3000" data-i18n="optDist30">Within 3 km</option>
                 <option value="5000" data-i18n="optDist50">Within 5 km</option>
+                <option value="25000" data-i18n="optDist25Km">Within 25 km</option>
+                <option value="50000" data-i18n="optDist50Km">Within 50 km</option>
               </select>
               <button class="icon-btn" id="locateBtn" type="button" data-i18n-title="titleGps" title="Auto-detect location (GPS)" aria-label="Auto-detect location">📍</button>
               <button class="filter-select" id="manualLocateBtn" type="button" style="padding: 0 12px; height: 38px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; border-radius: var(--radius-xs); border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);">
@@ -235,6 +237,8 @@
           <option value="3" data-i18n="optDist3">Within 3 km</option>
           <option value="5" data-i18n="optDist5">Within 5 km</option>
           <option value="10" data-i18n="optDist10">Within 10 km</option>
+          <option value="25" data-i18n="optDist25Km">Within 25 km</option>
+          <option value="50" data-i18n="optDist50Km" selected>Within 50 km</option>
         </select>
       </div>
       <div class="card-grid" id="hospitalGrid" aria-live="polite"></div>
@@ -515,6 +519,6 @@
 <!-- Google Maps API — replace YOUR_GOOGLE_MAPS_API_KEY -->
 <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initGoogleMap&libraries=places&loading=async" async defer></script> -->
 
-<script src="app.js?v=2.6"></script>
+<script src="app.js?v=2.7"></script>
 </body>
 </html>

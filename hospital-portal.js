@@ -5,6 +5,7 @@
 /* ── Demo credentials ── */
 const DEMO_STAFF_ID = "staff";
 const DEMO_PASSWORD = "health123";
+const HOSPITAL_STORAGE_KEY = "ohp_location_hospitals";
 
 /* ── Hospital default data ── */
 const HOSPITAL_DATA = {
@@ -99,15 +100,186 @@ let currentStaff    = null;
 let patientQueue    = [];
 let patientIdCounter = 1;
 let toastTimer      = null;
+let activeHospitalNames = new Set();
 
 /* ── DOM helpers ── */
 const $  = id  => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 
+function stableHash(value) {
+  let hash = 2166136261;
+  for (let i = 0; i < String(value).length; i++) {
+    hash ^= String(value).charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return Math.abs(hash >>> 0);
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function calculateDistanceKm(lat1, lng1, lat2, lng2) {
+  const radius = 6371;
+  const deltaLat = (lat2 - lat1) * Math.PI / 180;
+  const deltaLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(deltaLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(deltaLng / 2) ** 2;
+  return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function createPortalHospitalData(hospital, linkedDoctors = []) {
+  const seed = stableHash(`${hospital.name}|${hospital.lat}|${hospital.lng}`);
+  const totalBeds = Math.max(20, Number(hospital.totalBeds) || 60 + (seed % 120));
+  const beds = clamp(Number(hospital.beds) || 12 + (seed % Math.max(12, totalBeds - 12)), 0, totalBeds);
+  const icuTotal = Math.max(4, Math.round(totalBeds * 0.16));
+  const icu = clamp(Number(hospital.icu) || seed % (icuTotal + 1), 0, icuTotal);
+  const oxygenTotal = Math.max(6, Math.round(totalBeds * 0.28));
+  const oxygenBeds = hospital.oxygen === false ? 0 : clamp(Math.round(beds * 0.28), 1, oxygenTotal);
+  const staff = linkedDoctors.map((doctor, index) => ({
+    name: doctor.name,
+    role: doctor.specialty || "24/7 doctor help",
+    color: ["#1a56db", "#7c3aed", "#059669", "#ef4444"][index % 4],
+    on: true
+  }));
+
+  if (!staff.length) {
+    staff.push(
+      { name: "24/7 Doctor Help", role: "Emergency support", color: "#ef4444", on: true },
+      { name: "Nursing Desk", role: "Staff nurse", color: "#059669", on: true },
+      { name: "Reception Desk", role: "Patient services", color: "#f59e0b", on: true }
+    );
+  }
+
+  return {
+    beds,
+    totalBeds,
+    icu,
+    oxygen: hospital.oxygen !== false,
+    resources: [
+      { name: "General Beds", current: beds, total: totalBeds },
+      { name: "ICU Beds", current: icu, total: icuTotal },
+      { name: "Oxygen Beds", current: oxygenBeds, total: oxygenTotal },
+      { name: "Ventilators", current: seed % 9, total: 10 }
+    ],
+    inventory: [
+      { name: "Paracetamol 500mg", category: "Analgesic", stock: 70 + (seed % 220), threshold: 50 },
+      { name: "IV Saline 500ml", category: "IV Fluid", stock: 25 + (seed % 90), threshold: 30 },
+      { name: "Oxygen Cylinders", category: "Respiratory", stock: 4 + (seed % 14), threshold: 10 },
+      { name: "ORS Sachets", category: "Hydration", stock: 15 + (seed % 80), threshold: 20 }
+    ],
+    staff
+  };
+}
+
+function setHospitalLocationHint(message) {
+  const hint = $("hospitalLocationHint");
+  if (hint) hint.textContent = message;
+}
+
+function setHospitalOptions(hospitals, doctors = [], message) {
+  const select = $("hospitalSelect");
+  if (!select) return;
+
+  activeHospitalNames = new Set();
+  select.replaceChildren(new Option("Choose a hospital", ""));
+  hospitals
+    .filter(hospital => hospital && hospital.name && Number(hospital.distance) <= 50)
+    .sort((a, b) => Number(a.distance) - Number(b.distance))
+    .forEach(hospital => {
+      const relatedDoctors = doctors.filter(doctor => doctor.hospital === hospital.name);
+      HOSPITAL_DATA[hospital.name] = createPortalHospitalData(hospital, relatedDoctors);
+      activeHospitalNames.add(hospital.name);
+      const distance = Number(hospital.distance).toFixed(1);
+      select.add(new Option(`${hospital.name} (${distance} km)`, hospital.name));
+    });
+
+  setHospitalLocationHint(message || (activeHospitalNames.size
+    ? `Showing ${activeHospitalNames.size} hospitals within 50 km of your location.`
+    : "No hospitals were found within 50 km. Set your location in the patient portal and try again."));
+}
+
+function loadSavedLocationHospitals() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(HOSPITAL_STORAGE_KEY) || "null");
+    if (!saved || !Array.isArray(saved.hospitals) || !saved.hospitals.length) return false;
+    setHospitalOptions(saved.hospitals, Array.isArray(saved.doctors) ? saved.doctors : []);
+    return activeHospitalNames.size > 0;
+  } catch {
+    localStorage.removeItem(HOSPITAL_STORAGE_KEY);
+    return false;
+  }
+}
+
+async function loadHospitalsFromCurrentLocation(coords) {
+  setHospitalLocationHint("Finding hospitals within 50 km of your location...");
+  const query = `[out:json][timeout:20];(nwr(around:50000,${coords.lat},${coords.lng})[amenity~"^(hospital|clinic)$"];);out center 40;`;
+
+  try {
+    const response = await fetch("https://overpass-api.de/api/interpreter", {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=UTF-8" },
+      body: query
+    });
+    if (!response.ok) throw new Error("Nearby hospital lookup failed");
+    const result = await response.json();
+    const facilities = (result.elements || [])
+      .map((element, index) => {
+        const lat = Number(element.lat ?? element.center?.lat);
+        const lng = Number(element.lon ?? element.center?.lon);
+        const name = element.tags?.name;
+        if (!name || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+        return {
+          name,
+          lat,
+          lng,
+          distance: Number(calculateDistanceKm(coords.lat, coords.lng, lat, lng).toFixed(1)),
+          location: element.tags?.["addr:street"] || "Nearby location",
+          phone: element.tags?.phone || "Contact hospital directly",
+          totalBeds: 60 + (stableHash(`${element.id}|${index}`) % 120),
+          beds: 20 + (stableHash(`${element.id}|beds`) % 35),
+          icu: 3 + (stableHash(`${element.id}|icu`) % 12),
+          oxygen: true
+        };
+      })
+      .filter(Boolean)
+      .filter(hospital => hospital.distance <= 50)
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 12);
+
+    if (!facilities.length) throw new Error("No nearby hospitals found");
+    localStorage.setItem(HOSPITAL_STORAGE_KEY, JSON.stringify({
+      source: "portal-location",
+      updatedAt: new Date().toISOString(),
+      location: coords,
+      hospitals: facilities,
+      doctors: []
+    }));
+    setHospitalOptions(facilities, []);
+  } catch {
+    setHospitalLocationHint("Unable to load nearby hospitals. Open the patient portal, allow location access, then return here.");
+  }
+}
+
+function prepareLocationHospitalOptions() {
+  if (loadSavedLocationHospitals()) return;
+  if (!navigator.geolocation) {
+    setHospitalLocationHint("Location is unavailable in this browser. Open the patient portal and set your location first.");
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    position => loadHospitalsFromCurrentLocation({ lat: position.coords.latitude, lng: position.coords.longitude }),
+    () => setHospitalLocationHint("Allow location access to list hospitals within 50 km of you."),
+    { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
+  );
+}
+
 /* ═══════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded", () => {
+  prepareLocationHospitalOptions();
   checkSavedSession();
   bindLoginEvents();
 });
@@ -117,6 +289,10 @@ function checkSavedSession() {
   if (saved) {
     try {
       const sess = JSON.parse(saved);
+      if (!activeHospitalNames.has(sess.hospital)) {
+        localStorage.removeItem("ohp_portal_session");
+        return;
+      }
       currentHospital = sess.hospital;
       currentRole     = sess.role;
       currentStaff    = sess.staffId;
@@ -173,7 +349,8 @@ function showDashboard(hospital, role, staffId) {
   $("sidebarName").textContent     = `${role} — ${staffId.toUpperCase()}`;
   $("sidebarRole").textContent     = `${hospital}`;
 
-  const data = HOSPITAL_DATA[hospital] || HOSPITAL_DATA["CityCare Hospital"];
+  const data = HOSPITAL_DATA[hospital];
+  if (!data) return;
 
   renderBedTable(data);
   renderInventory(data);

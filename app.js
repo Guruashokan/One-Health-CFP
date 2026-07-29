@@ -7,6 +7,11 @@
 const GOOGLE_MAPS_API_KEY = "YOUR_GOOGLE_MAPS_API_KEY"; // https://console.cloud.google.com
 const GEMINI_API_KEY      = "YOUR_GEMINI_API_KEY";      // https://aistudio.google.com
 const GEMINI_MODEL        = "gemini-1.5-flash";
+const USE_SERVER_CHAT_FALLBACK = false;
+const USE_SERVER_INSURANCE_API = false;
+const DEFAULT_MAP_CENTER = { lat: 20.5937, lng: 78.9629 };
+const LOCATION_STORAGE_KEY = "ohp_user_location";
+const HOSPITAL_STORAGE_KEY = "ohp_location_hospitals";
 
 /* ───────────────────────────────────────────
    DATA
@@ -16,14 +21,27 @@ const hospitals = [
   { name:"GreenLine Clinic",      lat:12.9716, lng:77.5946, distance:3.8, location:"Lake View",     beds:11, totalBeds:40,  icu:0,  oxygen:true,  insurance:false, specialties:["General Medicine","Pediatrics"],             phone:"080-4200-2300" },
   { name:"Hope Multispeciality",  lat:12.9689, lng:77.6074, distance:5.4, location:"Central Market",beds:28, totalBeds:85,  icu:5,  oxygen:true,  insurance:true,  specialties:["Orthopedics","Neurology","Emergency"],        phone:"080-4300-7744" },
   { name:"Sunrise Senior Care",   lat:12.9812, lng:77.5878, distance:7.2, location:"West End",      beds:19, totalBeds:60,  icu:3,  oxygen:false, insurance:true,  specialties:["Geriatrics","General Medicine"],             phone:"080-4400-8812" },
+  { name:"Metro Heart & Trauma Centre", lat:13.0218, lng:77.6436, distance:12.8, location:"North Ring Road", beds:36, totalBeds:110, icu:10, oxygen:true, insurance:true, specialties:["Cardiology","Emergency","Orthopedics"], phone:"080-4500-1280" },
+  { name:"Asha Community Hospital", lat:12.8978, lng:77.5364, distance:18.6, location:"South Township", beds:24, totalBeds:70, icu:4, oxygen:true, insurance:true, specialties:["General Medicine","Pediatrics","Geriatrics"], phone:"080-4600-1860" },
+  { name:"CareBridge Medical College Hospital", lat:13.0926, lng:77.7102, distance:24.9, location:"Outer Health Corridor", beds:86, totalBeds:260, icu:22, oxygen:true, insurance:true, specialties:["Emergency","General Medicine","Orthopedics"], phone:"080-4700-2490" },
+  { name:"Veda Women & Child Hospital", lat:12.8234, lng:77.4621, distance:32.4, location:"East Valley Road", beds:31, totalBeds:95, icu:6, oxygen:true, insurance:false, specialties:["Pediatrics","General Medicine"], phone:"080-4800-3240" },
+  { name:"District Senior Care Institute", lat:13.2384, lng:77.3987, distance:41.2, location:"District Health Campus", beds:52, totalBeds:140, icu:9, oxygen:true, insurance:true, specialties:["Geriatrics","General Medicine","Emergency"], phone:"080-4900-4120" },
+  { name:"Nirmala Rural Super Speciality", lat:12.6678, lng:77.8615, distance:49.6, location:"Rural Link Road", beds:44, totalBeds:125, icu:7, oxygen:true, insurance:true, specialties:["Cardiology","Orthopedics","Emergency"], phone:"080-5000-4960" },
 ];
 
 let doctors = [
-  { name:"Dr. Asha Menon",    specialty:"Cardiology",       hospital:"CityCare Hospital",   available:"Available now",        mode:"In-person",    rating:4.9 },
-  { name:"Dr. Kiran Rao",     specialty:"General Medicine",  hospital:"GreenLine Clinic",    available:"Next slot 4:30 PM",    mode:"Video consult", rating:4.7 },
-  { name:"Dr. Meera Shah",    specialty:"Pediatrics",        hospital:"GreenLine Clinic",    available:"Available now",        mode:"In-person",    rating:4.8 },
-  { name:"Dr. Farhan Ali",    specialty:"Orthopedics",       hospital:"Hope Multispeciality",available:"Next slot 6:00 PM",    mode:"In-person",    rating:4.6 },
-  { name:"Dr. Priya Suresh",  specialty:"Geriatrics",        hospital:"Sunrise Senior Care", available:"Available now",        mode:"Video consult", rating:4.8 },
+  { name:"Dr. Asha Menon", specialty:"Cardiology", hospital:"CityCare Hospital", location:"MG Road", distance:2.1, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.9, phone:"080-4100-1011", languages:"English, Kannada, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 700", experience:"14 yrs", verified:true },
+  { name:"Dr. Kiran Rao", specialty:"General Medicine", hospital:"GreenLine Clinic", location:"Lake View", distance:3.8, available:"24/7 doctor help", mode:"Online + clinic follow-up", rating:4.7, phone:"080-4200-2315", languages:"English, Kannada, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 450", experience:"9 yrs", verified:true },
+  { name:"Dr. Meera Shah", specialty:"Pediatrics", hospital:"GreenLine Clinic", location:"Lake View", distance:3.8, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.8, phone:"080-4200-2322", languages:"English, Hindi, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 550", experience:"11 yrs", verified:true },
+  { name:"Dr. Farhan Ali", specialty:"Orthopedics", hospital:"Hope Multispeciality", location:"Central Market", distance:5.4, available:"24/7 doctor help", mode:"Online + emergency referral", rating:4.6, phone:"080-4300-7750", languages:"English, Hindi, Urdu", hours:"24/7 online helpdesk", fee:"Rs. 650", experience:"12 yrs", verified:true },
+  { name:"Dr. Priya Suresh", specialty:"Geriatrics", hospital:"Sunrise Senior Care", location:"West End", distance:7.2, available:"24/7 doctor help", mode:"Online + senior care support", rating:4.8, phone:"080-4400-8820", languages:"English, Tamil, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 600", experience:"16 yrs", verified:true },
+  { name:"Dr. Vivek Anand", specialty:"Cardiology", hospital:"Metro Heart & Trauma Centre", location:"North Ring Road", distance:12.8, available:"24/7 doctor help", mode:"Online + emergency referral", rating:4.8, phone:"080-4500-1291", languages:"English, Kannada, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 800", experience:"18 yrs", verified:true },
+  { name:"Dr. Nalini Joseph", specialty:"General Medicine", hospital:"Asha Community Hospital", location:"South Township", distance:18.6, available:"24/7 doctor help", mode:"Online + clinic follow-up", rating:4.5, phone:"080-4600-1872", languages:"English, Tamil, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 400", experience:"8 yrs", verified:true },
+  { name:"Dr. Rohan Iyer", specialty:"Orthopedics", hospital:"CareBridge Medical College Hospital", location:"Outer Health Corridor", distance:24.9, available:"24/7 doctor help", mode:"Online + in-person support", rating:4.7, phone:"080-4700-2508", languages:"English, Kannada, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 650", experience:"13 yrs", verified:true },
+  { name:"Dr. Latha Krishnan", specialty:"Pediatrics", hospital:"Veda Women & Child Hospital", location:"East Valley Road", distance:32.4, available:"24/7 doctor help", mode:"Online + child care support", rating:4.6, phone:"080-4800-3251", languages:"English, Tamil, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 500", experience:"10 yrs", verified:true },
+  { name:"Dr. Harish Nair", specialty:"Geriatrics", hospital:"District Senior Care Institute", location:"District Health Campus", distance:41.2, available:"24/7 doctor help", mode:"Online + senior care support", rating:4.9, phone:"080-4900-4135", languages:"English, Malayalam, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 550", experience:"20 yrs", verified:true },
+  { name:"Dr. Sana Kapoor", specialty:"General Medicine", hospital:"Nirmala Rural Super Speciality", location:"Rural Link Road", distance:49.6, available:"24/7 doctor help", mode:"Online + rural care support", rating:4.5, phone:"080-5000-4974", languages:"English, Hindi, Kannada", hours:"24/7 online helpdesk", fee:"Rs. 450", experience:"7 yrs", verified:true },
+  { name:"Dr. Arjun Dev", specialty:"Cardiology", hospital:"Nirmala Rural Super Speciality", location:"Rural Link Road", distance:49.6, available:"24/7 doctor help", mode:"Online + emergency referral", rating:4.7, phone:"080-5000-4988", languages:"English, Tamil, Hindi", hours:"24/7 online helpdesk", fee:"Rs. 750", experience:"15 yrs", verified:true },
 ];
 
 const medicines = [
@@ -63,9 +81,9 @@ const govtSchemes = [
     coverage:"₹5 Lakh / family / year",
     desc:"World's largest government health insurance scheme covering 55 crore+ beneficiaries for secondary and tertiary hospitalisation.",
     eligibility:"BPL families listed in SECC 2011 database",
-    portal:"https://pmjay.gov.in",
-    apply:"https://setu.pmjay.gov.in/setu/",
-    check:"https://mera.pmjay.gov.in",
+    portal:"https://pmjay.gov.in/",
+    apply:"https://mera.pmjay.gov.in/",
+    check:"https://mera.pmjay.gov.in/",
   },
   {
     name:"ESIC — Employees' State Insurance",
@@ -73,9 +91,9 @@ const govtSchemes = [
     coverage:"Full medical care + cash benefits",
     desc:"Comprehensive social security scheme for salaried employees earning ≤₹21,000/month in organised sector establishments.",
     eligibility:"Employees in ESI-covered establishments",
-    portal:"https://www.esic.gov.in",
-    apply:"https://www.esic.gov.in/registration",
-    check:"https://www.esic.gov.in/benefiteligibility",
+    portal:"https://www.esic.gov.in/",
+    apply:"https://www.esic.gov.in/",
+    check:"https://www.esic.gov.in/",
   },
   {
     name:"CGHS — Central Govt Health Scheme",
@@ -83,9 +101,9 @@ const govtSchemes = [
     coverage:"OPD + IPD at CGHS empanelled hospitals",
     desc:"Healthcare facility for central government employees, pensioners and their dependents in 75+ cities across India.",
     eligibility:"Central govt employees and pensioners",
-    portal:"https://cghs.nic.in",
-    apply:"https://cghs.nic.in/onlineRegistration",
-    check:"https://cghs.nic.in/wellness_centres",
+    portal:"https://cghs.mohfw.gov.in/",
+    apply:"https://cghs.mohfw.gov.in/",
+    check:"https://cghs.mohfw.gov.in/",
   },
 ];
 
@@ -95,27 +113,27 @@ const privateInsurers = [
     logo:"⭐", type:"private",
     coverage:"Up to ₹25 Lakh",
     desc:"India's largest standalone health insurer with 14,000+ network hospitals and comprehensive family floater plans.",
-    portal:"https://www.starhealth.in",
+    portal:"https://www.starhealth.in/",
     apply:"https://www.starhealth.in/health-insurance",
-    check:"https://www.starhealth.in/network-hospitals",
+    check:"https://www.starhealth.in/network-hospitals/",
   },
   {
     name:"HDFC Ergo Health",
     logo:"🏦", type:"private",
     coverage:"Up to ₹1 Crore",
     desc:"Feature-rich health insurance plans with no room rent capping, unlimited e-consults and restoration benefit.",
-    portal:"https://www.hdfcergo.com",
-    apply:"https://www.hdfcergo.com/health-insurance",
-    check:"https://www.hdfcergo.com/network-hospitals",
+    portal:"https://www.hdfcergo.com/",
+    apply:"https://www.hdfcergo.com/Health-Insurance",
+    check:"https://www.hdfcergo.com/locators/cashless-hospitals-networks/",
   },
   {
     name:"Niva Bupa Health",
     logo:"💙", type:"private",
     coverage:"Up to ₹1 Crore",
     desc:"ReAssure & Heartbeat plans with direct claim settlement, no third-party admin delays, and cashless at 10,000+ hospitals.",
-    portal:"https://www.nivabupa.com",
-    apply:"https://www.nivabupa.com/health-insurance-plans",
-    check:"https://www.nivabupa.com/network-hospitals",
+    portal:"https://www.nivabupa.com/",
+    apply:"https://www.nivabupa.com/health-insurance",
+    check:"https://www.nivabupa.com/",
   },
 ];
 
@@ -123,7 +141,7 @@ const insuranceSteps = [
   {
     title:"Apply for Ayushman Bharat (PM-JAY) card",
     steps:[
-      'Visit <a href="https://mera.pmjay.gov.in" target="_blank" rel="noopener">mera.pmjay.gov.in</a> and check your family eligibility by mobile number or ration card.',
+      'Visit <a href="https://mera.pmjay.gov.in/" target="_blank" rel="noopener">mera.pmjay.gov.in</a> and check your family eligibility by mobile number or ration card.',
       'If eligible, visit your nearest Common Service Centre (CSC) or empanelled hospital\'s Ayushman Mitra desk.',
       'Carry Aadhaar card, ration card or government ID, and a recent family photograph.',
       'Biometric verification is done on-site. An e-card (Ayushman card) is generated instantly.',
@@ -176,7 +194,7 @@ let leafletMap      = null;
 let tileLayer       = null;
 let mapMarkers      = [];
 let userMarker      = null;
-let userCoords      = { lat: 12.9716, lng: 77.5946 }; // Default center (Bangalore)
+let userCoords      = null;
 let mapQueryTimeout = null;
 
 const mapDetails = {
@@ -194,6 +212,95 @@ const mapDetails = {
 ─────────────────────────────────────────── */
 const $  = id  => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
+
+function stableHash(value) {
+  return String(value || "one-health")
+    .split("")
+    .reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) >>> 0, 2166136261);
+}
+
+function seededInt(seed, min, max) {
+  const range = max - min + 1;
+  return min + (Math.abs(seed) % range);
+}
+
+function buildStableCapacity(seed, type = "hospital") {
+  const totalBeds = type === "clinic" ? seededInt(seed, 24, 70) : seededInt(seed, 80, 260);
+  const beds = seededInt(seed * 17, Math.max(4, Math.round(totalBeds * 0.18)), Math.round(totalBeds * 0.58));
+  const icuCap = type === "clinic" ? 4 : 24;
+  const icu = type === "clinic" ? seededInt(seed * 19, 0, icuCap) : seededInt(seed * 19, 4, icuCap);
+  return {
+    beds,
+    totalBeds,
+    icu,
+    oxygen: seed % 5 !== 0,
+    insurance: seed % 4 !== 0
+  };
+}
+
+function persistLocalCareData(source = "app") {
+  if (typeof localStorage === "undefined" || !userCoords) return;
+  const payload = {
+    source,
+    updatedAt: new Date().toISOString(),
+    location: userCoords,
+    hospitals: hospitals.map(h => ({
+      name: h.name,
+      lat: h.lat,
+      lng: h.lng,
+      distance: h.distance,
+      location: h.location,
+      beds: h.beds,
+      totalBeds: h.totalBeds,
+      icu: h.icu,
+      oxygen: h.oxygen,
+      insurance: h.insurance,
+      specialties: h.specialties,
+      phone: h.phone,
+      rating: h.rating || 4.4
+    })),
+    doctors: doctors.map(d => ({
+      name: d.name,
+      specialty: d.specialty,
+      hospital: d.hospital,
+      location: d.location,
+      distance: d.distance,
+      mode: d.mode,
+      rating: d.rating,
+      phone: d.phone,
+      languages: d.languages,
+      hours: d.hours,
+      fee: d.fee,
+      experience: d.experience,
+      verified: d.verified
+    }))
+  };
+  localStorage.setItem(HOSPITAL_STORAGE_KEY, JSON.stringify(payload));
+  localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(userCoords));
+}
+
+function setLocationNotice(message) {
+  const noticeEl = $("mapNotice");
+  const textEl = $("mapNoticeText");
+  if (!noticeEl || !textEl) return;
+  noticeEl.hidden = false;
+  noticeEl.className = "map-notice";
+  textEl.textContent = message;
+}
+
+function nearestHospitals(limit = 3, filter = () => true) {
+  return hospitals
+    .filter(filter)
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, limit);
+}
+
+function nearestDoctorHelp(limit = 3, specialty = "all") {
+  return doctors
+    .filter(d => specialty === "all" || d.specialty === specialty)
+    .sort((a, b) => (a.distance ?? 999) - (b.distance ?? 999))
+    .slice(0, limit);
+}
 
 /* ───────────────────────────────────────────
    BOOT
@@ -239,25 +346,28 @@ function switchTab(tabId) {
    METRICS & SNAPSHOTS
 ═══════════════════════════════════════════════ */
 function renderMetrics() {
-  $("metricHospitals").textContent = hospitals.length;
-  $("metricBeds").textContent      = hospitals.reduce((s,h) => s + h.beds, 0);
-  $("metricDoctors").textContent   = doctors.filter(d => d.available.includes("Available")).length;
+  const activeHospitals = userCoords ? hospitals : [];
+  const activeDoctors = userCoords ? doctors : [];
+  $("metricHospitals").textContent = activeHospitals.length;
+  $("metricBeds").textContent      = activeHospitals.reduce((s,h) => s + h.beds, 0);
+  $("metricDoctors").textContent   = activeDoctors.length;
 }
 
 function renderSnapshots() {
-  const totalBeds = hospitals.reduce((s,h) => s + h.beds, 0);
-  const totalICU  = hospitals.reduce((s,h) => s + h.icu, 0);
+  const activeHospitals = userCoords ? hospitals : [];
+  const totalBeds = activeHospitals.reduce((s,h) => s + h.beds, 0);
+  const totalICU  = activeHospitals.reduce((s,h) => s + h.icu, 0);
   $("snapBeds").textContent    = totalBeds;
   $("snapICU").textContent     = totalICU;
-  $("snapOxygen").textContent  = hospitals.filter(h => h.oxygen).length;
-  $("snapPharmacy").textContent = localPharmacies.length;
+  $("snapOxygen").textContent  = activeHospitals.filter(h => h.oxygen).length;
+  $("snapPharmacy").textContent = userCoords ? localPharmacies.length : 0;
 }
 
 function animateCounters() {
   const counters = [
-    { el: $("metricHospitals"), target: hospitals.length },
-    { el: $("metricBeds"),      target: hospitals.reduce((s,h) => s + h.beds, 0) },
-    { el: $("metricDoctors"),   target: doctors.filter(d => d.available.includes("Available")).length },
+    { el: $("metricHospitals"), target: userCoords ? hospitals.length : 0 },
+    { el: $("metricBeds"),      target: userCoords ? hospitals.reduce((s,h) => s + h.beds, 0) : 0 },
+    { el: $("metricDoctors"),   target: userCoords ? doctors.length : 0 },
   ];
   counters.forEach(({ el, target }) => {
     let v = 0;
@@ -274,6 +384,7 @@ function animateCounters() {
    HOSPITALS
 ═══════════════════════════════════════════════ */
 function getFilteredHospitals() {
+  if (!userCoords) return [];
   const distLimit = ($("distanceFilter2")?.value) ?? "all";
   return hospitals.filter(h => {
     const matchDist   = distLimit === "all" || h.distance <= Number(distLimit);
@@ -284,10 +395,14 @@ function getFilteredHospitals() {
       (hospitalFilter === "insurance" && h.insurance);
     const hay = `${h.name} ${h.location} ${h.specialties.join(" ")} ${h.oxygen?"oxygen":""} ${h.insurance?"insurance":""}`.toLowerCase();
     return matchDist && matchFilter && (!searchTerm || hay.includes(searchTerm));
-  });
+  }).sort((a, b) => a.distance - b.distance);
 }
 
 function renderHospitals() {
+  if (!userCoords) {
+    $("hospitalGrid").innerHTML = `<p class="empty-state">Allow location access or use Set Location to list hospitals within 50 km of this device.</p>`;
+    return;
+  }
   const filtered = getFilteredHospitals();
   $("hospitalGrid").innerHTML = filtered.length
     ? filtered.map(buildHospitalCard).join("")
@@ -330,12 +445,16 @@ function buildHospitalCard(h) {
    DOCTORS
 ═══════════════════════════════════════════════ */
 function renderDoctors() {
+  if (!userCoords) {
+    $("doctorList").innerHTML = `<p class="empty-state">Allow location access or set your city to show local 24/7 doctor help.</p>`;
+    return;
+  }
   const spec = $("specialtyFilter")?.value ?? "all";
   const filtered = doctors.filter(d => {
     const matchSpec = spec === "all" || d.specialty === spec;
-    const hay = `${d.name} ${d.specialty} ${d.hospital}`.toLowerCase();
+    const hay = `${d.name} ${d.specialty} ${d.hospital} ${d.location || ""} ${d.languages || ""} ${d.phone || ""} ${d.mode || ""}`.toLowerCase();
     return matchSpec && (!searchTerm || hay.includes(searchTerm));
-  });
+  }).sort((a, b) => (a.distance ?? 999) - (b.distance ?? 999));
   $("doctorList").innerHTML = filtered.length
     ? filtered.map(buildDoctorCard).join("")
     : `<p class="empty-state">No doctors match your search.</p>`;
@@ -343,25 +462,32 @@ function renderDoctors() {
 
 function buildDoctorCard(d) {
   const initials = d.name.replace("Dr. ","").split(" ").map(p => p[0]).join("");
-  const now = d.available.includes("Available");
   const verifiedBadge = d.verified ? `<span class="verified-badge">🛡️ Verified</span>` : '';
   const phoneButton = d.phone ? `<button class="doctor-action secondary" type="button" onclick="window.location.href='tel:${d.phone}'">📞 Call</button>` : '';
+  const distance = Number.isFinite(d.distance) ? ` · ${d.distance} km` : "";
+  const location = d.location ? `${d.location}${distance}` : (distance ? distance.replace(" · ", "") : "Local area");
+  const details = [
+    d.experience ? `${d.experience} experience` : "",
+    d.languages ? `Languages: ${d.languages}` : "",
+    d.hours ? `Hours: ${d.hours}` : "",
+    d.fee ? `Fee: ${d.fee}` : ""
+  ].filter(Boolean);
   return `
   <article class="doctor-card">
     <span class="avatar" aria-hidden="true">${initials}</span>
-    <div style="flex:1">
-      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+    <div class="doctor-info">
+      <div class="doctor-title-row">
         <h3>${d.name}</h3>
         ${verifiedBadge}
       </div>
       <p>${d.specialty} · ${d.hospital} · ${d.mode} · ⭐ ${d.rating.toFixed(1)}</p>
-      ${d.languages ? `<p style="margin-top:2px;font-size:12.5px;color:var(--ink-2)">🗣️ Languages: ${d.languages}</p>` : ''}
-      ${d.phone ? `<p style="margin-top:2px;font-size:12.5px;color:var(--ink-2)">📞 Phone: ${d.phone}</p>` : ''}
-      <span class="doctor-avail${now ? "" : " busy"}" style="margin-top:6px">${now ? "🟢" : "🟡"} ${d.available}</span>
+      <p>${location}${d.phone ? ` · ${d.phone}` : ""}</p>
+      ${details.length ? `<div class="doctor-detail-grid">${details.map(item => `<span>${item}</span>`).join("")}</div>` : ""}
+      <span class="doctor-avail" style="margin-top:6px">🟢 ${d.available || "24/7 doctor help"}</span>
     </div>
-    <div style="display:flex;flex-direction:column;gap:6px;justify-content:center;align-items:stretch">
+    <div class="doctor-actions">
       <button class="doctor-action" type="button" data-action="book" data-name="${d.name}">
-        ${now ? "Book now" : "Reserve"}
+        24/7 help
       </button>
       ${phoneButton}
     </div>
@@ -1011,6 +1137,48 @@ function renderInsurance() {
 /* ═══════════════════════════════════════════════
    HOSPITAL EMPANELMENT CHECKER
 ═══════════════════════════════════════════════ */
+function checkInsuranceSupportLocally(policyType, need) {
+  const policy = String(policyType || "").toLowerCase();
+  const request = String(need || "").toLowerCase();
+  const plans = [...govtSchemes, ...privateInsurers];
+  const words = request.split(/\s+/).filter(word => word.length > 2);
+
+  let matchingPlans = plans.filter(plan => {
+    const planText = `${plan.name} ${plan.type} ${plan.coverage} ${plan.desc} ${plan.eligibility || ""}`.toLowerCase();
+    const policyMatch =
+      !policy ||
+      (policy.includes("government") && plan.type === "govt") ||
+      (policy.includes("private") && plan.type === "private") ||
+      (policy.includes("employer") && plan.type === "private") ||
+      planText.includes(policy);
+    const needMatch =
+      !request ||
+      /cashless|claim|admission|hospital|emergency|policy|scheme|coverage|insurance/.test(request) ||
+      words.some(word => planText.includes(word));
+
+    return policyMatch && needMatch;
+  });
+
+  if (!matchingPlans.length) {
+    matchingPlans = plans.filter(plan => {
+      if (policy.includes("government")) return plan.type === "govt";
+      if (policy.includes("private") || policy.includes("employer")) return plan.type === "private";
+      return true;
+    }).slice(0, 3);
+  }
+
+  return {
+    matched: matchingPlans.length > 0,
+    partners: matchingPlans,
+    hospitals: hospitals.filter(hospital => hospital.insurance),
+    nextSteps: [
+      "Keep government ID and policy or scheme number ready.",
+      "Ask the hospital insurance desk for cashless pre-authorization.",
+      "For emergency admission, start treatment first and submit documents as soon as possible."
+    ]
+  };
+}
+
 function checkEmpanelment(query) {
   const container = $("empanelResult");
   if (!query) { container.innerHTML = ""; return; }
@@ -1059,7 +1227,7 @@ function initLeafletMap() {
         </div>`;
     }
     // Still populate local fallback database so other features remain fully operational
-    generateFallbackFacilities(userCoords.lat, userCoords.lng);
+    setLocationNotice("Map library could not load. Please use Set Location after the page finishes loading.");
     return;
   }
 
@@ -1068,7 +1236,7 @@ function initLeafletMap() {
     zoomControl: true,
     minZoom: 3,
     maxZoom: 18
-  }).setView([userCoords.lat, userCoords.lng], 14);
+  }).setView([DEFAULT_MAP_CENTER.lat, DEFAULT_MAP_CENTER.lng], 5);
 
   // Set up tile layer (Light by default, or Dark if active)
   updateTileLayer();
@@ -1087,18 +1255,21 @@ function initLeafletMap() {
       },
       err => {
         console.warn("Geolocation error:", err);
-        setUserMarker(userCoords.lat, userCoords.lng);
-        fetchNearbyFacilities();
+        setLocationNotice("Allow location access or use Set Location to load hospitals near this device.");
+        renderHospitals();
+        renderDoctors();
+        renderMetrics();
+        renderSnapshots();
       },
       { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
     );
   } else {
-    setUserMarker(userCoords.lat, userCoords.lng);
-    fetchNearbyFacilities();
+    setLocationNotice("Geolocation is not supported here. Use Set Location to load local hospitals.");
   }
 
   // Hook map events for panning and zooming
   leafletMap.on("moveend", () => {
+    if (!userCoords) return;
     clearTimeout(mapQueryTimeout);
     mapQueryTimeout = setTimeout(fetchNearbyFacilities, 600);
   });
@@ -1164,6 +1335,12 @@ const OVERPASS_MIRRORS = [
 
 async function fetchNearbyFacilities() {
   if (!leafletMap) return;
+  if (!userCoords) {
+    clearMapMarkers();
+    if ($("mapLoader")) $("mapLoader").hidden = true;
+    setLocationNotice("Allow location access or use Set Location to load hospitals within 50 km.");
+    return;
+  }
   const zoom = leafletMap.getZoom();
   const noticeEl = $("mapNotice");
   const loaderEl = $("mapLoader");
@@ -1182,7 +1359,7 @@ async function fetchNearbyFacilities() {
 
   if (loaderEl) loaderEl.hidden = false;
 
-  const center = leafletMap.getCenter();
+  const center = userCoords;
 
   // Query hospitals & clinics within 50 km, pharmacies & doctors within 15 km
   const query = `[out:json][timeout:25];
@@ -1244,8 +1421,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.004,
       tags: {
         amenity: "hospital",
-        name: "Krishnankoil Community Hospital",
-        "addr:street": "Watrap Road, Krishnankoil",
+        name: "Nearby Community Hospital",
+        "addr:street": "Local health zone",
         phone: "+91 4563 289124"
       }
     },
@@ -1255,8 +1432,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.008,
       tags: {
         amenity: "clinic",
-        name: "Kalasalingam Clinic & Research",
-        "addr:street": "KLU Campus Street",
+        name: "Local Family Clinic",
+        "addr:street": "Central neighborhood road",
         phone: "+91 4563 288410"
       }
     },
@@ -1266,9 +1443,64 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.010,
       tags: {
         amenity: "hospital",
-        name: "Watrap Government Hospital",
-        "addr:street": "Main Road, Watrap",
+        name: "Government Emergency Hospital",
+        "addr:street": "Main civic road",
         phone: "+91 4563 230240"
+      }
+    },
+    {
+      id: 100007,
+      lat: lat + 0.070,
+      lon: lng + 0.060,
+      tags: {
+        amenity: "hospital",
+        name: "Regional Taluk Hospital",
+        "addr:street": "Regional hospital road",
+        phone: "+91 4563 260118"
+      }
+    },
+    {
+      id: 100008,
+      lat: lat - 0.120,
+      lon: lng + 0.095,
+      tags: {
+        amenity: "clinic",
+        name: "Family Health Centre",
+        "addr:street": "District main road",
+        phone: "+91 4563 222784"
+      }
+    },
+    {
+      id: 100009,
+      lat: lat + 0.185,
+      lon: lng - 0.150,
+      tags: {
+        amenity: "hospital",
+        name: "District General Hospital",
+        "addr:street": "District health campus",
+        phone: "+91 4562 243055"
+      }
+    },
+    {
+      id: 100010,
+      lat: lat - 0.265,
+      lon: lng - 0.215,
+      tags: {
+        amenity: "hospital",
+        name: "Emergency Care Hospital",
+        "addr:street": "Emergency care corridor",
+        phone: "+91 4562 275404"
+      }
+    },
+    {
+      id: 100011,
+      lat: lat + 0.330,
+      lon: lng + 0.300,
+      tags: {
+        amenity: "hospital",
+        name: "Metro Super Speciality Hospital",
+        "addr:street": "Outer ring health zone",
+        phone: "+91 452 2529200"
       }
     },
     {
@@ -1277,8 +1509,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.003,
       tags: {
         amenity: "pharmacy",
-        name: "Krishnankoil Medical & General Store",
-        "addr:street": "NH-744 Highway",
+        name: "Local Medical & General Store",
+        "addr:street": "Local highway junction",
         phone: "+91 94432 89012"
       }
     },
@@ -1288,8 +1520,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.003,
       tags: {
         amenity: "pharmacy",
-        name: "KLU Pharmacy Services",
-        "addr:street": "Campus Junction",
+        name: "Community Pharmacy Services",
+        "addr:street": "Neighborhood junction",
         phone: "+91 94881 23049"
       }
     },
@@ -1299,8 +1531,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.001,
       tags: {
         amenity: "doctors",
-        name: "Dr. A. Subramanian Clinic",
-        "addr:street": "Krishnankoil Bazaar",
+        name: "24/7 Doctor Help Clinic",
+        "addr:street": "Local clinic street",
         phone: "+91 98421 77334"
       }
     }
@@ -1326,10 +1558,16 @@ function relocateMockups(lat, lng) {
   if (!hasMockups) return;
 
   const offsets = [
-    { name:"CityCare Hospital",     lat: 0.0046, lng: 0.0047 },
-    { name:"GreenLine Clinic",      lat: 0.0000, lng: 0.0000 },
-    { name:"Hope Multispeciality",  lat:-0.0027, lng: 0.0128 },
-    { name:"Sunrise Senior Care",   lat: 0.0096, lng:-0.0068 }
+    { name:"CityCare Hospital", lat: 0.0140, lng: 0.0130 },
+    { name:"GreenLine Clinic", lat: 0.0250, lng:-0.0250 },
+    { name:"Hope Multispeciality", lat:-0.0340, lng: 0.0360 },
+    { name:"Sunrise Senior Care", lat: 0.0500, lng:-0.0450 },
+    { name:"Metro Heart & Trauma Centre", lat:-0.0850, lng: 0.0850 },
+    { name:"Asha Community Hospital", lat: 0.1250, lng:-0.1200 },
+    { name:"CareBridge Medical College Hospital", lat:-0.1700, lng: 0.1600 },
+    { name:"Veda Women & Child Hospital", lat: 0.2300, lng: 0.2050 },
+    { name:"District Senior Care Institute", lat:-0.2850, lng:-0.2550 },
+    { name:"Nirmala Rural Super Speciality", lat: 0.3300, lng:-0.3000 }
   ];
   
   hospitals.forEach((h, index) => {
@@ -1338,9 +1576,19 @@ function relocateMockups(lat, lng) {
     h.lng = lng + off.lng;
     h.distance = Number(calculateDistance(lat, lng, h.lat, h.lng).toFixed(1));
   });
+
+  doctors.forEach(doctor => {
+    const hospital = hospitals.find(h => h.name === doctor.hospital);
+    if (!hospital) return;
+    doctor.location = hospital.location;
+    doctor.distance = hospital.distance;
+  });
   
   renderHospitals();
+  renderDoctors();
   renderMetrics();
+  renderSnapshots();
+  persistLocalCareData("deterministic-local");
 }
 
 // Process API response, plot markers, synchronize database lists
@@ -1376,8 +1624,8 @@ function processMapData(elements) {
     const website = tags.website || tags["contact:website"] || "";
 
     // Generate stable rating between 3.8 and 4.9 based on OSM ID
-    const osmId = el.id || Math.floor(Math.random() * 100000);
-    const rating = ((osmId % 12) / 10 + 3.8);
+      const osmId = el.id || stableHash(name);
+      const rating = ((osmId % 12) / 10 + 3.8);
 
     if (typeof L !== "undefined" && leafletMap) {
       const markerIcon = L.divIcon({
@@ -1425,11 +1673,8 @@ function processMapData(elements) {
     }
 
     if (type === "hospital" || type === "clinic") {
-      const beds = Math.floor(Math.random() * 45) + 3;
-      const totalBeds = beds + Math.floor(Math.random() * 80) + 10;
-      const icu = Math.random() > 0.45 ? Math.floor(Math.random() * 12) : 0;
-      const oxygen = Math.random() > 0.3;
-      const insurance = Math.random() > 0.4;
+      const capacity = buildStableCapacity(stableHash(`${name}-${osmId}`), type);
+      const { beds, totalBeds, icu, oxygen, insurance } = capacity;
       const specialties = type === "hospital" 
         ? ["General Medicine", "Emergency", "Pediatrics"] 
         : ["General Practice", "Family Medicine"];
@@ -1465,8 +1710,11 @@ function processMapData(elements) {
 
       const docSpecialty = doctorSpecialties[osmId % doctorSpecialties.length];
       const docRating = ((osmId % 9) / 10 + 4.1).toFixed(1);
-      const docAvail = (osmId % 2 === 0) ? "Available now" : `Next slot ${(osmId % 4 + 2)}:30 PM`;
-      const docMode = (osmId % 3 === 0) ? "Video consult" : "In-person";
+      const docAvail = "24/7 doctor help";
+      const docMode = (osmId % 3 === 0) ? "Online + emergency referral" : "Online + clinic follow-up";
+      const docHours = "24/7 online helpdesk";
+      const docFee = `Rs. ${350 + (osmId % 6) * 100}`;
+      const docExperience = `${6 + (osmId % 18)} yrs`;
       
       // Dynamic regional languages
       const southLangs = ["English, Tamil", "English, Tamil, Hindi", "English, Telugu, Tamil", "English, Tamil, Malayalam"];
@@ -1487,13 +1735,18 @@ function processMapData(elements) {
         rating: Number(docRating),
         phone: docPhone,
         languages: docLangs,
+        location: street,
+        distance: Number(dist.toFixed(1)),
+        hours: docHours,
+        fee: docFee,
+        experience: docExperience,
         verified: true
       });
     } else if (type === "pharmacy") {
       loadedPharmacies.push({
         name,
         distance: Number(dist.toFixed(1)),
-        open: Math.random() > 0.4 ? "Open 24×7" : "Open until 10 PM",
+        open: osmId % 5 < 3 ? "Open 24×7" : "Open until 10 PM",
         phone
       });
     }
@@ -1523,6 +1776,7 @@ function processMapData(elements) {
   }
 
   renderSnapshots();
+  persistLocalCareData("osm");
 }
 
 // Nominatim Geocoding lookup
@@ -1547,11 +1801,12 @@ async function geocodeSearch(query) {
 
       showToast(`🗺️ Found: ${displayName}`);
       
+      userCoords = { lat, lng: lon };
+      relocateMockups(lat, lon);
       if (leafletMap) {
-        userCoords = { lat, lng: lon };
-        relocateMockups(lat, lon);
         setUserMarker(lat, lon);
         leafletMap.setView([lat, lon], 14);
+        fetchNearbyFacilities();
       }
     } else {
       showToast("❌ Place not found on global map. Searching locally...");
@@ -1588,6 +1843,8 @@ async function sendChatMessage(userText) {
   let replyText = "";
 
   if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY" || !GEMINI_API_KEY) {
+    replyText = ruleBasedReply(userText);
+  } else if (USE_SERVER_CHAT_FALLBACK) {
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -1640,39 +1897,82 @@ async function sendChatMessage(userText) {
 
 function ruleBasedReply(text) {
   const t = text.toLowerCase();
+  const disclaimer = "⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  const localReady = Boolean(userCoords);
+  const localIntro = localReady
+    ? "I am using the hospitals loaded for your current location."
+    : "Set your location first so I can use hospitals near this device.";
+  const hospitalLine = h => `• **${h.name}** — ${h.distance} km, ${h.beds} beds, ${h.icu} ICU, ${h.oxygen ? "oxygen yes" : "oxygen not listed"}`;
+  const doctorLine = d => `• **${d.name}** — ${d.specialty}, ${d.hospital}, ${d.distance ?? "nearby"} km, ${d.available || "24/7 doctor help"}`;
 
-  if (/chest|heart attack|cardiac|breathing|oxygen/i.test(t))
-    return "🚨 **This sounds like an emergency.** Call **108** immediately.\n\n**CityCare Hospital** (2.1 km) has ICU and oxygen support. **Rapid Ambulance 24×7** has an 8-minute ETA.\n\nFor chest pain: sit upright, loosen tight clothing, avoid food/water, and stay calm while waiting for help.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/chest|heart attack|cardiac|breathing|oxygen|stroke|unconscious/i.test(t)) {
+    const matches = localReady
+      ? nearestHospitals(3, h => h.icu > 0 || h.oxygen || h.specialties.includes("Emergency") || h.specialties.includes("Cardiology"))
+      : [];
+    return `🚨 **This may be urgent. Call 108 now if symptoms are severe.**\n\n${localIntro}${matches.length ? "\n\nNearest emergency matches:\n" + matches.map(hospitalLine).join("\n") : ""}\n\nWhile waiting: keep the person seated/upright if breathing is difficult, loosen tight clothing, and avoid food or drink.\n\n${disclaimer}`;
+  }
 
-  if (/accident|bleeding|trauma|fracture|broken/i.test(t))
-    return "🚑 **Call 108 immediately for accidents.**\n\nFor bleeding: apply firm pressure with a clean cloth and do not remove it. Elevate the injured limb if possible.\n\n**Hope Multispeciality** (5.4 km) has an emergency department. **Rapid Ambulance 24×7** (108) is the fastest option.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/accident|bleeding|trauma|fracture|broken|burn|injury/i.test(t)) {
+    const matches = localReady
+      ? nearestHospitals(3, h => h.specialties.includes("Emergency") || h.specialties.includes("Orthopedics"))
+      : [];
+    return `🚑 **For accident, heavy bleeding, fracture, or major burns, call 108 first.**\n\n${localIntro}${matches.length ? "\n\nTrauma-ready options:\n" + matches.map(hospitalLine).join("\n") : ""}\n\nBasic first aid: apply firm pressure for bleeding, keep the injured part still, and do not remove deeply stuck objects.\n\n${disclaimer}`;
+  }
 
-  if (/fever|cough|cold|flu/i.test(t))
-    return "🤒 For fever and cough:\n• Monitor temperature — if above 103°F / 39.5°C, seek medical attention\n• Stay hydrated with water and ORS\n• Paracetamol 500mg can help reduce fever (check with a pharmacist first)\n• **CarePlus Pharmacy** (1.4 km) has paracetamol in stock (120 units)\n\nSee **Dr. Kiran Rao** (General Medicine, GreenLine Clinic) for a same-day video consult.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/fever|cough|cold|flu|temperature|sore throat/i.test(t)) {
+    const doctor = nearestDoctorHelp(1, "General Medicine")[0] || nearestDoctorHelp(1)[0];
+    const med = medicines.find(m => /paracetamol/i.test(m.name));
+    return `🤒 **For fever or cough:** monitor temperature, drink fluids/ORS, rest, and seek care if fever is high, breathing is hard, or symptoms worsen.\n\n${doctor ? `24/7 doctor help: **${doctor.name}** (${doctor.specialty}) via ${doctor.hospital}.` : localIntro}\n${med ? `Medicine stock reference: **${med.name}** has ${med.stock} units at ${med.pharmacy}.` : ""}\n\n${disclaimer}`;
+  }
 
-  if (/diabetes|insulin|sugar|blood sugar/i.test(t))
-    return "💉 For diabetes management:\n• **MediQuick Pharmacy** (0.8 km) has 18 insulin units in stock — open 24×7\n• For low blood sugar: consume 15g of fast sugar (juice, glucose tablets)\n• See **Dr. Kiran Rao** (General Medicine) for consultation\n\nCheck insulin stock on **Tata 1mg** or **PharmEasy** for home delivery.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/diabetes|insulin|sugar|blood sugar|glucose/i.test(t)) {
+    const doctor = nearestDoctorHelp(1, "General Medicine")[0] || nearestDoctorHelp(1)[0];
+    const med = medicines.find(m => /insulin/i.test(m.name));
+    return `💉 **For diabetes support:** check blood sugar, do not skip prescribed insulin/medicines, and get urgent help for confusion, fainting, vomiting, or very high/low readings.\n\n${med ? `Stock reference: **${med.name}** has ${med.stock} units at ${med.pharmacy}.` : ""}\n${doctor ? `24/7 doctor help: **${doctor.name}** at ${doctor.hospital}.` : localIntro}\n\n${disclaimer}`;
+  }
 
-  if (/insurance|pmjay|ayushman|esic|cghs|claim/i.test(t))
-    return "📋 **Health Insurance options in India:**\n\n🏛️ **PM-JAY (Ayushman Bharat):** ₹5 lakh coverage for eligible families. Check at mera.pmjay.gov.in\n🏢 **ESIC:** For salaried employees ≤₹21K/month. esic.gov.in\n🏛️ **CGHS:** For central govt employees. cghs.nic.in\n\n🏥 **Private:** Star Health, HDFC Ergo, Niva Bupa — compare at policybazaar.com\n\nGo to the **Insurance tab** for detailed application steps and direct links.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/insurance|pmjay|ayushman|esic|cghs|claim|cashless/i.test(t)) {
+    return `📋 **Insurance help:** use the Insurance tab for official PM-JAY, ESIC, CGHS, Star Health, HDFC ERGO, and Niva Bupa links.\n\nFor cashless admission, carry photo ID, policy/scheme number, and admission note. Ask the hospital insurance desk for pre-authorization. For emergencies, begin treatment first and complete documents as soon as possible.\n\n${disclaimer}`;
+  }
 
-  if (/hospital|bed|icu|admit/i.test(t))
-    return "🏥 **Nearby hospitals:**\n\n• **CityCare Hospital** — 2.1 km, 42 beds, 8 ICU, oxygen ✅\n• **Hope Multispeciality** — 5.4 km, 28 beds, 5 ICU, emergency ✅\n• **GreenLine Clinic** — 3.8 km, 11 beds, general medicine\n• **Sunrise Senior Care** — 7.2 km, geriatrics specialist\n\nFor ICU or oxygen, **CityCare** is your best option right now.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/hospital|bed|icu|admit|nearby|near me/i.test(t)) {
+    const matches = localReady ? nearestHospitals(5) : [];
+    return `🏥 **Hospital search result**\n\n${localIntro}${matches.length ? "\n\n" + matches.map(hospitalLine).join("\n") : ""}\n\nFor ICU/oxygen needs, prefer hospitals with ICU beds and oxygen listed, then call before going.\n\n${disclaimer}`;
+  }
 
-  if (/doctor|physician|consult|appointment/i.test(t))
-    return "👨‍⚕️ **Doctors available now:**\n\n• **Dr. Asha Menon** — Cardiology, CityCare (in-person) ⭐ 4.9\n• **Dr. Meera Shah** — Pediatrics, GreenLine (in-person) ⭐ 4.8\n• **Dr. Priya Suresh** — Geriatrics, Sunrise (video) ⭐ 4.8\n\n📅 Next slots: Dr. Kiran Rao at 4:30 PM, Dr. Farhan Ali at 6:00 PM\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/doctor|physician|consult|appointment|specialist/i.test(t)) {
+    const specialty =
+      /cardio|heart/.test(t) ? "Cardiology" :
+      /child|pediatric/.test(t) ? "Pediatrics" :
+      /bone|ortho|fracture/.test(t) ? "Orthopedics" :
+      /senior|elder|geriatric/.test(t) ? "Geriatrics" :
+      "all";
+    const matches = localReady ? nearestDoctorHelp(5, specialty) : [];
+    return `👨‍⚕️ **24/7 doctor help**\n\n${localIntro}${matches.length ? "\n\n" + matches.map(doctorLine).join("\n") : ""}\n\nUse the Doctors tab to filter by specialization and call the listed help number.\n\n${disclaimer}`;
+  }
 
-  if (/medicine|pharmacy|drug|buy|order/i.test(t))
-    return "💊 **Buy medicines online:**\n\n• **Tata 1mg** — 1mg.com\n• **PharmEasy** — pharmeasy.in\n• **Netmeds** — netmeds.com\n• **Apollo Pharmacy** — apollopharmacy.in\n\nOr visit the **Medicines tab** to search stock at local pharmacies and get Buy links for all platforms at once.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/medicine|pharmacy|drug|buy|order|tablet|stock/i.test(t)) {
+    const found = medicines.filter(m => t.includes(m.name.toLowerCase().split(" ")[0])).slice(0, 3);
+    const stockLines = (found.length ? found : medicines.slice(0, 3))
+      .map(m => `• **${m.name}** — ${m.stock} units at ${m.pharmacy}`)
+      .join("\n");
+    return `💊 **Medicine and pharmacy help**\n\n${stockLines}\n\nUse the Medicines tab to search local stock and open online pharmacy searches. Prescription medicines should be used only with clinician advice.\n\n${disclaimer}`;
+  }
 
-  if (/first aid|cpr|burn|choke|seizure/i.test(t))
-    return "🩹 Go to the **First Aid tab** for step-by-step emergency procedures covering CPR, burns, choking, bleeding, seizures, snake bites, and 14+ more emergencies.\n\nFor life-threatening situations, always **call 108 first**.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/first aid|cpr|choke|seizure|poison|snake|asthma/i.test(t)) {
+    return `🩹 **First aid guidance is available in the First Aid tab.** It has step-by-step procedures for CPR, choking, bleeding, burns, seizures, poisoning, asthma attacks, snake bites, and more.\n\nFor life-threatening situations, call **108** first, then follow first-aid steps while help is coming.\n\n${disclaimer}`;
+  }
 
-  if (/ambulance|emergency|108/i.test(t))
-    return "🚑 **Emergency services:**\n\n• **Rapid Ambulance 24×7** — 108 (8 min ETA, advanced life support)\n• **CityCare Ambulance** — 080-4100-1111 (12 min ETA)\n• **Senior Assist** — 080-5999-1212 (18 min ETA, non-emergency)\n\n📞 Always call **108** first in any life-threatening emergency.\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  if (/ambulance|emergency|108|112/i.test(t)) {
+    return `🚑 **Emergency support:** call **108** for ambulance help or **112** for national emergency response.\n\nThe app can also show nearby emergency hospitals after location is allowed. Keep the phone line open and share exact location/landmark with responders.\n\n${disclaimer}`;
+  }
 
-  // Default
-  return "👋 I can help you with:\n\n• 🏥 Finding hospitals, doctors, or beds\n• 💊 Medicine stock and pharmacy info\n• 🩹 First aid guidance\n• 📋 Insurance and PM-JAY queries\n• 🚨 Emergency triage advice\n\nTry asking: *\"Which hospitals have ICU beds?\"* or *\"First aid for burns\"* or *\"How to apply for Ayushman Bharat?\"*\n\n⚠️ This is general health information. Consult a qualified doctor for diagnosis and treatment.";
+  const queryWords = t.split(/\W+/).filter(word => word.length > 3);
+  const matches = localReady
+    ? nearestHospitals(3, h => queryWords.some(word => `${h.name} ${h.location} ${h.specialties.join(" ")}`.toLowerCase().includes(word)))
+    : [];
+
+  return `I can help with hospitals, beds, 24/7 doctor help, medicines, first aid, insurance, and emergency triage.\n\n${localIntro}${matches.length ? "\n\nPossible local matches:\n" + matches.map(hospitalLine).join("\n") : "\n\nTry asking about a symptom, specialty, medicine, hospital bed, or insurance scheme."}\n\n${disclaimer}`;
 }
 
 function appendChatBubble(role, text) {
@@ -1712,13 +2012,64 @@ function suggestCare(raw) {
     box.innerHTML = `<span class="advice-icon">💡</span><div><strong>Suggestion preview</strong><p>Enter symptoms above to see triage guidance.</p></div>`;
     return;
   }
-  let icon="💡", title="Suggested next step", msg="Book a general medicine consultation and keep nearby hospital details ready.", match="GreenLine Clinic · Dr. Kiran Rao.", urgent=false;
-  if (/chest|breathing|oxygen/.test(t)) { icon="🚨";urgent=true;title="Emergency attention recommended";msg="Chest pain or breathing difficulty should be treated as urgent. Do not wait.";match="CityCare Hospital has ICU + oxygen. Rapid Ambulance 24×7 — 8 min ETA. Call 108 now."; }
-  else if (/accident|bleeding/.test(t)) { icon="🚑";urgent=true;title="Immediate emergency response";msg="For accident or heavy bleeding, call 108 and get to emergency immediately.";match="Rapid Ambulance 24×7 + Hope Multispeciality emergency are available."; }
-  else if (/fever|cough/.test(t)) { icon="🤒";title="Primary care suggested";msg="Monitor temperature, stay hydrated, consult a doctor if symptoms worsen.";match="GreenLine Clinic · Dr. Kiran Rao · CarePlus Pharmacy (paracetamol in stock)."; }
-  else if (/diabetes|insulin/.test(t)) { icon="💉";title="Medicine + doctor support";msg="Check insulin stock and consult a physician for blood-sugar concerns.";match="MediQuick Pharmacy has 18 insulin units. Dr. Kiran Rao available."; }
-  else if (/senior|elderly|dizzy/.test(t)) { icon="👴";title="Senior care recommended";msg="Dizziness in elderly may indicate BP, hydration or cardiac issues.";match="Dr. Priya Suresh (Geriatrics, Sunrise Senior Care) — available now via video consult."; }
-  else if (/child|pediatric/.test(t)) { icon="🧒";title="Pediatric care suggested";msg="For children, early consultation prevents complications.";match="Dr. Meera Shah (Pediatrics, GreenLine Clinic) — available in-person now."; }
+
+  const safe = value => String(value).replace(/[&<>'"]/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "'":"&#39;", "\"":"&quot;" })[char]);
+  const formatHospital = hospital => `${safe(hospital.name)} (${hospital.distance} km, ${hospital.beds} beds, ${hospital.icu} ICU)`;
+  const hasLocation = Boolean(userCoords);
+  const localHospitals = hasLocation ? nearestHospitals(3) : [];
+  const localDoctors = hasLocation ? nearestDoctorHelp(3) : [];
+  const locationMessage = "Allow location access or set your city to match care near you.";
+  let icon = "💡";
+  let title = "Suggested next step";
+  let msg = "Use the 24/7 doctor-help list for a local care option.";
+  let match = hasLocation && localDoctors[0]
+    ? `${safe(localDoctors[0].name)} - ${safe(localDoctors[0].specialty)}, ${safe(localDoctors[0].hospital)} (${localDoctors[0].distance} km).`
+    : locationMessage;
+  let urgent = false;
+
+  if (/chest|breathing|oxygen|stroke|unconscious/.test(t)) {
+    const matches = hasLocation ? nearestHospitals(2, hospital => hospital.icu > 0 || hospital.oxygen || hospital.specialties.includes("Emergency")) : [];
+    icon = "🚨";
+    urgent = true;
+    title = "Emergency attention recommended";
+    msg = "Chest pain, breathing difficulty, stroke signs, or unconsciousness need urgent emergency care. Call 108 now.";
+    match = matches.length ? `Nearby emergency care: ${matches.map(formatHospital).join("; ")}.` : locationMessage;
+  } else if (/accident|bleeding|burn/.test(t)) {
+    const matches = hasLocation ? nearestHospitals(2, hospital => hospital.specialties.includes("Emergency") || hospital.specialties.includes("Orthopedics")) : [];
+    icon = "🚑";
+    urgent = true;
+    title = "Immediate emergency response";
+    msg = "For an accident, heavy bleeding, or severe burn, call 108 and go to emergency immediately.";
+    match = matches.length ? `Nearby emergency care: ${matches.map(formatHospital).join("; ")}.` : locationMessage;
+  } else if (/fever|cough/.test(t)) {
+    const doctor = hasLocation ? nearestDoctorHelp(1, "General Medicine")[0] || localDoctors[0] : null;
+    icon = "🤒";
+    title = "Primary care suggested";
+    msg = "Monitor symptoms, stay hydrated, and seek care promptly if symptoms worsen or breathing becomes difficult.";
+    match = doctor ? `24/7 doctor help: ${safe(doctor.name)}, ${safe(doctor.specialty)} at ${safe(doctor.hospital)} (${doctor.distance} km).` : locationMessage;
+  } else if (/diabetes|insulin/.test(t)) {
+    const doctor = hasLocation ? nearestDoctorHelp(1, "General Medicine")[0] || localDoctors[0] : null;
+    const insulin = medicines.find(medicine => medicine.name.toLowerCase().includes("insulin"));
+    icon = "💉";
+    title = "Medicine and doctor support";
+    msg = "Do not change insulin or other prescribed medicine without clinician guidance.";
+    match = `${insulin ? `${safe(insulin.name)}: ${insulin.stock} listed units. ` : ""}${doctor ? `24/7 doctor help: ${safe(doctor.name)} at ${safe(doctor.hospital)}.` : locationMessage}`;
+  } else if (/senior|elderly|dizzy/.test(t)) {
+    const doctor = hasLocation ? nearestDoctorHelp(1, "Geriatrics")[0] || localDoctors[0] : null;
+    icon = "👴";
+    title = "Senior care suggested";
+    msg = "Dizziness in an older adult can be serious. Seek urgent care for fainting, chest pain, weakness, or stroke signs.";
+    match = doctor ? `24/7 doctor help: ${safe(doctor.name)}, ${safe(doctor.specialty)} at ${safe(doctor.hospital)} (${doctor.distance} km).` : locationMessage;
+  } else if (/child|pediatric/.test(t)) {
+    const doctor = hasLocation ? nearestDoctorHelp(1, "Pediatrics")[0] || localDoctors[0] : null;
+    icon = "🧒";
+    title = "Child care suggested";
+    msg = "For a child with worsening symptoms, poor feeding, dehydration, trouble breathing, or persistent fever, seek medical care promptly.";
+    match = doctor ? `24/7 doctor help: ${safe(doctor.name)}, ${safe(doctor.specialty)} at ${safe(doctor.hospital)} (${doctor.distance} km).` : locationMessage;
+  } else if (hasLocation && localHospitals[0]) {
+    match = `Nearest local hospital: ${formatHospital(localHospitals[0])}.`;
+  }
+
   box.className = urgent ? "advice-box urgent" : "advice-box";
   box.innerHTML = `<span class="advice-icon">${icon}</span><div><strong>${title}</strong><p>${msg}</p><p>${match}</p></div>`;
 }
@@ -1813,6 +2164,18 @@ function bindEvents() {
     const policy = $("policyType").value;
     const need = $("supportNeed").value;
     let result = "";
+    if (!USE_SERVER_INSURANCE_API) {
+      const data = checkInsuranceSupportLocally(policy, need);
+      const planNames = data.partners.map(partner => partner.name).join(", ");
+      const hospitalNames = data.hospitals.map(hospital => hospital.name).join(", ");
+
+      result = data.matched
+        ? `Coverage match: ${planNames}\n\nNetwork-ready demo hospitals: ${hospitalNames}\n\nNext steps:\n` + data.nextSteps.map(step => `- ${step}`).join("\n")
+        : "No exact scheme match found in the demo data. Contact the hospital insurance desk to check tie-ups.\n\nNext steps:\n" + data.nextSteps.map(step => `- ${step}`).join("\n");
+
+      $("insuranceResult").textContent = result;
+      return;
+    }
     
     $("insuranceResult").textContent = "🔄 Checking coverage database...";
     
@@ -1848,9 +2211,9 @@ function bindEvents() {
     const val = $("distanceFilter").value;
     if (val === "all") return;
     if (leafletMap && userCoords) {
-      const zoom = val === "1500" ? 15 : val === "3000" ? 14 : 13;
+      const zoom = val === "1500" ? 15 : val === "3000" ? 14 : val === "5000" ? 13 : val === "25000" ? 11 : 10;
       leafletMap.setView([userCoords.lat, userCoords.lng], zoom);
-      showToast(`Zooming map to radius of ${val === "1500" ? "1.5" : val === "3000" ? "3" : "5"} km`);
+      showToast(`Zooming map to radius of ${Number(val) / 1000} km`);
     }
   });
 
@@ -1865,6 +2228,7 @@ function bindEvents() {
         relocateMockups(lat, lng);
         setUserMarker(lat, lng);
         if (leafletMap) leafletMap.setView([lat, lng], 14);
+        fetchNearbyFacilities();
         showToast(`📍 Location found: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
       },
       ()  => showToast("Could not access location. Please allow location permission.")
@@ -1873,7 +2237,7 @@ function bindEvents() {
 
   /* ── Manual Locate button ── */
   $("manualLocateBtn")?.addEventListener("click", async () => {
-    const area = prompt("Enter your city, area, or zip code (e.g. Krishnankoil):");
+    const area = prompt("Enter your city, area, or zip code:");
     if (area && area.trim()) {
       await geocodeSearch(area.trim());
     }
@@ -1883,7 +2247,7 @@ function bindEvents() {
   $("mapRouteBtn")?.addEventListener("click", () => {
     const lat = $("mapRouteBtn")?.dataset.lat;
     const lng = $("mapRouteBtn")?.dataset.lng;
-    if (lat && lng) {
+    if (lat && lng && userCoords) {
       window.open(`https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}`, "_blank");
     } else {
       const name = $("mapRouteBtn")?.dataset.name ?? "CityCare Hospital";
@@ -1918,7 +2282,7 @@ function bindEvents() {
     if (action === "route") {
       const lat = btn.dataset.lat;
       const lng = btn.dataset.lng;
-      if (lat && lng) {
+      if (lat && lng && userCoords) {
         window.open(`https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}`, "_blank");
       } else {
         window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
@@ -2372,16 +2736,20 @@ function runTriageOptimization() {
 
   if (!listContainer) return;
 
-  if (hospitals.length === 0) {
+  const localHospitals = userCoords
+    ? hospitals.filter(h => Number.isFinite(h.distance) && h.distance <= 50)
+    : [];
+
+  if (localHospitals.length === 0) {
     listContainer.innerHTML = `
       <div class="empty-state" style="color:var(--coral); border-color:var(--coral);">
-        ⚠️ No hospitals loaded in map view. Please search or locate a place first.
+        ⚠️ Please allow location access or use Set Location first. Smart triage uses hospitals within 50 km of your current location.
       </div>`;
     return;
   }
 
   // Multi-objective optimization calculation
-  const scored = hospitals.map(h => {
+  const scored = localHospitals.map(h => {
     // 1. Specialty compatibility score (S)
     let s = 0.2;
     if (profile === "cardiac") {
@@ -2457,7 +2825,7 @@ function runTriageOptimization() {
               </span>
             </div>
             <div style="font-size:12.5px; color:var(--ink-2);">
-              📍 ${h.distance} km away · 🛏️ ${h.beds} general beds · 🏥 ${h.icu} ICU beds · ⭐ ${h.rating.toFixed(1)}
+              📍 ${h.distance} km away · 🛏️ ${h.beds} beds · 🏥 ${h.icu} ICU beds · ⭐ ${(h.rating || 4.0).toFixed(1)}
             </div>
             <div style="font-size:11px; font-family:monospace; color:var(--blue); margin-top:4px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">
               <span>Proximity: ${item.breakdown.proximity}%</span>
@@ -2513,6 +2881,8 @@ Object.assign(TRANSLATIONS.en, {
   optDist3: "Within 3 km",
   optDist5: "Within 5 km",
   optDist10: "Within 10 km",
+  optDist25Km: "Within 25 km",
+  optDist50Km: "Within 50 km",
   docEyebrow: "Doctors",
   docTitle: "Availability & Specialization",
   optAllSpec: "All specializations",
@@ -2708,6 +3078,8 @@ Object.assign(TRANSLATIONS.hi, {
   optDist3: "3 किमी के भीतर",
   optDist5: "5 किमी के भीतर",
   optDist10: "10 किमी के भीतर",
+  optDist25Km: "25 किमी के भीतर",
+  optDist50Km: "50 किमी के भीतर",
   docEyebrow: "चिकित्सक",
   docTitle: "उपलब्धता और विशेषज्ञता",
   optAllSpec: "सभी विशेषज्ञता",
@@ -2903,6 +3275,8 @@ Object.assign(TRANSLATIONS.ta, {
   optDist3: "3 கி.மீ க்குள்",
   optDist5: "5 கி.மீ க்குள்",
   optDist10: "10 கி.மீ க்குள்",
+  optDist25Km: "25 கி.மீ க்குள்",
+  optDist50Km: "50 கி.மீ க்குள்",
   docEyebrow: "மருத்துவர்கள்",
   docTitle: "கிடைக்கும் தன்மை மற்றும் சிறப்பு",
   optAllSpec: "அனைத்து சிறப்புகளும்",
