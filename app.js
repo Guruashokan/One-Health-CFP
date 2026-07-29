@@ -1358,15 +1358,15 @@ async function fetchNearbyFacilities() {
 
   const center = userCoords;
 
-  // Query hospitals & clinics within 50 km, pharmacies & doctors within 15 km
-  const query = `[out:json][timeout:25];
+  // Query hospitals & clinics within 15 km, pharmacies & doctors within 5 km for fast performance
+  const query = `[out:json][timeout:15];
 (
-  node(around:50000, ${center.lat}, ${center.lng})["amenity"~"hospital|clinic"];
-  way(around:50000, ${center.lat}, ${center.lng})["amenity"~"hospital|clinic"];
-  node(around:15000, ${center.lat}, ${center.lng})["amenity"~"pharmacy|dentist|doctors"];
-  way(around:15000, ${center.lat}, ${center.lng})["amenity"~"pharmacy|dentist|doctors"];
+  node(around:15000, ${center.lat}, ${center.lng})["amenity"~"hospital|clinic"];
+  way(around:15000, ${center.lat}, ${center.lng})["amenity"~"hospital|clinic"];
+  node(around:5000, ${center.lat}, ${center.lng})["amenity"~"pharmacy|dentist|doctors"];
+  way(around:5000, ${center.lat}, ${center.lng})["amenity"~"pharmacy|dentist|doctors"];
 );
-out center;`;
+out center 100;`;
 
   let fetchedOk = false;
 
@@ -1418,8 +1418,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.004,
       tags: {
         amenity: "hospital",
-        name: "Krishnankoil Community Hospital",
-        "addr:street": "Watrap Road, Krishnankoil",
+        name: "Local Community Hospital",
+        "addr:street": "Local Health Street",
         phone: "+91 4563 289124"
       }
     },
@@ -1429,8 +1429,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.008,
       tags: {
         amenity: "clinic",
-        name: "Kalasalingam Clinic & Research",
-        "addr:street": "KLU Campus, Krishnankoil",
+        name: "Family Care Clinic & Research",
+        "addr:street": "Education Campus Lane",
         phone: "+91 4563 288410"
       }
     },
@@ -1440,8 +1440,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.010,
       tags: {
         amenity: "hospital",
-        name: "Watrap Government Hospital",
-        "addr:street": "Watrap Bazaar",
+        name: "Municipal Government Hospital",
+        "addr:street": "Market Bazaar Road",
         phone: "+91 4563 288500"
       }
     },
@@ -1451,8 +1451,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.060,
       tags: {
         amenity: "hospital",
-        name: "Srivilliputhur Cooperative Hospital",
-        "addr:street": "Madurai Road, Srivilliputhur",
+        name: "Cooperative Health Centre",
+        "addr:street": "Madurai Highway Road",
         phone: "+91 4563 260341"
       }
     },
@@ -1462,8 +1462,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.095,
       tags: {
         amenity: "clinic",
-        name: "Srivilliputhur Government Hospital",
-        "addr:street": "Srivilliputhur Town",
+        name: "General Medical Hospital",
+        "addr:street": "Town Plaza Corridor",
         phone: "+91 4563 260224"
       }
     },
@@ -1473,8 +1473,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.150,
       tags: {
         amenity: "hospital",
-        name: "Asha Community Hospital",
-        "addr:street": "South Township",
+        name: "Metro Trust Clinic",
+        "addr:street": "South Township Sector",
         phone: "+91 4563 290186"
       }
     },
@@ -1484,8 +1484,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.215,
       tags: {
         amenity: "hospital",
-        name: "CareBridge Medical College Hospital",
-        "addr:street": "Outer Health Corridor",
+        name: "CareBridge Medical College",
+        "addr:street": "Outer Health Bypass",
         phone: "+91 4563 290470"
       }
     },
@@ -1495,8 +1495,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.300,
       tags: {
         amenity: "hospital",
-        name: "Madurai Rajaji Govt Hospital",
-        "addr:street": "Collector Office Road, Madurai",
+        name: "District General Hospital",
+        "addr:street": "Collector Office Avenue",
         phone: "+91 452 253 2535"
       }
     },
@@ -1506,8 +1506,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.003,
       tags: {
         amenity: "pharmacy",
-        name: "KLU Campus Pharmacy",
-        "addr:street": "Campus Junction",
+        name: "Campus Medicals & Pharmacy",
+        "addr:street": "Campus Junction Crossing",
         phone: "+91 4563 288410"
       }
     },
@@ -1517,8 +1517,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.003,
       tags: {
         amenity: "pharmacy",
-        name: "Watrap Town Pharmacy",
-        "addr:street": "Watrap Bazaar",
+        name: "Town Pharmacy & General",
+        "addr:street": "Market Central Bazaar",
         phone: "+91 4563 288500"
       }
     },
@@ -1528,8 +1528,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.001,
       tags: {
         amenity: "doctors",
-        name: "Dr. A. Subramanian Clinic",
-        "addr:street": "Krishnankoil Bazaar",
+        name: "Neighborhood Doctor Clinic",
+        "addr:street": "Local Clinic Lane",
         phone: "+91 98421 77334"
       }
     }
