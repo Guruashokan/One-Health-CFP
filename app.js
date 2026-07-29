@@ -510,11 +510,17 @@ function renderMedicines() {
 }
 
 function renderPharmacies() {
-  $("pharmacyList").innerHTML = localPharmacies.map(p => `
-    <article class="pharmacy-item">
-      <div><strong>${p.name}</strong><span>📍 ${p.distance} km · ${p.open}</span></div>
-      <button class="doctor-action" type="button" data-action="call" data-name="${p.name}" data-phone="${p.phone}">📞 Call</button>
-    </article>`).join("");
+  if (!userCoords) {
+    $("pharmacyList").innerHTML = `<p class="empty-state">Allow location access or use Set Location to list pharmacies near this device.</p>`;
+    return;
+  }
+  $("pharmacyList").innerHTML = localPharmacies.length
+    ? localPharmacies.map(p => `
+      <article class="pharmacy-item">
+        <div><strong>${p.name}</strong><span>📍 ${p.distance} km · ${p.open}</span></div>
+        <button class="doctor-action" type="button" data-action="call" data-name="${p.name}" data-phone="${p.phone}">📞 Call</button>
+      </article>`).join("")
+    : `<p class="empty-state">No pharmacies found within range. Try zooming/panning the map or search a nearby town.</p>`;
 }
 
 /* ═══════════════════════════════════════════════
@@ -1554,6 +1560,26 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+// Open Google Maps directions using the location our own app already
+// detected (usually via high-accuracy GPS), instead of leaving the origin
+// blank. Some phones default their Maps app to "approximate" location
+// permission, which snaps to the nearest big city (e.g. Madurai) rather
+// than the user's real small-town position — explicitly passing the origin
+// we already captured avoids that mismatch and keeps directions consistent
+// for every user, wherever they are.
+function openDirections(destLat, destLng, name) {
+  if (!destLat || !destLng) {
+    window.open(`https://www.google.com/maps/search/${encodeURIComponent(name || "hospital")}`, "_blank");
+    return;
+  }
+  const base = `https://www.google.com/maps/dir/?api=1&destination=${destLat},${destLng}`;
+  const url = (userCoords && Number.isFinite(userCoords.lat) && Number.isFinite(userCoords.lng))
+    ? `${base}&origin=${userCoords.lat},${userCoords.lng}&travelmode=driving`
+    : base;
+  window.open(url, "_blank");
+}
+window.openDirections = openDirections;
+
 function relocateMockups(lat, lng) {
   const isDefaultArea = Math.abs(lat - 9.5606) < 0.1 && Math.abs(lng - 77.6749) < 0.1;
 
@@ -1662,7 +1688,7 @@ function processMapData(elements) {
             ${website ? `<div>🌐 <a href="${website}" target="_blank" rel="noopener">Website</a></div>` : ""}
           </div>
           <div style="display:flex;gap:6px;">
-            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}','_blank')" 
+            <button onclick="window.openDirections(${lat}, ${lng}, '${name.replace(/'/g, "\\'")}')" 
                     style="background:var(--blue);color:#fff;border-radius:4px;border:none;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;">
               Directions
             </button>
@@ -1681,7 +1707,7 @@ function processMapData(elements) {
             <strong>${name} (⭐ ${rating.toFixed(1)})</strong>
             <span>${dist.toFixed(1)} km · ${street} · Contact: ${phone}</span>
           </div>
-          <button class="map-route-btn" id="mapRouteBtn" data-name="${name}" data-lat="${lat}" data-lng="${lng}" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}','_blank')">Get directions</button>
+          <button class="map-route-btn" id="mapRouteBtn" data-name="${name}" data-lat="${lat}" data-lng="${lng}" onclick="window.openDirections(${lat}, ${lng}, '${name.replace(/'/g, "\\'")}')">Get directions</button>
         `;
       });
 
@@ -2278,12 +2304,8 @@ function bindEvents() {
   $("mapRouteBtn")?.addEventListener("click", () => {
     const lat = $("mapRouteBtn")?.dataset.lat;
     const lng = $("mapRouteBtn")?.dataset.lng;
-    if (lat && lng) {
-      window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, "_blank");
-    } else {
-      const name = $("mapRouteBtn")?.dataset.name ?? "Krishnankoil Community Hospital";
-      window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
-    }
+    const name = $("mapRouteBtn")?.dataset.name ?? "hospital";
+    openDirections(lat, lng, name);
   });
 
   /* ── Dark mode ── */
@@ -2313,11 +2335,7 @@ function bindEvents() {
     if (action === "route") {
       const lat = btn.dataset.lat;
       const lng = btn.dataset.lng;
-      if (lat && lng) {
-        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, "_blank");
-      } else {
-        window.open(`https://www.google.com/maps/search/${encodeURIComponent(name)}`, "_blank");
-      }
+      openDirections(lat, lng, name);
     }
     if (action === "book")  showToast(`📅 Appointment started for ${name}. You'll be redirected to booking.`);
     if (action === "map") {
