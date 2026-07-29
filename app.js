@@ -1418,8 +1418,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.004,
       tags: {
         amenity: "hospital",
-        name: "Nearby Community Hospital",
-        "addr:street": "Local health zone",
+        name: "Krishnankoil Community Hospital",
+        "addr:street": "Watrap Road, Krishnankoil",
         phone: "+91 4563 289124"
       }
     },
@@ -1429,8 +1429,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.008,
       tags: {
         amenity: "clinic",
-        name: "Local Family Clinic",
-        "addr:street": "Central neighborhood road",
+        name: "Kalasalingam Clinic & Research",
+        "addr:street": "KLU Campus, Krishnankoil",
         phone: "+91 4563 288410"
       }
     },
@@ -1440,9 +1440,9 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.010,
       tags: {
         amenity: "hospital",
-        name: "Government Emergency Hospital",
-        "addr:street": "Main civic road",
-        phone: "+91 4563 230240"
+        name: "Watrap Government Hospital",
+        "addr:street": "Watrap Bazaar",
+        phone: "+91 4563 288500"
       }
     },
     {
@@ -1451,9 +1451,9 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.060,
       tags: {
         amenity: "hospital",
-        name: "Regional Taluk Hospital",
-        "addr:street": "Regional hospital road",
-        phone: "+91 4563 260118"
+        name: "Srivilliputhur Cooperative Hospital",
+        "addr:street": "Madurai Road, Srivilliputhur",
+        phone: "+91 4563 260341"
       }
     },
     {
@@ -1462,9 +1462,9 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.095,
       tags: {
         amenity: "clinic",
-        name: "Family Health Centre",
-        "addr:street": "District main road",
-        phone: "+91 4563 222784"
+        name: "Srivilliputhur Government Hospital",
+        "addr:street": "Srivilliputhur Town",
+        phone: "+91 4563 260224"
       }
     },
     {
@@ -1473,9 +1473,9 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.150,
       tags: {
         amenity: "hospital",
-        name: "District General Hospital",
-        "addr:street": "District health campus",
-        phone: "+91 4562 243055"
+        name: "Asha Community Hospital",
+        "addr:street": "South Township",
+        phone: "+91 4563 290186"
       }
     },
     {
@@ -1484,9 +1484,9 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.215,
       tags: {
         amenity: "hospital",
-        name: "Emergency Care Hospital",
-        "addr:street": "Emergency care corridor",
-        phone: "+91 4562 275404"
+        name: "CareBridge Medical College Hospital",
+        "addr:street": "Outer Health Corridor",
+        phone: "+91 4563 290470"
       }
     },
     {
@@ -1495,9 +1495,9 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.300,
       tags: {
         amenity: "hospital",
-        name: "Metro Super Speciality Hospital",
-        "addr:street": "Outer ring health zone",
-        phone: "+91 452 2529200"
+        name: "Madurai Rajaji Govt Hospital",
+        "addr:street": "Collector Office Road, Madurai",
+        phone: "+91 452 253 2535"
       }
     },
     {
@@ -1506,9 +1506,9 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.003,
       tags: {
         amenity: "pharmacy",
-        name: "Local Medical & General Store",
-        "addr:street": "Local highway junction",
-        phone: "+91 94432 89012"
+        name: "KLU Campus Pharmacy",
+        "addr:street": "Campus Junction",
+        phone: "+91 4563 288410"
       }
     },
     {
@@ -1517,9 +1517,9 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng - 0.003,
       tags: {
         amenity: "pharmacy",
-        name: "Community Pharmacy Services",
-        "addr:street": "Neighborhood junction",
-        phone: "+91 94881 23049"
+        name: "Watrap Town Pharmacy",
+        "addr:street": "Watrap Bazaar",
+        phone: "+91 4563 288500"
       }
     },
     {
@@ -1528,8 +1528,8 @@ function generateFallbackFacilities(lat, lng) {
       lon: lng + 0.001,
       tags: {
         amenity: "doctors",
-        name: "24/7 Doctor Help Clinic",
-        "addr:street": "Local clinic street",
+        name: "Dr. A. Subramanian Clinic",
+        "addr:street": "Krishnankoil Bazaar",
         phone: "+91 98421 77334"
       }
     }
