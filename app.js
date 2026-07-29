@@ -1049,6 +1049,20 @@ function initLeafletMap() {
   const mapContainer = $("map");
   if (!mapContainer) return;
 
+  if (typeof L === "undefined") {
+    console.error("Leaflet library (L) is not loaded. Map cannot be initialized.");
+    if (mapContainer) {
+      mapContainer.innerHTML = `
+        <div style="padding:20px; text-align:center; color:var(--coral); font-weight:600; display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%;">
+          ⚠️ Map Load Error: Leaflet library could not be loaded from the CDN.<br>
+          Please check your network connection or DNS settings.
+        </div>`;
+    }
+    // Still populate local fallback database so other features remain fully operational
+    generateFallbackFacilities(userCoords.lat, userCoords.lng);
+    return;
+  }
+
   // Initialize Leaflet map instance
   leafletMap = L.map("map", {
     zoomControl: true,
@@ -1361,52 +1375,54 @@ function processMapData(elements) {
     const phone = tags.phone || tags["contact:phone"] || "N/A";
     const website = tags.website || tags["contact:website"] || "";
 
-    const markerIcon = L.divIcon({
-      className: "custom-marker",
-      html: `<div class="marker-ring ${type}"></div>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
-    });
-
     // Generate stable rating between 3.8 and 4.9 based on OSM ID
     const osmId = el.id || Math.floor(Math.random() * 100000);
     const rating = ((osmId % 12) / 10 + 3.8);
 
-    let popupHtml = `
-      <div class="map-popup-card" style="min-width: 180px;">
-        <h4 style="margin:0 0 4px 0;font-size:14px;font-weight:700;color:var(--navy);">${name}</h4>
-        <p style="margin:0 0 6px 0;font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;">🏷️ ${type}</p>
-        <div style="font-size:12px;color:var(--ink-2);margin-bottom:8px;line-height:1.4;">
-          <div>⭐ ${rating.toFixed(1)}</div>
-          <div>📍 ${dist.toFixed(1)} km · ${street}</div>
-          ${phone !== "N/A" ? `<div>📞 ${phone}</div>` : ""}
-          ${website ? `<div>🌐 <a href="${website}" target="_blank" rel="noopener">Website</a></div>` : ""}
-        </div>
-        <div style="display:flex;gap:6px;">
-          <button onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}','_blank')" 
-                  style="background:var(--blue);color:#fff;border-radius:4px;border:none;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;">
-            Directions
-          </button>
-          ${phone !== "N/A" ? `<a href="tel:${phone}" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:4px 8px;font-size:11px;font-weight:700;display:inline-block;text-align:center;">Call</a>` : ""}
-        </div>
-      </div>
-    `;
+    if (typeof L !== "undefined" && leafletMap) {
+      const markerIcon = L.divIcon({
+        className: "custom-marker",
+        html: `<div class="marker-ring ${type}"></div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+      });
 
-    const marker = L.marker([lat, lng], { icon: markerIcon }).addTo(leafletMap)
-      .bindPopup(popupHtml);
-    
-    marker.on("click", () => {
-      $("mapDetail").innerHTML = `
-        <div class="map-detail-icon">${type === "hospital" ? "🏥" : type === "pharmacy" ? "💊" : type === "clinic" ? "🏨" : "👨‍⚕️"}</div>
-        <div class="map-detail-info">
-          <strong>${name} (⭐ ${rating.toFixed(1)})</strong>
-          <span>${dist.toFixed(1)} km · ${street} · Contact: ${phone}</span>
+      let popupHtml = `
+        <div class="map-popup-card" style="min-width: 180px;">
+          <h4 style="margin:0 0 4px 0;font-size:14px;font-weight:700;color:var(--navy);">${name}</h4>
+          <p style="margin:0 0 6px 0;font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;">🏷️ ${type}</p>
+          <div style="font-size:12px;color:var(--ink-2);margin-bottom:8px;line-height:1.4;">
+            <div>⭐ ${rating.toFixed(1)}</div>
+            <div>📍 ${dist.toFixed(1)} km · ${street}</div>
+            ${phone !== "N/A" ? `<div>📞 ${phone}</div>` : ""}
+            ${website ? `<div>🌐 <a href="${website}" target="_blank" rel="noopener">Website</a></div>` : ""}
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}','_blank')" 
+                    style="background:var(--blue);color:#fff;border-radius:4px;border:none;padding:4px 8px;font-size:11px;font-weight:700;cursor:pointer;">
+              Directions
+            </button>
+            ${phone !== "N/A" ? `<a href="tel:${phone}" style="background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:4px 8px;font-size:11px;font-weight:700;display:inline-block;text-align:center;">Call</a>` : ""}
+          </div>
         </div>
-        <button class="map-route-btn" id="mapRouteBtn" data-name="${name}" data-lat="${lat}" data-lng="${lng}" onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}','_blank')">Get directions</button>
       `;
-    });
 
-    mapMarkers.push(marker);
+      const marker = L.marker([lat, lng], { icon: markerIcon }).addTo(leafletMap)
+        .bindPopup(popupHtml);
+      
+      marker.on("click", () => {
+        $("mapDetail").innerHTML = `
+          <div class="map-detail-icon">${type === "hospital" ? "🏥" : type === "pharmacy" ? "💊" : type === "clinic" ? "🏨" : "👨‍⚕️"}</div>
+          <div class="map-detail-info">
+            <strong>${name} (⭐ ${rating.toFixed(1)})</strong>
+            <span>${dist.toFixed(1)} km · ${street} · Contact: ${phone}</span>
+          </div>
+          <button class="map-route-btn" id="mapRouteBtn" data-name="${name}" data-lat="${lat}" data-lng="${lng}" onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${lat},${lng}','_blank')">Get directions</button>
+        `;
+      });
+
+      mapMarkers.push(marker);
+    }
 
     if (type === "hospital" || type === "clinic") {
       const beds = Math.floor(Math.random() * 45) + 3;
