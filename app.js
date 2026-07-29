@@ -1556,8 +1556,10 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 function relocateMockups(lat, lng) {
   const isDefaultArea = Math.abs(lat - 9.5606) < 0.1 && Math.abs(lng - 77.6749) < 0.1;
-  
+
   if (isDefaultArea) {
+    // Krishnankoil/Watrap/Srivilliputhur/Madurai demo region: these are the real,
+    // curated project hospitals, so just refresh distances relative to the user.
     const baseCoords = {
       "Krishnankoil Community Hospital": { lat: 9.5636, lng: 77.6709 },
       "Kalasalingam Clinic & Research": { lat: 9.5536, lng: 77.6829 },
@@ -1576,40 +1578,33 @@ function relocateMockups(lat, lng) {
       }
       h.distance = Number(calculateDistance(lat, lng, h.lat, h.lng).toFixed(1));
     });
-  } else {
-    const offsets = [
-      { lat: 0.003, lng: -0.004 },
-      { lat: -0.007, lng: 0.008 },
-      { lat: 0.015, lng: -0.010 },
-      { lat: -0.050, lng: -0.040 },
-      { lat: -0.055, lng: -0.045 },
-      { lat: -0.104, lng: -0.138 },
-      { lat: -0.168, lng: 0.035 },
-      { lat: -0.337, lng: -0.212 },
-      { lat: 0.364, lng: 0.444 }
-    ];
-    hospitals.forEach((h, index) => {
-      const off = offsets[index % offsets.length];
-      h.lat = lat + off.lat;
-      h.lng = lng + off.lng;
-      h.distance = Number(calculateDistance(lat, lng, h.lat, h.lng).toFixed(1));
+    hospitals.sort((a, b) => a.distance - b.distance);
+
+    doctors.forEach(doctor => {
+      const hospital = hospitals.find(h => h.name === doctor.hospital);
+      if (!hospital) return;
+      doctor.location = hospital.location;
+      doctor.distance = hospital.distance;
     });
+
+    renderHospitals();
+    renderDoctors();
+    renderMetrics();
+    renderSnapshots();
+    persistLocalCareData("deterministic-local");
+  } else {
+    // Anywhere else in the world: don't invent fake hospitals near the user.
+    // Show a loading state and let fetchNearbyFacilities() populate real,
+    // nearby hospitals/pharmacies/doctors from OpenStreetMap in a moment.
+    hospitals.length = 0;
+    doctors.length = 0;
+    localPharmacies.length = 0;
+    setLocationNotice("📡 Looking up real hospitals, clinics and pharmacies near this location…");
+    $("hospitalGrid").innerHTML = `<p class="empty-state">🔎 Searching for real hospitals near your location…</p>`;
+    $("doctorList").innerHTML = `<p class="empty-state">🔎 Searching for local doctors…</p>`;
+    renderMetrics();
+    renderSnapshots();
   }
-
-  hospitals.sort((a, b) => a.distance - b.distance);
-
-  doctors.forEach(doctor => {
-    const hospital = hospitals.find(h => h.name === doctor.hospital);
-    if (!hospital) return;
-    doctor.location = hospital.location;
-    doctor.distance = hospital.distance;
-  });
-  
-  renderHospitals();
-  renderDoctors();
-  renderMetrics();
-  renderSnapshots();
-  persistLocalCareData("deterministic-local");
 }
 
 // Process API response, plot markers, synchronize database lists
@@ -1773,17 +1768,37 @@ function processMapData(elements) {
     }
   });
 
-  // Always keep project hospitals list stable and update distances relative to userCoords
-  if (userCoords) {
+  const isDefaultArea = userCoords &&
+    Math.abs(userCoords.lat - 9.5606) < 0.1 && Math.abs(userCoords.lng - 77.6749) < 0.1;
+
+  if (!isDefaultArea && loadedHospitals.length > 0) {
+    // Real location: replace the list contents in place (not the const binding)
+    // with the actual nearby hospitals/clinics just pulled from OpenStreetMap,
+    // so every user anywhere sees facilities that really exist near them.
+    hospitals.length = 0;
+    hospitals.push(...loadedHospitals);
+  } else if (userCoords) {
+    // Krishnankoil demo area: keep the curated project hospitals, just refresh distances.
     hospitals.forEach(h => {
       h.distance = Number(calculateDistance(userCoords.lat, userCoords.lng, h.lat, h.lng).toFixed(1));
     });
-    hospitals.sort((a, b) => a.distance - b.distance);
-    
+  }
+  hospitals.sort((a, b) => a.distance - b.distance);
+
+  if (!isDefaultArea && loadedDoctors.length > 0) {
+    doctors.length = 0;
+    doctors.push(...loadedDoctors);
+  } else {
     doctors.forEach(d => {
       const h = hospitals.find(hosp => hosp.name === d.hospital);
       if (h) d.distance = h.distance;
     });
+  }
+  doctors.sort((a, b) => (a.distance ?? 999) - (b.distance ?? 999));
+
+  if (!isDefaultArea && loadedPharmacies.length > 0) {
+    localPharmacies.length = 0;
+    localPharmacies.push(...loadedPharmacies);
   }
 
   renderHospitals();
