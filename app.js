@@ -2651,7 +2651,7 @@ Object.assign(TRANSLATIONS.en, {
   "Call 108 now": "Call 108 now",
   "Call 108": "Call 108",
   "View steps": "View steps",
-  "Call 108 immediately for this emergency. Do not delay."
+  "Call 108 immediately for this emergency. Do not delay.": "Call 108 immediately for this emergency. Do not delay."
 });
 
 Object.assign(TRANSLATIONS.hi, {
@@ -2846,7 +2846,7 @@ Object.assign(TRANSLATIONS.hi, {
   "Call 108 now": "अभी 108 पर कॉल करें",
   "Call 108": "108 पर कॉल करें",
   "View steps": "चरण देखें",
-  "Call 108 immediately for this emergency. Do not delay."
+  "Call 108 immediately for this emergency. Do not delay.": "इस आपातकाल के लिए तुरंत 108 पर कॉल करें। देरी न करें।"
 });
 
 Object.assign(TRANSLATIONS.ta, {
@@ -3041,7 +3041,7 @@ Object.assign(TRANSLATIONS.ta, {
   "Call 108 now": "இப்போது 108 ஐ அழைக்கவும்",
   "Call 108": "108 ஐ அழைக்கவும்",
   "View steps": "வழிமுறைகளைக் காண்க",
-  "Call 108 immediately for this emergency. Do not delay.",
+  "Call 108 immediately for this emergency. Do not delay.": "இந்த அவசரநிலைக்கு உடனடியாக 108 ஐ அழைக்கவும். தாமதிக்க வேண்டாம்.",
   "firstaid_cpr-adult_title": "சிபிஆர் — பெரியவர்கள் (18+)",
   "firstaid_cpr-child_title": "சிபிஆர் — குழந்தைகள் (1-12 ஆண்டுகள்)",
   "firstaid_cpr-infant_title": "சிபிஆர் — குழந்தைகள் (1 வருடத்திற்குள்)",
