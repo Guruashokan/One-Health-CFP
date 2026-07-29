@@ -4,8 +4,8 @@
    ⚙️  CONFIGURATION — replace these keys before deploying
    ═══════════════════════════════════════════════════════════ */
 
-const GOOGLE_MAPS_API_KEY = "YOUR_GOOGLE_MAPS_API_KEY"; // https://console.cloud.google.com
-const GEMINI_API_KEY      = "YOUR_GEMINI_API_KEY";      // https://aistudio.google.com
+const GOOGLE_MAPS_API_KEY = "AIzaSyD9LyRWrc7DjHMqXjiy2ip2NsvQmd_WvsM"; // https://console.cloud.google.com
+const GEMINI_API_KEY      = "AIzaSyB4SrxCD7QkNKjYT1ZUEYNBlNfg9Z-KrFg";      // https://aistudio.google.com
 const GEMINI_MODEL        = "gemini-1.5-flash";
 const USE_SERVER_CHAT_FALLBACK = false;
 const USE_SERVER_INSURANCE_API = false;
