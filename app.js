@@ -1411,125 +1411,129 @@ out center 100;`;
 
 // Generate fallback facilities around target location to avoid empty map or Bangalore fallback
 function generateFallbackFacilities(lat, lng) {
+  const isDefaultArea = Math.abs(lat - 9.5606) < 0.1 && Math.abs(lng - 77.6749) < 0.1;
+  const baseLat = isDefaultArea ? 9.5606 : lat;
+  const baseLng = isDefaultArea ? 77.6749 : lng;
+
   const fallbackElements = [
     {
       id: 100001,
-      lat: lat + 0.003,
-      lon: lng - 0.004,
+      lat: isDefaultArea ? 9.5636 : baseLat + 0.003,
+      lon: isDefaultArea ? 77.6709 : baseLng - 0.004,
       tags: {
         amenity: "hospital",
-        name: "Local Community Hospital",
-        "addr:street": "Local Health Street",
+        name: "Krishnankoil Community Hospital",
+        "addr:street": "Watrap Road, Krishnankoil",
         phone: "+91 4563 289124"
       }
     },
     {
       id: 100002,
-      lat: lat - 0.007,
-      lon: lng + 0.008,
+      lat: isDefaultArea ? 9.5536 : baseLat - 0.007,
+      lon: isDefaultArea ? 77.6829 : baseLng + 0.008,
       tags: {
         amenity: "clinic",
-        name: "Family Care Clinic & Research",
-        "addr:street": "Education Campus Lane",
+        name: "Kalasalingam Clinic & Research",
+        "addr:street": "KLU Campus, Krishnankoil",
         phone: "+91 4563 288410"
       }
     },
     {
       id: 100003,
-      lat: lat + 0.015,
-      lon: lng - 0.010,
+      lat: isDefaultArea ? 9.5756 : baseLat + 0.015,
+      lon: isDefaultArea ? 77.6649 : baseLng - 0.010,
       tags: {
         amenity: "hospital",
-        name: "Municipal Government Hospital",
-        "addr:street": "Market Bazaar Road",
+        name: "Watrap Government Hospital",
+        "addr:street": "Watrap Bazaar",
         phone: "+91 4563 288500"
       }
     },
     {
       id: 100007,
-      lat: lat + 0.070,
-      lon: lng + 0.060,
+      lat: isDefaultArea ? 9.5106 : baseLat + 0.070,
+      lon: isDefaultArea ? 77.6349 : baseLng + 0.060,
       tags: {
         amenity: "hospital",
-        name: "Cooperative Health Centre",
-        "addr:street": "Madurai Highway Road",
+        name: "Srivilliputhur Cooperative Hospital",
+        "addr:street": "Madurai Road, Srivilliputhur",
         phone: "+91 4563 260341"
       }
     },
     {
       id: 100008,
-      lat: lat - 0.120,
-      lon: lng + 0.095,
+      lat: isDefaultArea ? 9.5058 : baseLat - 0.120,
+      lon: isDefaultArea ? 77.6294 : baseLng + 0.095,
       tags: {
         amenity: "clinic",
-        name: "General Medical Hospital",
-        "addr:street": "Town Plaza Corridor",
+        name: "Srivilliputhur Government Hospital",
+        "addr:street": "Srivilliputhur Town",
         phone: "+91 4563 260224"
       }
     },
     {
       id: 100009,
-      lat: lat + 0.185,
-      lon: lng - 0.150,
+      lat: isDefaultArea ? 9.4568 : baseLat + 0.185,
+      lon: isDefaultArea ? 77.5364 : baseLng - 0.150,
       tags: {
         amenity: "hospital",
-        name: "Metro Trust Clinic",
-        "addr:street": "South Township Sector",
+        name: "Asha Community Hospital",
+        "addr:street": "South Township",
         phone: "+91 4563 290186"
       }
     },
     {
       id: 100010,
-      lat: lat - 0.265,
-      lon: lng - 0.215,
+      lat: isDefaultArea ? 9.3926 : baseLat - 0.265,
+      lon: isDefaultArea ? 77.7102 : baseLng - 0.215,
       tags: {
         amenity: "hospital",
-        name: "CareBridge Medical College",
-        "addr:street": "Outer Health Bypass",
+        name: "CareBridge Medical College Hospital",
+        "addr:street": "Outer Health Corridor",
         phone: "+91 4563 290470"
       }
     },
     {
       id: 100011,
-      lat: lat + 0.330,
-      lon: lng + 0.300,
+      lat: isDefaultArea ? 9.9252 : baseLat + 0.330,
+      lon: isDefaultArea ? 78.1198 : baseLng + 0.300,
       tags: {
         amenity: "hospital",
-        name: "District General Hospital",
-        "addr:street": "Collector Office Avenue",
+        name: "Madurai Rajaji Govt Hospital",
+        "addr:street": "Collector Office Road, Madurai",
         phone: "+91 452 253 2535"
       }
     },
     {
       id: 100004,
-      lat: lat + 0.002,
-      lon: lng + 0.003,
+      lat: baseLat + 0.002,
+      lon: baseLng + 0.003,
       tags: {
         amenity: "pharmacy",
-        name: "Campus Medicals & Pharmacy",
-        "addr:street": "Campus Junction Crossing",
+        name: "KLU Campus Pharmacy",
+        "addr:street": "Campus Junction",
         phone: "+91 4563 288410"
       }
     },
     {
       id: 100005,
-      lat: lat - 0.002,
-      lon: lng - 0.003,
+      lat: baseLat - 0.002,
+      lon: baseLng - 0.003,
       tags: {
         amenity: "pharmacy",
-        name: "Town Pharmacy & General",
-        "addr:street": "Market Central Bazaar",
+        name: "Watrap Town Pharmacy",
+        "addr:street": "Watrap Bazaar",
         phone: "+91 4563 288500"
       }
     },
     {
       id: 100006,
-      lat: lat + 0.005,
-      lon: lng + 0.001,
+      lat: baseLat + 0.005,
+      lon: baseLng + 0.001,
       tags: {
         amenity: "doctors",
-        name: "Neighborhood Doctor Clinic",
-        "addr:street": "Local Clinic Lane",
+        name: "Dr. A. Subramanian Clinic",
+        "addr:street": "Krishnankoil Bazaar",
         phone: "+91 98421 77334"
       }
     }
